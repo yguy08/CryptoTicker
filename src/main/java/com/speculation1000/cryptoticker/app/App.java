@@ -20,7 +20,7 @@ public class App {
 	
 	public App() throws Exception {	
 		exchanges = new ArrayList<>();
-	    ResultSet rs = new Csv().read("exchange.csv", null, null);
+	    ResultSet rs = new Csv().read("src/main/resources/exchange.csv", null, null);
         
 	    while (rs.next()) {
         	exchanges.add(rs.getString(1));
