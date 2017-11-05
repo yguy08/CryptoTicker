@@ -38,7 +38,7 @@ public class PoloniexTickProducer implements ITickProducer {
 	@Override
 	public void produce() throws InterruptedException {		
         try {
-        	ResultSet rs = new Csv().read("src/main/resources/poloniex.csv", null, null);
+        	ResultSet rs = new Csv().read("config/poloniex.csv", null, null);
 			while (rs.next()) {        
 		        Ticker ticker = POLONIEX.getMarketDataService().getTicker(new CurrencyPair(rs.getString(1),rs.getString(2)));
 				queue.put(new GenericTickImpl(ticker.getCurrencyPair().toString(),UniqueCurrentTimeMS.uniqueCurrentTimeMS(),
