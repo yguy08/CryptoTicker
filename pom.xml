@@ -14,27 +14,23 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   </properties>
 
   <dependencies>
+  
 	<dependency>
   		<groupId>org.knowm.xchange</groupId>
   		<artifactId>xchange-core</artifactId>
   		<version>4.2.2</version>
 	</dependency>
+	
 	<dependency>
-  			<groupId>org.knowm.xchange</groupId>
-  			<artifactId>xchange-poloniex</artifactId>
-  			<version>4.2.2</version>
+  		<groupId>org.knowm.xchange</groupId>
+  		<artifactId>xchange-poloniex</artifactId>
+  		<version>4.2.2</version>
 	</dependency>
-		<dependency>
-  			<groupId>org.knowm.xchange</groupId>
-  			<artifactId>xchange-bittrex</artifactId>
-  			<version>4.2.2</version>
-	</dependency>	
-
-	<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+	
 	<dependency>
-	    <groupId>org.slf4j</groupId>
-	    <artifactId>slf4j-simple</artifactId>
-	    <version>1.7.25</version>
+  		<groupId>org.knowm.xchange</groupId>
+  		<artifactId>xchange-bittrex</artifactId>
+  		<version>4.2.2</version>
 	</dependency>	
 	  
 	<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
@@ -44,26 +40,36 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	    <version>1.4.196</version>
 	</dependency>
 	
+	<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
 	<dependency>
-		<groupId>org.apache.camel</groupId>
-		<artifactId>camel-core</artifactId>
-		<version>2.16.1</version>
+    	<groupId>org.apache.logging.log4j</groupId>
+    	<artifactId>log4j-core</artifactId>
+    	<version>2.9.1</version>
 	</dependency>
-	
+
+	<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
 	<dependency>
-		<groupId>org.apache.camel</groupId>
-		<artifactId>camel-stream</artifactId>		
-		<version>2.16.1</version>
+    	<groupId>org.apache.logging.log4j</groupId>
+    	<artifactId>log4j-api</artifactId>
+    	<version>2.9.1</version>
 	</dependency>
-    
-	<dependency>
+
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
+    
+    <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+	<dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-simple</artifactId>
+	    <version>1.7.25</version>
+	</dependency>
 
   </dependencies>
+  
     <build>
     <plugins>
       <plugin>

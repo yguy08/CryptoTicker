@@ -12,8 +12,6 @@ import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 import org.knowm.xchange.poloniex.PoloniexExchange;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.speculation1000.cryptoticker.core.GenericTickImpl;
 import com.speculation1000.cryptoticker.core.ITickProducer;
@@ -22,8 +20,6 @@ import com.speculation1000.cryptoticker.core.UniqueCurrentTimeMS;
 
 public class PoloniexTickProducer implements ITickProducer {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(PoloniexTickProducer.class);
-
 	private static final Exchange POLONIEX = ExchangeFactory.INSTANCE.createExchange(PoloniexExchange.class.getName());
 	
 	private final ITickQueue queue;
@@ -47,7 +43,6 @@ public class PoloniexTickProducer implements ITickProducer {
 			}
 	        rs.close();
 	    } catch (SQLException | NotAvailableFromExchangeException | NotYetImplementedForExchangeException | ExchangeException | IOException e1) {
-	    	LOGGER.error(e1.getMessage());
 	    	Thread.sleep(60000);
 		}
 	}

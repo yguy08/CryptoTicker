@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import org.h2.tools.Csv;
 
 import com.speculation1000.cryptoticker.core.GenericTickQueueImpl;
@@ -16,21 +19,26 @@ import com.speculation1000.cryptoticker.core.ITickQueue;
 
 public class App {
 	
+    private static final Logger logger = LogManager.getLogger("App");
+	
 	private List<String> exchanges;
 	
-	public App() throws Exception {	
+	public App() {	
 		exchanges = new ArrayList<>();
-	    ResultSet rs = new Csv().read("config/exchange.csv", null, null);
-        
-	    while (rs.next()) {
-        	exchanges.add(rs.getString(1));
-        }
-        rs.close();
+		
+	    try {
+	    	ResultSet rs = new Csv().read("config/exchange.csv", null, null);
+			while (rs.next()) {
+	        	exchanges.add(rs.getString(1));
+	        }
+			rs.close();
+	    } catch (SQLException e) {
+	    	logger.error(e.getMessage());
+		}
 	}
 	
 	private void start() {
 		ITickQueue tickQueue = new GenericTickQueueImpl();
-		
 		ExecutorService executorService = Executors.newFixedThreadPool(5);
 		
         for(String exchange : exchanges) {
@@ -54,6 +62,7 @@ public class App {
 
 	public static void main(String[] args) throws SQLException {
 		try {
+			logger.info("start");
 			new App().start();
 		} catch (Exception e) {
 			e.printStackTrace();

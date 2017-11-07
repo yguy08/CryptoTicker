@@ -5,7 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class GenericTickQueueImpl implements ITickQueue {
 
-	private BlockingQueue<GenericTickImpl> queue;
+	private BlockingQueue<ITick> queue;
 	
 	public GenericTickQueueImpl() {
 		queue = new LinkedBlockingQueue<>(50);
@@ -13,7 +13,7 @@ public class GenericTickQueueImpl implements ITickQueue {
 
 	@Override
 	public void put(ITick tick) throws InterruptedException {
-		queue.put((GenericTickImpl) tick);
+		queue.put(tick);
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package com.speculation1000.cryptoticker.poloniex;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.speculation1000.cryptoticker.core.ITick;
 import com.speculation1000.cryptoticker.core.ITickConsumer;
@@ -9,7 +9,7 @@ import com.speculation1000.cryptoticker.core.ITickQueue;
 
 public class PoloniexTickConsumer implements ITickConsumer {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(PoloniexTickConsumer.class);
+    private static final Logger logger = LogManager.getLogger("PoloniexTickConsumer");
 	
 	private final ITickQueue queue;
 	
@@ -20,7 +20,7 @@ public class PoloniexTickConsumer implements ITickConsumer {
 	@Override
 	public void consume() throws Exception {
 		ITick tick = queue.take();
-		LOGGER.info(tick.toString());
+		logger.info(tick.toString());
 	}
 
 }
