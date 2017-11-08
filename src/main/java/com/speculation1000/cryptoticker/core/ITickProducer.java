@@ -5,7 +5,7 @@ import com.speculation1000.cryptoticker.poloniex.PoloniexTickProducer;
 public interface ITickProducer {
     void produce() throws InterruptedException;
     
-    static ITickProducer createProducer(String producer, ITickQueue queue) {
+    static ITickProducer createProducer(String producer, TickQueue queue) {
     	switch(producer) {
     	case "Poloniex":
     		return new PoloniexTickProducer(producer,queue);

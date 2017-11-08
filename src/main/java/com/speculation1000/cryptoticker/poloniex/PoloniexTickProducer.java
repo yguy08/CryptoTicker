@@ -13,20 +13,19 @@ import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 import org.knowm.xchange.poloniex.PoloniexExchange;
 
-import com.speculation1000.cryptoticker.core.GenericTickImpl;
 import com.speculation1000.cryptoticker.core.ITickProducer;
-import com.speculation1000.cryptoticker.core.ITickQueue;
-import com.speculation1000.cryptoticker.core.UniqueCurrentTimeMS;
+import com.speculation1000.cryptoticker.core.TickQueue;
+import com.speculation1000.cryptoticker.marketdataevent.Tick;
 
 public class PoloniexTickProducer implements ITickProducer {
 	
 	private static final Exchange POLONIEX = ExchangeFactory.INSTANCE.createExchange(PoloniexExchange.class.getName());
 	
-	private final ITickQueue queue;
+	private final TickQueue queue;
 	
 	private final String name;
 	
-	public PoloniexTickProducer(String name,ITickQueue queue) {
+	public PoloniexTickProducer(String name,TickQueue queue) {
 		this.name = name;
 		this.queue = queue;
 	}
@@ -37,8 +36,7 @@ public class PoloniexTickProducer implements ITickProducer {
         	ResultSet rs = new Csv().read("config/poloniex.csv", null, null);
 			while (rs.next()) {        
 		        Ticker ticker = POLONIEX.getMarketDataService().getTicker(new CurrencyPair(rs.getString(1),rs.getString(2)));
-				queue.put(new GenericTickImpl(ticker.getCurrencyPair().toString(),UniqueCurrentTimeMS.uniqueCurrentTimeMS(),
-						ticker.getLast().doubleValue(),name));
+				queue.put(new Tick());
 		        Thread.sleep(1000);
 			}
 	        rs.close();

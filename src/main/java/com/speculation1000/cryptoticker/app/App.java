@@ -12,10 +12,9 @@ import org.apache.logging.log4j.Logger;
 
 import org.h2.tools.Csv;
 
-import com.speculation1000.cryptoticker.core.GenericTickQueueImpl;
+import com.speculation1000.cryptoticker.core.TickQueue;
 import com.speculation1000.cryptoticker.core.ITickConsumer;
 import com.speculation1000.cryptoticker.core.ITickProducer;
-import com.speculation1000.cryptoticker.core.ITickQueue;
 
 public class App {
 	
@@ -38,7 +37,7 @@ public class App {
 	}
 	
 	private void start() {
-		ITickQueue tickQueue = new GenericTickQueueImpl();
+		TickQueue tickQueue = new TickQueue();
 		ExecutorService executorService = Executors.newFixedThreadPool(5);
 		
         for(String exchange : exchanges) {
