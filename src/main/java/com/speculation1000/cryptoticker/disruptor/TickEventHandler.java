@@ -56,6 +56,7 @@ public class TickEventHandler implements EventHandler<Tick>{
 	public void onEvent(Tick event, long sequence, boolean endOfBatch){
     	try {
         	producer.send(session.createTextMessage(event.toString()));
+        	//logger.info(event.toString());
     	}catch(Exception e) {
     		logger.error(e.getMessage());
     	}
