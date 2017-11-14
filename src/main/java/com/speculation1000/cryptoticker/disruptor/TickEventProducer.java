@@ -7,7 +7,8 @@ import com.speculation1000.cryptoticker.core.UniqueCurrentTimeMS;
 import com.speculation1000.cryptoticker.marketdataevent.Tick;
 
 public class TickEventProducer{
-    private final RingBuffer<Tick> ringBuffer;
+    
+	private final RingBuffer<Tick> ringBuffer;
 
     public TickEventProducer(RingBuffer<Tick> ringBuffer){
         this.ringBuffer = ringBuffer;

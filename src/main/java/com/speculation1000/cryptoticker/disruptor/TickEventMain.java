@@ -1,7 +1,6 @@
 package com.speculation1000.cryptoticker.disruptor;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.sql.SQLException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -24,7 +23,8 @@ public class TickEventMain {
 	
 	private static final Exchange POLONIEX = ExchangeFactory.INSTANCE.createExchange(PoloniexExchange.class.getName());
 
-	public static void main(String[] args) throws InterruptedException, SQLException, NotAvailableFromExchangeException, NotYetImplementedForExchangeException, ExchangeException, IOException {
+	public static void main(String[] args) throws InterruptedException, SQLException, 
+				NotAvailableFromExchangeException, NotYetImplementedForExchangeException, ExchangeException, IOException {
 		
         // Executor that will be used to construct new threads for consumers
         ThreadFactory threadFactory = Executors.defaultThreadFactory();
@@ -39,7 +39,7 @@ public class TickEventMain {
         Disruptor<Tick> disruptor = new Disruptor<>(factory, bufferSize, threadFactory);
 
         // Connect the handler
-        disruptor.handleEventsWith(new TickEventHandler());
+        disruptor.handleEventsWith(new TickEventHandler("main"));
 
         // Start the Disruptor, starts all threads running
         disruptor.start();
