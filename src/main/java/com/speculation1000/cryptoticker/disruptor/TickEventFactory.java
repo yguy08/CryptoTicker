@@ -1,11 +1,11 @@
 package com.speculation1000.cryptoticker.disruptor;
 
 import com.lmax.disruptor.EventFactory;
-import com.speculation1000.cryptoticker.model.Tick;
+import com.speculation1000.cryptoticker.model.TickVO;
 
-public class TickEventFactory implements EventFactory<Tick> {
+public class TickEventFactory implements EventFactory<TickVO> {
     @Override
-	public Tick newInstance(){
-        return new Tick();
+	public TickVO newInstance(){
+        return new TickVO();
     }
 }

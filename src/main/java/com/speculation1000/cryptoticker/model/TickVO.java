@@ -1,6 +1,6 @@
 package com.speculation1000.cryptoticker.model;
 
-public class Tick {
+public class TickVO {
 	private String symbol;
 	private long timestamp;
 	private double last;
@@ -8,7 +8,7 @@ public class Tick {
 	private double ask;
 	private double volume;
 	
-	public Tick set(String symbol, long timestamp, double last, double bid, double ask, int volume) {
+	public TickVO set(String symbol, long timestamp, double last, double bid, double ask, int volume) {
 		setSymbol(symbol);
 		setTimestamp(timestamp);
 		setLast(last);

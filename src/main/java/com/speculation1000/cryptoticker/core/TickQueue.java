@@ -3,21 +3,21 @@ package com.speculation1000.cryptoticker.core;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import com.speculation1000.cryptoticker.model.Tick;
+import com.speculation1000.cryptoticker.model.TickVO;
 
 public class TickQueue {
 
-	private BlockingQueue<Tick> queue;
+	private BlockingQueue<TickVO> queue;
 	
 	public TickQueue() {
 		queue = new LinkedBlockingQueue<>(50);
 	}
 
-	public void put(Tick tick) throws InterruptedException {
+	public void put(TickVO tick) throws InterruptedException {
 		queue.put(tick);
 	}
 
-	public Tick take() throws InterruptedException {
+	public TickVO take() throws InterruptedException {
 		return queue.take();
 	}
 

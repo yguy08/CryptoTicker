@@ -10,9 +10,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.lmax.disruptor.EventHandler;
-import com.speculation1000.cryptoticker.model.Tick;
+import com.speculation1000.cryptoticker.model.TickVO;
 
-public class TickEventHandler implements EventHandler<Tick>{
+public class TickEventHandler implements EventHandler<TickVO>{
 	
 	private static final Logger logger = LogManager.getLogger("TickEventHandler");
 	
@@ -53,7 +53,7 @@ public class TickEventHandler implements EventHandler<Tick>{
 	
 	
     @Override
-	public void onEvent(Tick event, long sequence, boolean endOfBatch){
+	public void onEvent(TickVO event, long sequence, boolean endOfBatch){
     	try {
         	producer.send(session.createTextMessage(event.toString()));
         	//logger.info(event.toString());

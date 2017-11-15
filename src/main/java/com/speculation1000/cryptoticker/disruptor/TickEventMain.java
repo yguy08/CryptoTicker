@@ -17,7 +17,7 @@ import org.knowm.xchange.poloniex.PoloniexExchange;
 
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
-import com.speculation1000.cryptoticker.model.Tick;
+import com.speculation1000.cryptoticker.model.TickVO;
 
 public class TickEventMain {
 	
@@ -36,7 +36,7 @@ public class TickEventMain {
         int bufferSize = 1024;
 
         // Construct the Disruptor
-        Disruptor<Tick> disruptor = new Disruptor<>(factory, bufferSize, threadFactory);
+        Disruptor<TickVO> disruptor = new Disruptor<>(factory, bufferSize, threadFactory);
 
         // Connect the handler
         disruptor.handleEventsWith(new TickEventHandler("main"));
@@ -45,7 +45,7 @@ public class TickEventMain {
         disruptor.start();
 
         // Get the ring buffer from the Disruptor to be used for publishing.
-        RingBuffer<Tick> ringBuffer = disruptor.getRingBuffer();
+        RingBuffer<TickVO> ringBuffer = disruptor.getRingBuffer();
 
         TickEventProducer producer = new TickEventProducer(ringBuffer);
         
