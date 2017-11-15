@@ -27,7 +27,7 @@ import org.knowm.xchange.poloniex.PoloniexExchange;
 
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
-import com.speculation1000.cryptoticker.marketdataevent.Tick;
+import com.speculation1000.cryptoticker.model.Tick;
 
 public class DisruptorTest {
 	
@@ -114,5 +114,6 @@ public class DisruptorTest {
             System.out.println("JMS Exception occured.  Shutting down client.");
         }
 
-}
+    }
+    
 }

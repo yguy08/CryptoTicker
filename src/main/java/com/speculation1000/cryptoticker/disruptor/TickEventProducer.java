@@ -4,7 +4,7 @@ import org.knowm.xchange.dto.marketdata.Ticker;
 
 import com.lmax.disruptor.RingBuffer;
 import com.speculation1000.cryptoticker.core.UniqueCurrentTimeMS;
-import com.speculation1000.cryptoticker.marketdataevent.Tick;
+import com.speculation1000.cryptoticker.model.Tick;
 
 public class TickEventProducer{
     

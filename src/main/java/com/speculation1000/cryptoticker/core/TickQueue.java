@@ -3,7 +3,7 @@ package com.speculation1000.cryptoticker.core;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import com.speculation1000.cryptoticker.marketdataevent.Tick;
+import com.speculation1000.cryptoticker.model.Tick;
 
 public class TickQueue {
 

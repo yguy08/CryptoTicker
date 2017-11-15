@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.lmax.disruptor.EventHandler;
-import com.speculation1000.cryptoticker.marketdataevent.Tick;
+import com.speculation1000.cryptoticker.model.Tick;
 
 public class TickEventHandler implements EventHandler<Tick>{
 	
