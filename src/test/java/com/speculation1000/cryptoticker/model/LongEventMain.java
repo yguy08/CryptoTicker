@@ -1,4 +1,4 @@
-package com.speculation1000.cryptoticker.disruptor;
+package com.speculation1000.cryptoticker.model;
 
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.RingBuffer;
