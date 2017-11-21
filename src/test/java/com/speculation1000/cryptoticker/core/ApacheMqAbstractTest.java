@@ -13,7 +13,7 @@ import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
-public class ApacheMq {
+public class ApacheMqAbstractTest {
 
 	 public static void main(String[] args) throws Exception {
 	        thread(new HelloWorldProducer(), false);
