@@ -2,8 +2,8 @@ package com.speculation1000.cryptoticker.model;
 
 public interface TapeReader {
 	
-	void readTheTape();
+	void readTheTape() throws Exception;
 	
-	public void setBroker(Broker broker) throws Exception;
+	public void setTicker(Ticker broker) throws Exception;
     
 }
