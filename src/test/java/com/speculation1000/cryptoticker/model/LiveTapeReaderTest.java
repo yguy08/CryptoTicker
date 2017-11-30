@@ -1,10 +1,11 @@
 package com.speculation1000.cryptoticker.model;
 
-import com.speculation1000.cryptoticker.model.DataFeed;
-import com.speculation1000.cryptoticker.model.LiveTicker;
 import com.speculation1000.cryptoticker.model.TapeReader;
 import com.speculation1000.cryptoticker.model.TapeReaderImpl;
-import com.speculation1000.cryptoticker.model.XchangeDataFeed;
+import com.speculation1000.cryptoticker.tape.Tape;
+import com.speculation1000.cryptoticker.tape.XchangeLiveTape;
+import com.speculation1000.cryptoticker.ticker.LiveTicker;
+import com.speculation1000.cryptoticker.ticker.Ticker;
 
 public class LiveTapeReaderTest {
 	
@@ -12,17 +13,17 @@ public class LiveTapeReaderTest {
 	
 	Ticker ticker;
 	
-	DataFeed dataFeed;
+	Tape tape;
 	
 	public LiveTapeReaderTest(){
 		tapeReader = new TapeReaderImpl();
 		ticker = new LiveTicker();
-		dataFeed = new XchangeDataFeed();
+		tape = new XchangeLiveTape();
 	}
 	
 	public void start() throws Exception {
-		dataFeed.configure("src/main/resources/application.properties");
-		ticker.setDataFeed(dataFeed);
+		tape.configure("src/main/resources/application.properties");
+		ticker.setTape(tape);
 		tapeReader.setTicker(ticker);
 		tapeReader.readTheTape();
 	}

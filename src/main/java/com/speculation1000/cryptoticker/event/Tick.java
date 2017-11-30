@@ -1,4 +1,4 @@
-package com.speculation1000.cryptoticker.model;
+package com.speculation1000.cryptoticker.event;
 
 public class Tick {
 	private String symbol;

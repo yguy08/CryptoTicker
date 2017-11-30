@@ -1,6 +1,8 @@
-package com.speculation1000.cryptoticker.model;
+package com.speculation1000.cryptoticker.ticker;
 
-public class TapeReplay implements Ticker {
+import com.speculation1000.cryptoticker.tape.Tape;
+
+public class HistoricalTicker implements Ticker {
     
     private Tape dataFeed;
 
@@ -10,7 +12,7 @@ public class TapeReplay implements Ticker {
 	}
 
 	@Override
-	public void setDataFeed(Tape dataFeed) throws Exception {
+	public void setTape(Tape dataFeed) throws Exception {
         this.dataFeed = dataFeed;        
 	}
 

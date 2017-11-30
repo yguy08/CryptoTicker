@@ -1,4 +1,4 @@
-package com.speculation1000.cryptoticker.model;
+package com.speculation1000.cryptoticker.tape;
 
 import java.io.FileInputStream;
 import java.sql.ResultSet;
@@ -16,10 +16,10 @@ public class CsvTape extends Tape {
 
 	@Override
 	public void start() throws Exception {
-        ResultSet rs = new Csv().read(config.getProperty("file"), null, null);
+        final ResultSet rs = new Csv().read(config.getProperty("file"), null, null);
         while (rs.next()) {
-            System.out.println(rs.getString(1)+","+rs.getLong(2)+","+rs.getDouble(3)+","+rs.getDouble(4)+","
-            		+rs.getDouble(5)+","+rs.getDouble(6)+","+rs.getDouble(7));
+        	final double[] tickArr = {rs.getDouble(3),rs.getDouble(4),rs.getDouble(5)}; 
+            onData(rs.getString(1),rs.getLong(2),tickArr);
         }
         rs.close();
 	}
