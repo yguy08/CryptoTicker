@@ -17,8 +17,13 @@ public class LiveTicker implements Ticker {
 	}
 
 	@Override
-	public void setTape(Tape tape) throws Exception {
+	public void setTape(Tape tape) {
 		this.tape = tape;
+	}
+
+	@Override
+	public Tape getTape() {
+		return tape;
 	}
 
 }

@@ -4,21 +4,26 @@ import com.speculation1000.cryptoticker.tape.Tape;
 
 public class HistoricalTicker implements Ticker {
     
-    private Tape dataFeed;
+    private Tape tape;
 
 	@Override
 	public void start() throws Exception {
-		dataFeed.start();		
+		tape.start();		
 	}
 
 	@Override
-	public void setTape(Tape dataFeed) throws Exception {
-        this.dataFeed = dataFeed;        
+	public void setTape(Tape tape) {
+        this.tape = tape;        
 	}
 
 	@Override
 	public void reset() throws Exception {
 				
+	}
+
+	@Override
+	public Tape getTape() {
+		return tape;
 	}
 
 }

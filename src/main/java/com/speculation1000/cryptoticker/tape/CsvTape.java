@@ -5,10 +5,13 @@ import java.sql.ResultSet;
 import java.util.Properties;
 
 import org.h2.tools.Csv;
+import org.knowm.xchange.Exchange;
+
+import com.speculation1000.cryptoticker.event.handler.TickEventHandler;
 
 public class CsvTape extends Tape {
 
-	@Override
+	
 	public void configure(String path) throws Exception {
         config = new Properties();
         config.load(new FileInputStream(path));
@@ -22,6 +25,24 @@ public class CsvTape extends Tape {
             onData(rs.getString(1),rs.getLong(2),tickArr);
         }
         rs.close();
+	}
+
+	@Override
+	public void subscribe(String... symbol) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addTickEventHandler(TickEventHandler... handler) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setExchange(Exchange exchange) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

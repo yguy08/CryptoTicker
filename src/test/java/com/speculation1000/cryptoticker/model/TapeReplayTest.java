@@ -13,19 +13,17 @@ public class TapeReplayTest {
 	
 	Ticker ticker;
 	
-	Tape dataFeed;
+	Tape tape;
 	
 	public TapeReplayTest(){
 		tapeReader = new TapeReaderImpl();
 		ticker = new HistoricalTicker();
-		dataFeed = new CsvTape();
+		tape = new CsvTape();
 	}
 	
 	public void start() throws Exception {
-		dataFeed.configure("src/main/resources/application.properties");
-		ticker.setTape(dataFeed);
 		tapeReader.setTicker(ticker);
-		tapeReader.readTheTape();
+		tapeReader.setTape(tape);
 	}
 	
 	public static void main(String[] args) throws Exception {
