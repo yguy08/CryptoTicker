@@ -1,5 +1,7 @@
 package com.speculation1000.cryptoticker.event;
 
+import com.speculation1000.cryptoticker.core.UniqueCurrentTimeMS;
+
 public class Tick {
 	private String symbol;
 	private long timestamp;
@@ -15,6 +17,26 @@ public class Tick {
 		setBid(bid);
 		setAsk(ask);
 		setVolume(volume);
+		return this;
+	}
+	
+	public Tick set(Tick t) {
+		setSymbol(t.getSymbol());
+		setTimestamp(t.getTimestamp());
+		setLast(t.getLast());
+		setBid(t.getBid());
+		setAsk(t.getAsk());
+		setVolume(t.getVolume());
+		return this;
+	}
+	
+	public Tick set(String t){
+		setSymbol("BTC/USDT");
+		setTimestamp(UniqueCurrentTimeMS.uniqueCurrentTimeMS());
+		setLast(10_000);
+		setBid(10_000);
+		setAsk(10000);
+		setVolume(10000);
 		return this;
 	}
 	

@@ -13,7 +13,7 @@ public class HistoricalTicker implements Ticker {
 
 	@Override
 	public void setTape(Tape tape) {
-        this.tape = tape;        
+        this.tape = tape;
 	}
 
 	@Override

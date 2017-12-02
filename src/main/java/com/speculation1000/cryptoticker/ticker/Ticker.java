@@ -10,9 +10,9 @@ public interface Ticker {
     
     public void reset() throws Exception;
     
-    public void setTape(Tape tape);
+    void setTape(Tape tape);
     
-    public Tape getTape();
+    Tape getTape();
     
     public static final Function<String,Ticker> TICKERFACTORY = 
     		new Function<String,Ticker>(){

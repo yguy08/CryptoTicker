@@ -1,48 +1,39 @@
 package com.speculation1000.cryptoticker.tape;
 
-import java.io.FileInputStream;
-import java.sql.ResultSet;
-import java.util.Properties;
-
-import org.h2.tools.Csv;
 import org.knowm.xchange.Exchange;
 
 import com.speculation1000.cryptoticker.event.handler.TickEventHandler;
 
 public class CsvTape extends Tape {
-
 	
-	public void configure(String path) throws Exception {
-        config = new Properties();
-        config.load(new FileInputStream(path));
-	}
-
+	private static final String record = "BTC/USDT,123405968,10000.00,10000.01,10000.0233333,10000.03333333,10000.0333333";
+	
+	//file...
+	
 	@Override
 	public void start() throws Exception {
-        final ResultSet rs = new Csv().read(config.getProperty("file"), null, null);
-        while (rs.next()) {
-        	final double[] tickArr = {rs.getDouble(3),rs.getDouble(4),rs.getDouble(5)}; 
-            onData(rs.getString(1),rs.getLong(2),tickArr);
+		disruptor.start();
+        while(true){
+            onData(record);
         }
-        rs.close();
+        //disruptor.shutdown();
 	}
 
 	@Override
-	public void subscribe(String... symbol) {
-		// TODO Auto-generated method stub
-		
+	public Tape subscribe(String symbol) {
+		return this;		
 	}
 
 	@Override
-	public void addTickEventHandler(TickEventHandler... handler) {
-		// TODO Auto-generated method stub
+	public Tape addTickEventHandler(TickEventHandler handler) {
+		disruptor.handleEventsWith(handler::onTick);
+		return this;
 		
 	}
 
 	@Override
 	public void setExchange(Exchange exchange) {
-		// TODO Auto-generated method stub
-		
+	
 	}
 
 }
