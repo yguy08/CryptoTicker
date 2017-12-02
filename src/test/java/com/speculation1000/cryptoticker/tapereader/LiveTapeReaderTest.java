@@ -1,5 +1,6 @@
 package com.speculation1000.cryptoticker.tapereader;
 
+import com.speculation1000.cryptoticker.event.handler.EventEnum;
 import com.speculation1000.cryptoticker.tapereader.TapeReader;
 import com.speculation1000.cryptoticker.tapereader.TapeReaderImpl;
 
@@ -14,10 +15,11 @@ public class LiveTapeReaderTest {
     public void start() throws Exception {
         //tapeReader set ticker
     	tapeReader.setTicker(TapeReader.TICKER_FACTORY.apply("live"))
-    	    .setTape(TapeReader.TAPE_FACTORY.apply("xchange"))
+    	    .setTape(TapeReader.TAPE_FACTORY.apply("fake"))
     	    .subscribe(TapeReader.SYMBOL_FACTORY.apply(1))
-    	    .addTickEvent(TapeReader.EVENT_FACTORY.apply(1))
-    	    .addTickEvent(TapeReader.EVENT_FACTORY.apply(2))
+    	    .subscribe(TapeReader.SYMBOL_FACTORY.apply(2))
+    	    .addTickEvent(TapeReader.EVENT_FACTORY.apply(EventEnum.LOG))
+    	    //.addTickEvent(TapeReader.EVENT_FACTORY.apply(EventEnum.SAVE))
     	    .setExchange(TapeReader.EXCHANGE_FACTORY.apply("poloniex"))
     	    .readTheTape();
     	

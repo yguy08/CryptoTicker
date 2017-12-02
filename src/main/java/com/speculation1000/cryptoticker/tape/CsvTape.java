@@ -2,7 +2,7 @@ package com.speculation1000.cryptoticker.tape;
 
 import org.knowm.xchange.Exchange;
 
-import com.speculation1000.cryptoticker.event.handler.TickEventHandler;
+import com.speculation1000.cryptoticker.event.handler.EventHandler;
 
 public class CsvTape extends Tape {
 	
@@ -25,7 +25,7 @@ public class CsvTape extends Tape {
 	}
 
 	@Override
-	public Tape addTickEventHandler(TickEventHandler handler) {
+	public Tape addTickEventHandler(EventHandler handler) {
 		disruptor.handleEventsWith(handler::onTick);
 		return this;
 		

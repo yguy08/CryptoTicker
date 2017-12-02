@@ -2,7 +2,7 @@ package com.speculation1000.cryptoticker.tape;
 
 import org.knowm.xchange.Exchange;
 
-import com.speculation1000.cryptoticker.event.handler.TickEventHandler;
+import com.speculation1000.cryptoticker.event.handler.EventHandler;
 
 public class FakeTape extends Tape {
 	
@@ -13,7 +13,7 @@ public class FakeTape extends Tape {
 		disruptor.start();
         while(true){
         	onData(record);
-            Thread.sleep(1000, 1);
+            //Thread.sleep(1000, 1);
         }
         //disruptor.shutdown();
 	}
@@ -24,7 +24,7 @@ public class FakeTape extends Tape {
 	}
 
 	@Override
-	public Tape addTickEventHandler(TickEventHandler handler) {
+	public Tape addTickEventHandler(EventHandler handler) {
 		disruptor.handleEventsWith(handler::onTick);
 		return this;
 		

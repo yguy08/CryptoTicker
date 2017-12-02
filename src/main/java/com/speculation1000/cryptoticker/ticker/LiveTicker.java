@@ -10,11 +10,6 @@ public class LiveTicker implements Ticker {
 	public void start() throws Exception {
 		tape.start();
 	}
-	
-	@Override
-	public void reset() throws Exception {
-		
-	}
 
 	@Override
 	public void setTape(Tape tape) {
@@ -24,6 +19,11 @@ public class LiveTicker implements Ticker {
 	@Override
 	public Tape getTape() {
 		return tape;
+	}
+	
+	@Override
+	public void reset() throws Exception {
+		
 	}
 
 }

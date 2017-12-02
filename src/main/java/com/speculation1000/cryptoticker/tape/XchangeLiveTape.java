@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
 
-import com.speculation1000.cryptoticker.event.handler.TickEventHandler;
+import com.speculation1000.cryptoticker.event.handler.EventHandler;
 import com.speculation1000.cryptoticker.tapereader.TapeReader;
 
 public class XchangeLiveTape extends Tape {
@@ -23,7 +23,7 @@ public class XchangeLiveTape extends Tape {
                 .apply(symbol, EXCHANGE
                 .getMarketDataService()
                 .getTicker(new CurrencyPair(symbol))));
-                Thread.sleep(1000);
+                Thread.sleep(500);
           }
 	   }
     }
@@ -35,7 +35,7 @@ public class XchangeLiveTape extends Tape {
 	}
 
 	@Override
-	public Tape addTickEventHandler(TickEventHandler handler) {
+	public Tape addTickEventHandler(EventHandler handler) {
 		disruptor.handleEventsWith(handler::onTick);
 		return this;
 	}

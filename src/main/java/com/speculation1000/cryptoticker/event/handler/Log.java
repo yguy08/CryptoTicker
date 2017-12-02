@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.speculation1000.cryptoticker.event.Tick;
 
-public class TickEventHandlerImpl implements TickEventHandler {
+public class Log implements EventHandler {
 
 	private static final Logger LOGGER = LogManager.getLogger("TickEventHandler");
 	

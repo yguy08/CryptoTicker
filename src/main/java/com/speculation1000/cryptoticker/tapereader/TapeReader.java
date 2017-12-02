@@ -6,13 +6,13 @@ import java.util.function.IntFunction;
 
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
+import org.knowm.xchange.bittrex.BittrexExchange;
 import org.knowm.xchange.poloniex.PoloniexExchange;
 
 import com.speculation1000.cryptoticker.core.UniqueCurrentTimeMS;
 import com.speculation1000.cryptoticker.event.Tick;
-import com.speculation1000.cryptoticker.event.handler.Save2File;
-import com.speculation1000.cryptoticker.event.handler.TickEventHandler;
-import com.speculation1000.cryptoticker.event.handler.TickEventHandlerImpl;
+import com.speculation1000.cryptoticker.event.handler.EventEnum;
+import com.speculation1000.cryptoticker.event.handler.EventHandler;
 import com.speculation1000.cryptoticker.tape.CsvTape;
 import com.speculation1000.cryptoticker.tape.FakeTape;
 import com.speculation1000.cryptoticker.tape.Tape;
@@ -29,15 +29,13 @@ public interface TapeReader {
     
     TapeReader subscribe(String symbol);
     
-    TapeReader addTickEvent(TickEventHandler handler);
+    TapeReader addTickEvent(EventHandler handler);
 
 	TapeReader setExchange(Exchange apply);
     
     //set what ever is in reader test...
 
     void readTheTape() throws Exception;
-
-    void configure(String cfg) throws Exception;
 
     public static final Function<String,Ticker> TICKER_FACTORY =
             new Function<String,Ticker>() {
@@ -81,6 +79,8 @@ public interface TapeReader {
                 switch(t){
                 case "poloniex":
                     return ExchangeFactory.INSTANCE.createExchange(PoloniexExchange.class.getName());
+                case "trex":
+                	return ExchangeFactory.INSTANCE.createExchange(BittrexExchange.class.getName());
                 default:
                 	return ExchangeFactory.INSTANCE.createExchange(PoloniexExchange.class.getName());
                 }
@@ -94,26 +94,21 @@ public interface TapeReader {
             public String apply(int t){
                 switch(t){
                 case 1:
-                    return "BTC/USDT"; //properties
+                    return "BTC/USDT";
+                case 2:
+                	return "ETH/BTC";//properties
                 default:
                 	return "BTC/USDT";
                 }
             }
     };
     
-    public static final IntFunction<TickEventHandler> EVENT_FACTORY =
-            new IntFunction<TickEventHandler>() {
+    public static final Function<EventEnum,EventHandler> EVENT_FACTORY =
+            new Function<EventEnum,EventHandler>() {
     
             @Override
-            public TickEventHandler apply(int t){
-                switch(t){
-                case 1:
-                    return new TickEventHandlerImpl();
-                case 2:
-                	return new Save2File();
-                default:
-                    return new TickEventHandlerImpl();
-                }
+            public EventHandler apply(EventEnum t){
+                return EventEnum.getHandler(t);
             }
     };
     

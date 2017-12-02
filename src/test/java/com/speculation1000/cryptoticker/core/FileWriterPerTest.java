@@ -62,26 +62,25 @@ public static void writeBuffered(List<String> records, int bufSize) throws IOExc
     }
 }
 
-public static String writeBuffered(String record, int bufSize,File file,FileWriter writer) throws IOException {
+public static void writeBuffered(String record, int bufSize,File file,FileWriter writer) throws IOException {
     try {
         BufferedWriter bufferedWriter = new BufferedWriter(writer, bufSize);
 
         System.out.println("Writing buffered (buffer size: " + bufSize + ")... ");
-        return write(record, bufferedWriter);
+        write(record, bufferedWriter);
     } finally {
         // comment this out if you want to inspect the files afterward
         file.delete();
     }
 }
 
-public static String write(String record, Writer writer) throws IOException {
+public static void write(String record, Writer writer) throws IOException {
     long start = System.currentTimeMillis();
     writer.write(record);
-    //writer.flush();
-    //writer.close();
+    writer.flush();
+    writer.close();
     long end = System.currentTimeMillis();
-    return record;
-    //System.out.println((end - start) / 1000f + " seconds");
+    System.out.println((end - start) / 1000f + " seconds");
 }
 
 public static void write(List<String> records, Writer writer) throws IOException {
@@ -89,8 +88,8 @@ public static void write(List<String> records, Writer writer) throws IOException
     for (String record: records) {
         writer.write(record);
     }
-    //writer.flush();
-    //writer.close();
+    writer.flush();
+    writer.close();
     long end = System.currentTimeMillis();
     System.out.println((end - start) / 1000f + " seconds");
 }

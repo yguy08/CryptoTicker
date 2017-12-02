@@ -9,7 +9,7 @@ import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.speculation1000.cryptoticker.event.Tick;
-import com.speculation1000.cryptoticker.event.handler.TickEventHandler;
+import com.speculation1000.cryptoticker.event.handler.EventHandler;
 
 public abstract class Tape {
 	
@@ -21,7 +21,7 @@ public abstract class Tape {
 	
 	public RingBuffer<Tick> ringBuffer;
 	
-	public List<TickEventHandler> tickEvents;
+	public List<EventHandler> tickEvents;
 	
 	public List<String> symbols;
 	
@@ -31,7 +31,7 @@ public abstract class Tape {
 	
 	public abstract Tape subscribe(String symbol);
 	
-    public abstract Tape addTickEventHandler(TickEventHandler handler);
+    public abstract Tape addTickEventHandler(EventHandler handler);
     
     public void setExchange(Exchange exchange){
     	EXCHANGE = exchange;
