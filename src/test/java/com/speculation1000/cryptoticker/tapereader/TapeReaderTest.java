@@ -3,33 +3,33 @@ package com.speculation1000.cryptoticker.tapereader;
 import com.speculation1000.cryptoticker.event.handler.EventEnum;
 import com.speculation1000.cryptoticker.tapereader.TapeReader;
 import com.speculation1000.cryptoticker.tapereader.TapeReaderImpl;
+import com.speculation1000.cryptoticker.ticker.SimpleTicker;
 
-public class LiveTapeReaderTest {
+public class TapeReaderTest {
     
     TapeReader tapeReader;
     
-    public LiveTapeReaderTest(){
+    public TapeReaderTest(){
         tapeReader = new TapeReaderImpl();
     }
     
     public void start() throws Exception {
         //tapeReader set ticker
-    	tapeReader.setTicker(TapeReader.TICKER_FACTORY.apply("live"))
-    	    .setTape(TapeReader.TAPE_FACTORY.apply("fake"))
+    	tapeReader.setTicker(new SimpleTicker())
+	        .configure("src/main/resources/application.properties")
     	    .subscribe(TapeReader.SYMBOL_FACTORY.apply(1))
     	    .subscribe(TapeReader.SYMBOL_FACTORY.apply(2))
-    	    .addTickEvent(TapeReader.EVENT_FACTORY.apply(EventEnum.LOG))
-    	    //.addTickEvent(TapeReader.EVENT_FACTORY.apply(EventEnum.SAVE))
-    	    .setExchange(TapeReader.EXCHANGE_FACTORY.apply("poloniex"))
+    	    .subscribe("NXT/BTC")
+    	    .subscribe("ETC/BTC")
+    	    .subscribe("ETH/BTC")
+    	    .addEvent(TapeReader.EVENTFACTORY.apply(EventEnum.LOG))
+    	    .addEvent(TapeReader.EVENTFACTORY.apply(EventEnum.SAVE))
+    	    .addEvent(TapeReader.EVENTFACTORY.apply(EventEnum.COUNT))
     	    .readTheTape();
-    	
-    	
-        //tapeReader configure disruptor?
-        //tapeReader start
 	}
 	
 	public static void main(String[] args) throws Exception {
-        LiveTapeReaderTest ticker = new LiveTapeReaderTest();
+        TapeReaderTest ticker = new TapeReaderTest();
         ticker.start();
     }
 }

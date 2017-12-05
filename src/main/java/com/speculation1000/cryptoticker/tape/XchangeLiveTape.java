@@ -1,6 +1,7 @@
 package com.speculation1000.cryptoticker.tape;
 
-import java.util.stream.Stream;
+import java.io.FileInputStream;
+import java.util.Properties;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,11 +9,14 @@ import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
 
 import com.speculation1000.cryptoticker.event.handler.EventHandler;
+import com.speculation1000.cryptoticker.function.TickerFunction;
 import com.speculation1000.cryptoticker.tapereader.TapeReader;
 
 public class XchangeLiveTape extends Tape {
 
     private static final Logger LOGGER = LogManager.getLogger("XchangeDataFeed");
+    
+    public Exchange EXCHANGE = null;
     
     @Override
     public void start() throws Exception {
@@ -23,26 +27,34 @@ public class XchangeLiveTape extends Tape {
                 .apply(symbol, EXCHANGE
                 .getMarketDataService()
                 .getTicker(new CurrencyPair(symbol))));
-                Thread.sleep(500);
+                Thread.sleep(1000);
           }
 	   }
     }
 
 	@Override
-	public Tape subscribe(String symbol) {
-		Stream.of(symbol).forEach(e -> this.symbols.add(e));
-		return this;
+	public void subscribe(String symbol) {
+		symbols.add(symbol);
 	}
 
 	@Override
-	public Tape addTickEventHandler(EventHandler handler) {
+	public void addEventHandler(EventHandler handler) {
 		disruptor.handleEventsWith(handler::onTick);
-		return this;
 	}
 
 	@Override
-	public void setExchange(Exchange exchange) {
-		EXCHANGE = exchange;
+	public void configure(String path) throws Exception {
+        config = new Properties();
+        config.load(new FileInputStream(path));
+        
+        setExchange(config.getProperty("xchange.exchange"));
+        
+        //if save to file, etc...
+        
 	};
+	
+    private void setExchange(String exchange) {
+		EXCHANGE = TickerFunction.EXCHANGEFACTORY.apply(exchange);
+	}
 	
 }

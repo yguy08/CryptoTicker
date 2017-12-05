@@ -1,39 +1,44 @@
 package com.speculation1000.cryptoticker.tape;
 
-import org.knowm.xchange.Exchange;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
 
 import com.speculation1000.cryptoticker.event.handler.EventHandler;
 
 public class CsvTape extends Tape {
 	
-	private static final String record = "BTC/USDT,123405968,10000.00,10000.01,10000.0233333,10000.03333333,10000.0333333";
-	
-	//file...
+	private File path;
 	
 	@Override
 	public void start() throws Exception {
 		disruptor.start();
         while(true){
-            onData(record);
+            onData(null);
         }
         //disruptor.shutdown();
 	}
 
 	@Override
-	public Tape subscribe(String symbol) {
-		return this;		
+	public void addEventHandler(EventHandler handler) {
+		disruptor.handleEventsWith(handler::onTick);
 	}
 
 	@Override
-	public Tape addTickEventHandler(EventHandler handler) {
-		disruptor.handleEventsWith(handler::onTick);
-		return this;
+	public void configure(String path) throws Exception {
+        config = new Properties();
+        config.load(new FileInputStream(path));
+        
+        setFilePath(config.getProperty("csv.file"));	    	
+	}
+	
+    private void setFilePath(String property) {
 		
 	}
 
 	@Override
-	public void setExchange(Exchange exchange) {
-	
+	public void subscribe(String symbol) {
+		
 	}
 
 }

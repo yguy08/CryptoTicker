@@ -2,7 +2,8 @@ package com.speculation1000.cryptoticker.event.handler;
 
 public enum EventEnum {
     LOG("log"),
-    SAVE("save");
+    SAVE("save"),
+    COUNT("count");
 	
 	String eventName;
 	
@@ -16,6 +17,8 @@ public enum EventEnum {
 			return new Log();
 		case SAVE:
 			return new Save2File();
+		case COUNT:
+			return new Counter();
 		default:
 			return new Log();
 		}

@@ -1,38 +1,38 @@
 package com.speculation1000.cryptoticker.tape;
 
-import org.knowm.xchange.Exchange;
-
+import com.speculation1000.cryptoticker.core.UniqueCurrentTimeMS;
+import com.speculation1000.cryptoticker.event.Tick;
 import com.speculation1000.cryptoticker.event.handler.EventHandler;
 
 public class FakeTape extends Tape {
 	
-	private static final String record = "BTC/USDT,123405968,10000.00,10000.01,10000.0233333,10000.03333333,10000.0333333";
+	private static Tick fakeTick;
 	
 	@Override
 	public void start() throws Exception {
 		disruptor.start();
         while(true){
-        	onData(record);
+        	onData(fakeTick);
             //Thread.sleep(1000, 1);
         }
-        //disruptor.shutdown();
 	}
 
 	@Override
-	public Tape subscribe(String symbol) {
-		return this;		
-	}
-
-	@Override
-	public Tape addTickEventHandler(EventHandler handler) {
+	public void addEventHandler(EventHandler handler) {
 		disruptor.handleEventsWith(handler::onTick);
-		return this;
+	}
+	
+    @Override
+	public void subscribe(String symbol) {
 		
 	}
 
 	@Override
-	public void setExchange(Exchange exchange) {
-	
+	public void configure(String path) throws Exception {
+		fakeTick = new Tick().set("BTC/USDT",UniqueCurrentTimeMS.uniqueCurrentTimeMS(),
+				10000.00,10000.00,10000.00,100000);
+		
+		
 	}
 
 }

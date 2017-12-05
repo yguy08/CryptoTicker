@@ -1,6 +1,7 @@
 package com.speculation1000.cryptoticker.tapereader;
 
-import org.knowm.xchange.Exchange;
+import java.io.FileInputStream;
+import java.util.Properties;
 
 import com.speculation1000.cryptoticker.event.handler.EventHandler;
 import com.speculation1000.cryptoticker.tape.Tape;
@@ -9,6 +10,8 @@ import com.speculation1000.cryptoticker.ticker.Ticker;
 public class TapeReaderImpl implements TapeReader {
 
     private Ticker ticker;
+    
+    private Properties config;
 
 	@Override
 	public void readTheTape() throws Exception {
@@ -29,19 +32,22 @@ public class TapeReaderImpl implements TapeReader {
 
 	@Override
 	public TapeReader subscribe(String symbol) {
-		ticker.getTape().subscribe(symbol);
+		ticker.subscribe(symbol);
 		return this;
 	}
 
 	@Override
-	public TapeReader addTickEvent(EventHandler handler) {
-        ticker.getTape().addTickEventHandler(handler);
+	public TapeReader addEvent(EventHandler handler) {
+        ticker.addEventHandler(handler);
 		return this;
 	}
 
 	@Override
-	public TapeReader setExchange(Exchange ex) {
-		ticker.getTape().setExchange(ex);
+	public TapeReader configure(String path) throws Exception {
+        config = new Properties();
+        config.load(new FileInputStream(path));
+		ticker.setTape(Tape.TAPEFACTORY.apply(config.getProperty("tape")));
+		ticker.configure(path);
 		return this;
 	}	
 

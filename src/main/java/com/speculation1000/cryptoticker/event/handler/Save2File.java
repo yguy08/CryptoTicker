@@ -13,7 +13,7 @@ import com.speculation1000.cryptoticker.event.Tick;
 
 public class Save2File implements EventHandler {
 
-	private static final Logger LOGGER = LogManager.getLogger("TickEventHandler");
+	private static final Logger LOGGER = LogManager.getLogger("Save2File");
 	
 	private static File file;
 	
@@ -23,21 +23,17 @@ public class Save2File implements EventHandler {
 	
 	public Save2File() {
 		try {
-			file = File.createTempFile("foo", ".txt");
+			file = File.createTempFile("btc", ".txt");
 			writer = new FileWriter(file);
 			buffWriter = new BufferedWriter(writer,8192);
 		}catch (Exception e) {
-			
+			LOGGER.error(e);
 		} 
 	}
-	
-	private static int count = 0;
 	
 	@Override
 	public void onTick(Tick tick, long sequence, boolean endOfBatch) throws Exception {
 		WRITER.accept(tick.toString());
-		count++; //count handle
-		LOGGER.info("ticks: "+count);
 	}
 	
     private static final Consumer<String> WRITER = 

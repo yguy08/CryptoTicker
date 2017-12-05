@@ -4,21 +4,11 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
-import org.knowm.xchange.Exchange;
-import org.knowm.xchange.ExchangeFactory;
-import org.knowm.xchange.bittrex.BittrexExchange;
-import org.knowm.xchange.poloniex.PoloniexExchange;
-
 import com.speculation1000.cryptoticker.core.UniqueCurrentTimeMS;
 import com.speculation1000.cryptoticker.event.Tick;
 import com.speculation1000.cryptoticker.event.handler.EventEnum;
 import com.speculation1000.cryptoticker.event.handler.EventHandler;
-import com.speculation1000.cryptoticker.tape.CsvTape;
-import com.speculation1000.cryptoticker.tape.FakeTape;
 import com.speculation1000.cryptoticker.tape.Tape;
-import com.speculation1000.cryptoticker.tape.XchangeLiveTape;
-import com.speculation1000.cryptoticker.ticker.HistoricalTicker;
-import com.speculation1000.cryptoticker.ticker.LiveTicker;
 import com.speculation1000.cryptoticker.ticker.Ticker;
 
 public interface TapeReader {
@@ -29,63 +19,11 @@ public interface TapeReader {
     
     TapeReader subscribe(String symbol);
     
-    TapeReader addTickEvent(EventHandler handler);
-
-	TapeReader setExchange(Exchange apply);
+    TapeReader addEvent(EventHandler handler);
     
-    //set what ever is in reader test...
+    TapeReader configure(String path) throws Exception;
 
     void readTheTape() throws Exception;
-
-    public static final Function<String,Ticker> TICKER_FACTORY =
-            new Function<String,Ticker>() {
-
-                @Override
-                public Ticker apply(String t) {
-                    switch(t){
-                    case "live":
-                        return new LiveTicker();
-                    case "historical":
-                        return new HistoricalTicker();
-                    default:
-                        return new HistoricalTicker();
-                    }
-                }
-    };
-
-    public static final Function<String,Tape> TAPE_FACTORY = 
-            new Function<String,Tape>() {
-
-            @Override
-            public Tape apply(String t){
-                switch(t){
-                case "xchange":
-                    return new XchangeLiveTape();
-                case "csv":
-                    return new CsvTape();
-                case "fake":
-                	return new FakeTape();
-                default:
-                    return new CsvTape();
-            	}
-            }
-    };
-    
-    public static final Function<String,Exchange> EXCHANGE_FACTORY = 
-            new Function<String,Exchange>() {
-
-            @Override
-            public Exchange apply(String t){
-                switch(t){
-                case "poloniex":
-                    return ExchangeFactory.INSTANCE.createExchange(PoloniexExchange.class.getName());
-                case "trex":
-                	return ExchangeFactory.INSTANCE.createExchange(BittrexExchange.class.getName());
-                default:
-                	return ExchangeFactory.INSTANCE.createExchange(PoloniexExchange.class.getName());
-                }
-            }
-    };
     
     public static final IntFunction<String> SYMBOL_FACTORY = 
             new IntFunction<String>() {
@@ -103,7 +41,7 @@ public interface TapeReader {
             }
     };
     
-    public static final Function<EventEnum,EventHandler> EVENT_FACTORY =
+    public static final Function<EventEnum,EventHandler> EVENTFACTORY =
             new Function<EventEnum,EventHandler>() {
     
             @Override
