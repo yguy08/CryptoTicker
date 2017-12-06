@@ -80,6 +80,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     	<artifactId>activemq-all</artifactId>
     	<version>5.15.2</version>
 	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/net.openhft/chronicle-bytes -->
+	<dependency>
+	    <groupId>net.openhft</groupId>
+	    <artifactId>chronicle-bytes</artifactId>
+	    <version>1.10.0</version>
+	</dependency>
 
   </dependencies>
   

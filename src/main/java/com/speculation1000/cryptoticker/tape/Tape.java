@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Executors;
-import java.util.function.Function;
+
+import static net.openhft.chronicle.bytes.StopCharTesters.SPACE_STOP;
 
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.speculation1000.cryptoticker.event.Tick;
 import com.speculation1000.cryptoticker.event.handler.EventHandler;
+
+import net.openhft.chronicle.bytes.Bytes;
 
 public abstract class Tape {
 	
@@ -48,26 +51,20 @@ public abstract class Tape {
                 }
             };
             
-    public void onData(Tick tick){
+	public static final EventTranslatorOneArg<Tick,Bytes> BYTESTRANSLATOR =
+            new EventTranslatorOneArg<Tick,Bytes>() {
+                public void translateTo(Tick event, long sequence,Bytes bytes){
+                    event.set(bytes.parseUtf8(SPACE_STOP),bytes.parseLong(),bytes.parseDouble(),
+                    		bytes.parseDouble(),bytes.parseDouble(),(int) bytes.parseDouble());
+                }
+            };
+            
+   public void onData(Tick tick){
         ringBuffer.publishEvent(TRANSLATOR, tick);
-    }
-    
-    public static final Function<String,Tape> TAPEFACTORY = 
-            new Function<String,Tape>() {
-
-            @Override
-            public Tape apply(String t){
-                switch(t){
-                case "xchange":
-                    return new XchangeLiveTape();
-                case "csv":
-                    return new CsvTape();
-                case "fake":
-                	return new FakeTape();
-                default:
-                    return new CsvTape();
-            	}
-            }
-    };
+   }
+   
+   public void onTick(Bytes bytes){
+       ringBuffer.publishEvent(BYTESTRANSLATOR, bytes);
+  }
 
 }

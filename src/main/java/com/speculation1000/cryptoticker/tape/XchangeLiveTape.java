@@ -8,9 +8,8 @@ import org.apache.logging.log4j.Logger;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
 
+import com.speculation1000.cryptoticker.core.TickerFunction;
 import com.speculation1000.cryptoticker.event.handler.EventHandler;
-import com.speculation1000.cryptoticker.function.TickerFunction;
-import com.speculation1000.cryptoticker.tapereader.TapeReader;
 
 public class XchangeLiveTape extends Tape {
 
@@ -23,11 +22,11 @@ public class XchangeLiveTape extends Tape {
         disruptor.start();
         while(true) {
             for(String symbol : symbols){
-                onData(TapeReader.TICK_FACTORY
+            	onTick(TickerFunction.XTICKER2BYTESFUNC
                 .apply(symbol, EXCHANGE
                 .getMarketDataService()
                 .getTicker(new CurrencyPair(symbol))));
-                Thread.sleep(1000);
+                Thread.sleep(5000);
           }
 	   }
     }
@@ -54,7 +53,7 @@ public class XchangeLiveTape extends Tape {
 	};
 	
     private void setExchange(String exchange) {
-		EXCHANGE = TickerFunction.EXCHANGEFACTORY.apply(exchange);
+		EXCHANGE = TickerFunction.XCHANGEFUNC.apply(exchange);
 	}
 	
 }

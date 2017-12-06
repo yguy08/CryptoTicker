@@ -1,22 +1,24 @@
 package com.speculation1000.cryptoticker.tape;
 
-import java.io.File;
 import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import com.speculation1000.cryptoticker.event.handler.EventHandler;
 
 public class CsvTape extends Tape {
 	
-	private File path;
+	private String path;
 	
 	@Override
 	public void start() throws Exception {
 		disruptor.start();
-        while(true){
-            onData(null);
-        }
-        //disruptor.shutdown();
+		try (Stream<String> stream = Files.lines(Paths.get(path))) {
+	        //stream.forEach();
+		}
+        disruptor.shutdown();
 	}
 
 	@Override

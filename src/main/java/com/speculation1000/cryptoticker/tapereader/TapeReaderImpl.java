@@ -3,6 +3,7 @@ package com.speculation1000.cryptoticker.tapereader;
 import java.io.FileInputStream;
 import java.util.Properties;
 
+import com.speculation1000.cryptoticker.core.TickerFunction;
 import com.speculation1000.cryptoticker.event.handler.EventHandler;
 import com.speculation1000.cryptoticker.tape.Tape;
 import com.speculation1000.cryptoticker.ticker.Ticker;
@@ -46,7 +47,9 @@ public class TapeReaderImpl implements TapeReader {
 	public TapeReader configure(String path) throws Exception {
         config = new Properties();
         config.load(new FileInputStream(path));
-		ticker.setTape(Tape.TAPEFACTORY.apply(config.getProperty("tape")));
+        
+        setTicker(TickerFunction.TICKERFUNC.apply(config.getProperty("ticker")));
+        ticker.setTape(TickerFunction.TAPEFACTORY.apply(config.getProperty("tape")));
 		ticker.configure(path);
 		return this;
 	}	

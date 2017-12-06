@@ -1,16 +1,15 @@
 package com.speculation1000.cryptoticker.event;
 
-import com.speculation1000.cryptoticker.core.UniqueCurrentTimeMS;
+import static net.openhft.chronicle.bytes.StopCharTesters.SPACE_STOP;
+
+import net.openhft.chronicle.bytes.Bytes;
 
 public class Tick {
-	private String symbol;
-	private long timestamp;
-	private double last;
-	private double bid;
-	private double ask;
-	private int volume;
+	
+	private Bytes<?> bytes;
 	
 	public Tick set(String symbol, long timestamp, double last, double bid, double ask, int volume) {
+		setBytes();
 		setSymbol(symbol);
 		setTimestamp(timestamp);
 		setLast(last);
@@ -20,76 +19,64 @@ public class Tick {
 		return this;
 	}
 	
-	public Tick set(Tick t) {
-		setSymbol(t.getSymbol());
-		setTimestamp(t.getTimestamp());
-		setLast(t.getLast());
-		setBid(t.getBid());
-		setAsk(t.getAsk());
-		setVolume(t.getVolume());
-		return this;
+	private void setBytes(){
+		bytes = Bytes.elasticByteBuffer();
 	}
 	
-	public Tick set(String t){
-		setSymbol("BTC/USDT");
-		setTimestamp(UniqueCurrentTimeMS.uniqueCurrentTimeMS());
-		setLast(10_000);
-		setBid(10_000);
-		setAsk(10000);
-		setVolume(10000);
-		return this;
+	public Tick set(Tick t) {
+		return t;
 	}
 	
 	public String getSymbol(){
-		return symbol;
+		return bytes.parseUtf8(SPACE_STOP);
 	}
 	
 	public void setSymbol(String symbol) {
-		this.symbol = symbol;
+		bytes.append(symbol).append(' ');
 	}
 	
 	public long getTimestamp(){
-		return timestamp;
+		return bytes.parseLong();
 	}
 
 	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
+		bytes.append(timestamp).append(' ');
 	}
 	
 	public double getLast(){
-		return last;
+		return bytes.parseDouble();
 	}
 
 	public void setLast(double last) {
-		this.last = last;
+		bytes.append(last).append(' ');
 	}
 	
 	public double getBid(){
-		return bid;
+		return bytes.parseDouble();
 	}
 
 	public void setBid(double bid) {
-		this.bid = bid;
+		bytes.append(bid).append(' ');
 	}
 	
 	public double getAsk(){
-		return ask;
+		return bytes.parseDouble();
 	}
 
 	public void setAsk(double ask) {
-		this.ask = ask;
+		bytes.append(ask).append(' ');
 	}
 	
 	public int getVolume(){
-		return volume;
+		return (int) bytes.parseDouble();
 	}
 
 	public void setVolume(int volume) {
-		this.volume = volume;
+		bytes.append(volume).append(' ');
 	}
 	
 	@Override
 	public String toString() {
-		return this.symbol+","+this.timestamp+","+this.last+","+this.bid+","+this.ask+","+this.volume;
+		return bytes.toString();
 	}
 }

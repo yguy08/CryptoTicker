@@ -15,6 +15,6 @@ public interface Ticker {
     
     void addEventHandler(EventHandler handler);
 
-	void configure(String path);
+	void configure(String path) throws Exception;
     
 }
