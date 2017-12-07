@@ -43,28 +43,17 @@ public abstract class Tape {
     	symbols = new ArrayList<>();
     	ringBuffer = disruptor.getRingBuffer();
     }
-	
-	public static final EventTranslatorOneArg<Tick,Tick> TRANSLATOR =
-            new EventTranslatorOneArg<Tick,Tick>() {
-                public void translateTo(Tick event, long sequence,Tick tick){
-                    event.set(tick);
-                }
-            };
             
-	public static final EventTranslatorOneArg<Tick,Bytes> BYTESTRANSLATOR =
-            new EventTranslatorOneArg<Tick,Bytes>() {
-                public void translateTo(Tick event, long sequence,Bytes bytes){
+	public static final EventTranslatorOneArg<Tick,Bytes<?>> BYTESTRANSLATOR =
+            new EventTranslatorOneArg<Tick,Bytes<?>>() {
+                public void translateTo(Tick event, long sequence,Bytes<?> bytes){
                     event.set(bytes.parseUtf8(SPACE_STOP),bytes.parseLong(),bytes.parseDouble(),
                     		bytes.parseDouble(),bytes.parseDouble(),(int) bytes.parseDouble());
                 }
             };
-            
-   public void onData(Tick tick){
-        ringBuffer.publishEvent(TRANSLATOR, tick);
-   }
    
-   public void onTick(Bytes bytes){
+    public void onTick(Bytes<?> bytes){
        ringBuffer.publishEvent(BYTESTRANSLATOR, bytes);
-  }
+    }
 
 }

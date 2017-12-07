@@ -7,9 +7,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.marketdata.Ticker;
 
 import com.speculation1000.cryptoticker.core.TickerFunction;
+import com.speculation1000.cryptoticker.core.UniqueCurrentTimeMS;
 import com.speculation1000.cryptoticker.event.handler.EventHandler;
+
+import net.openhft.chronicle.bytes.Bytes;
 
 public class XchangeLiveTape extends Tape {
 
@@ -17,15 +21,23 @@ public class XchangeLiveTape extends Tape {
     
     public Exchange EXCHANGE = null;
     
+    private Ticker ticker = null;
+    
+    private Bytes<?> bytes = Bytes.elasticByteBuffer();
+    
     @Override
     public void start() throws Exception {
         disruptor.start();
         while(true) {
             for(String symbol : symbols){
-            	onTick(TickerFunction.XTICKER2BYTESFUNC
-                .apply(symbol, EXCHANGE
-                .getMarketDataService()
-                .getTicker(new CurrencyPair(symbol))));
+            	ticker = EXCHANGE.getMarketDataService().getTicker(new CurrencyPair(symbol));
+            	onTick(bytes
+						.append(symbol).append(' ')
+						.append(UniqueCurrentTimeMS.uniqueCurrentTimeMS()).append(' ')
+						.append(ticker.getLast()).append(' ')
+						.append(ticker.getBid()).append(' ')
+						.append(ticker.getAsk()).append(' ')
+						.append(ticker.getVolume()).append(' '));
                 Thread.sleep(5000);
           }
 	   }
@@ -48,7 +60,10 @@ public class XchangeLiveTape extends Tape {
         
         setExchange(config.getProperty("xchange.exchange"));
         
-        //if save to file, etc...
+        String[] s = config.getProperty("symbols").split(",");
+        for(int i = 0; i < s.length;i++){
+        	subscribe(s[i]);
+        }
         
 	};
 	

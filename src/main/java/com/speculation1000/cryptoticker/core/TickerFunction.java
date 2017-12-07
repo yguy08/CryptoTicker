@@ -1,16 +1,13 @@
 package com.speculation1000.cryptoticker.core;
 
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.bittrex.BittrexExchange;
-import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.poloniex.PoloniexExchange;
 
-import com.speculation1000.cryptoticker.event.Tick;
 import com.speculation1000.cryptoticker.event.handler.EventEnum;
 import com.speculation1000.cryptoticker.event.handler.EventHandler;
 import com.speculation1000.cryptoticker.tape.CsvTape;
@@ -18,8 +15,6 @@ import com.speculation1000.cryptoticker.tape.FakeTape;
 import com.speculation1000.cryptoticker.tape.Tape;
 import com.speculation1000.cryptoticker.tape.XchangeLiveTape;
 import com.speculation1000.cryptoticker.ticker.SimpleTicker;
-
-import net.openhft.chronicle.bytes.Bytes;
 
 public class TickerFunction {
 
@@ -71,17 +66,6 @@ public class TickerFunction {
 	        }
 	};
 
-	public static final BiFunction<String,org.knowm.xchange.dto.marketdata.Ticker,Tick> TICKFACTORY =
-	        new BiFunction<String,org.knowm.xchange.dto.marketdata.Ticker, Tick>() {
-	        
-	        @Override
-	        public Tick apply(String symbol, org.knowm.xchange.dto.marketdata.Ticker value) {
-	            return new Tick().set(symbol, UniqueCurrentTimeMS.uniqueCurrentTimeMS(),
-	                    value.getLast().doubleValue(), value.getBid().doubleValue(),
-	                    value.getAsk().doubleValue(), value.getVolume().intValue());
-	        }
-	};
-
 	public static final Function<EventEnum,EventHandler> EVENTFACTORY =
 	        new Function<EventEnum,EventHandler>() {
 	
@@ -105,40 +89,6 @@ public class TickerFunction {
 	            	return "BTC/USDT";
 	            }
 	        }
-	};
-	
-	/**
-	 * An operation that accepts an Xchange Ticker and returns
-	 * a <code>Bytes</code> object of tick data.
-	 */
-	public static final BiFunction<String,org.knowm.xchange.dto.marketdata.Ticker,Bytes<?>> XTICKER2BYTESFUNC =
-			new BiFunction<String,org.knowm.xchange.dto.marketdata.Ticker,Bytes<?>> () {
-		
-				@Override
-				public Bytes<?> apply(String symbol, Ticker t) { 
-					return Bytes.elasticByteBuffer()
-							.append(symbol).append(' ')
-							.append(UniqueCurrentTimeMS.uniqueCurrentTimeMS()).append(' ')
-							.append(t.getLast()).append(' ')
-							.append(t.getBid()).append(' ')
-							.append(t.getAsk()).append(' ')
-							.append(t.getVolume()).append(' ');
-				}
-		
-	};
-	
-	/**
-	 * An operation that accepts a String of tick data and returns
-	 * a <code>Bytes</code> object of tick data.
-	 */
-	public static final Function<String,Bytes<?>> TICK_STR_2_BYTES_FUNC =
-			new Function<String,Bytes<?>> () {
-		
-				@Override
-				public Bytes<?> apply(String tick) {
-					return null;
-				}
-		
 	};
 	
 }
