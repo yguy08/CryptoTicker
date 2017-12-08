@@ -1,6 +1,5 @@
 package com.speculation1000.cryptoticker.tape;
 
-import java.io.FileInputStream;
 import java.util.Properties;
 
 import org.apache.logging.log4j.LogManager;
@@ -17,7 +16,7 @@ import net.openhft.chronicle.bytes.Bytes;
 
 public class XchangeLiveTape extends Tape {
 
-    private static final Logger LOGGER = LogManager.getLogger("XchangeDataFeed");
+    private static final Logger LOGGER = LogManager.getLogger("XchangeLiveTape");
     
     public Exchange EXCHANGE = null;
     
@@ -30,39 +29,36 @@ public class XchangeLiveTape extends Tape {
         disruptor.start();
         while(true) {
             for(String symbol : symbols){
-            	ticker = EXCHANGE.getMarketDataService().getTicker(new CurrencyPair(symbol));
-            	onTick(bytes
-						.append(symbol).append(' ')
-						.append(UniqueCurrentTimeMS.uniqueCurrentTimeMS()).append(' ')
-						.append(ticker.getLast()).append(' ')
-						.append(ticker.getBid()).append(' ')
-						.append(ticker.getAsk()).append(' ')
-						.append(ticker.getVolume()).append(' '));
-                Thread.sleep(5000);
+	            try{
+	            	ticker = EXCHANGE.getMarketDataService().getTicker(new CurrencyPair(symbol));
+	            	onTick(bytes
+							.append(symbol).append(' ')
+							.append(UniqueCurrentTimeMS.uniqueCurrentTimeMS()).append(' ')
+							.append(ticker.getLast()).append(' ')
+							.append(ticker.getBid()).append(' ')
+							.append(ticker.getAsk()).append(' ')
+							.append(ticker.getVolume()).append(' '));
+	                Thread.sleep(1000);
+            	}catch(Exception e){
+            		LOGGER.error(e);
+            		Thread.sleep(10000);
+            	}
           }
 	   }
     }
 
 	@Override
-	public void subscribe(String symbol) {
-		symbols.add(symbol);
-	}
-
-	@Override
-	public void addEventHandler(EventHandler handler) {
-		disruptor.handleEventsWith(handler::onTick);
-	}
-
-	@Override
-	public void configure(String path) throws Exception {
-        config = new Properties();
-        config.load(new FileInputStream(path));
+	public void configure(Properties props) throws Exception {
         
-        setExchange(config.getProperty("xchange.exchange"));
+        setExchange(props.getProperty("xchange.exchange"));
         
-        String[] s = config.getProperty("symbols").split(",");
+        String[] s = props.getProperty("symbols").split(",");
         for(int i = 0; i < s.length;i++){
         	subscribe(s[i]);
+        }
+        
+        for(EventHandler eh : tickEvents){
+            eh.configure(props);	
         }
         
 	};

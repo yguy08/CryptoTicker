@@ -79,4 +79,10 @@ public class Tick {
 	public String toString() {
 		return bytes.toString();
 	}
+
+	public void set(long parseLong, double parseDouble) {
+		setBytes();
+		setTimestamp(parseLong);
+		setLast(parseDouble);
+	}
 }

@@ -1,9 +1,7 @@
 package com.speculation1000.cryptoticker.ticker;
 
-import java.io.FileInputStream;
 import java.util.Properties;
 
-import com.speculation1000.cryptoticker.core.TickerFunction;
 import com.speculation1000.cryptoticker.event.handler.EventHandler;
 import com.speculation1000.cryptoticker.tape.Tape;
 
@@ -35,16 +33,12 @@ public class SimpleTicker implements Ticker {
 	
     @Override
 	public void reset() throws Exception {
-		
+		tape = null;
 	}
 
 	@Override
-	public void configure(String path) throws Exception {
-        config = new Properties();
-        config.load(new FileInputStream(path));
-        
-        setTape(TickerFunction.TAPEFACTORY.apply(config.getProperty("tape")));
-		tape.configure(path);
+	public void configure(Properties config) throws Exception {
+		tape.configure(config);
 	}
 
 }

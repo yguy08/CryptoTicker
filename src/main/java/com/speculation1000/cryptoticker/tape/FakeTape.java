@@ -1,8 +1,8 @@
 package com.speculation1000.cryptoticker.tape;
 
-import com.speculation1000.cryptoticker.core.UniqueCurrentTimeMS;
-import com.speculation1000.cryptoticker.event.handler.EventHandler;
+import java.util.Properties;
 
+import com.speculation1000.cryptoticker.core.UniqueCurrentTimeMS;
 import net.openhft.chronicle.bytes.Bytes;
 
 public class FakeTape extends Tape {
@@ -24,18 +24,8 @@ public class FakeTape extends Tape {
 	}
 
 	@Override
-	public void addEventHandler(EventHandler handler) {
-		disruptor.handleEventsWith(handler::onTick);
-	}
-	
-    @Override
-	public void subscribe(String symbol) {
-		
-	}
+	public void configure(Properties props) throws Exception {
 
-	@Override
-	public void configure(String path) throws Exception {
-		
 	}
 
 }

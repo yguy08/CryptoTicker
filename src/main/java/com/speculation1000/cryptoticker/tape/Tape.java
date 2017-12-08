@@ -16,9 +16,7 @@ import com.speculation1000.cryptoticker.event.handler.EventHandler;
 import net.openhft.chronicle.bytes.Bytes;
 
 public abstract class Tape {
-	
-	public Properties config;
-	
+
 	public static final int BUFFER = 1024;
 	
 	public Disruptor<Tick> disruptor;
@@ -31,11 +29,17 @@ public abstract class Tape {
 	
 	public abstract void start() throws Exception;
 	
-	public abstract void subscribe(String symbol);
+	public void subscribe(String symbol) {
+		symbols.add(symbol);
+	}
 	
-    public abstract void addEventHandler(EventHandler handler);
+    @SuppressWarnings("unchecked")
+	public void addEventHandler(EventHandler handler){
+		disruptor.handleEventsWith(handler::onTick);
+		tickEvents.add(handler);
+    }
     
-    public abstract void configure(String path) throws Exception;
+    public abstract void configure(Properties cfg) throws Exception;
     
     public Tape(){
     	disruptor = new Disruptor<>(Tick::new, BUFFER, Executors.defaultThreadFactory());
@@ -44,7 +48,7 @@ public abstract class Tape {
     	ringBuffer = disruptor.getRingBuffer();
     }
             
-	public static final EventTranslatorOneArg<Tick,Bytes<?>> BYTESTRANSLATOR =
+	private static final EventTranslatorOneArg<Tick,Bytes<?>> BYTESTRANSLATOR =
             new EventTranslatorOneArg<Tick,Bytes<?>>() {
                 public void translateTo(Tick event, long sequence,Bytes<?> bytes){
                     event.set(bytes.parseUtf8(SPACE_STOP),bytes.parseLong(),bytes.parseDouble(),
@@ -52,7 +56,7 @@ public abstract class Tape {
                 }
             };
    
-    public void onTick(Bytes<?> bytes){
+    void onTick(Bytes<?> bytes){
        ringBuffer.publishEvent(BYTESTRANSLATOR, bytes);
     }
 

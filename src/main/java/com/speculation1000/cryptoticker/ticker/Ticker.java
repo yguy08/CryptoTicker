@@ -1,5 +1,7 @@
 package com.speculation1000.cryptoticker.ticker;
 
+import java.util.Properties;
+
 import com.speculation1000.cryptoticker.event.handler.EventHandler;
 import com.speculation1000.cryptoticker.tape.Tape;
 
@@ -15,6 +17,6 @@ public interface Ticker {
     
     void addEventHandler(EventHandler handler);
 
-	void configure(String path) throws Exception;
+	void configure(Properties path) throws Exception;
     
 }

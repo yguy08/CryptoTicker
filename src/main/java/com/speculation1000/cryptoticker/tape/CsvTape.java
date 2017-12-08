@@ -1,46 +1,35 @@
 package com.speculation1000.cryptoticker.tape;
 
-import java.io.FileInputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.Properties;
-import java.util.stream.Stream;
-
-import com.speculation1000.cryptoticker.event.handler.EventHandler;
+import net.openhft.chronicle.bytes.Bytes;
 
 public class CsvTape extends Tape {
 	
-	private String path;
+    private String path;
+	
+	private BufferedReader reader;
+	
+	private Bytes<?> bytes = Bytes.elasticByteBuffer();
 	
 	@Override
 	public void start() throws Exception {
 		disruptor.start();
-		try (Stream<String> stream = Files.lines(Paths.get(path))) {
-	        //stream.forEach();
-		}
+	    String line;
+	    while ((line = reader.readLine()) != null) {
+	        onTick(bytes.append(line));
+	    }
         disruptor.shutdown();
 	}
 
 	@Override
-	public void addEventHandler(EventHandler handler) {
-		disruptor.handleEventsWith(handler::onTick);
-	}
-
-	@Override
-	public void configure(String path) throws Exception {
-        config = new Properties();
-        config.load(new FileInputStream(path));
-        
-        setFilePath(config.getProperty("csv.file"));	    	
+	public void configure(Properties prop) throws Exception {
+        setFilePath(prop.getProperty("csv.file"));
+        reader = new BufferedReader(new FileReader(path));	    	
 	}
 	
     private void setFilePath(String property) {
-		
+		path = property;
 	}
-
-	@Override
-	public void subscribe(String symbol) {
-		
-	}
-
 }

@@ -1,5 +1,7 @@
 package com.speculation1000.cryptoticker.event.handler;
 
+import java.util.Properties;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,6 +14,12 @@ public class Log implements EventHandler {
 	@Override
 	public void onTick(Tick tick, long sequence, boolean endOfBatch) throws Exception {
 		LOGGER.info(tick);		
+	}
+
+	@Override
+	public void configure(Properties prop) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
