@@ -22,14 +22,15 @@ public class Save2File implements EventHandler {
 	@Override
 	public void onTick(Tick tick, long sequence, boolean endOfBatch) throws Exception {
 		buffWriter.append('\n');
-		buffWriter.append(tick.toString());
-		
+		buffWriter.append(tick.toString());		
 		buffWriter.flush();
 	}
 
 	@Override
 	public void configure(Properties prop) {
-        file = "ticks-"+UniqueCurrentTimeMS.uniqueCurrentTimeMS()+".csv";
+		String dir = prop.getProperty("file.directory");
+	    String name = prop.getProperty("file.name");
+        file = dir+"/"+name+UniqueCurrentTimeMS.uniqueCurrentTimeMS()+".csv";
 		
 		try {
 			buffWriter = new BufferedWriter(new FileWriter(file));

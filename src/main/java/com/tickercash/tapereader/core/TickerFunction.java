@@ -12,7 +12,7 @@ import com.tickercash.tapereader.event.handler.Log;
 import com.tickercash.tapereader.event.handler.Save2File;
 import com.tickercash.tapereader.tape.CsvTape;
 import com.tickercash.tapereader.tape.FakeTape;
-import com.tickercash.tapereader.tape.GDAXStreamTape;
+import com.tickercash.tapereader.tape.XchangeStreamTape;
 import com.tickercash.tapereader.tape.Tape;
 import com.tickercash.tapereader.tape.XchangeLiveTape;
 
@@ -44,8 +44,8 @@ public class TickerFunction {
 	                return new CsvTape();
 	            case "FAKE":
 	            	return new FakeTape();
-                case "GDAX-STREAM":
-                	return new GDAXStreamTape();
+                case "XCHANGE-STREAM":
+                	return new XchangeStreamTape();
 	            default:
 	                return new CsvTape();
 	        	}

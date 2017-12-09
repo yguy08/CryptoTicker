@@ -8,6 +8,17 @@ public class Tick {
 	
 	private Bytes<?> bytes;
 	
+	public Tick() {
+		
+	}
+	
+	public Tick(String string, long time, double doubleValue) {
+		setBytes();
+		setSymbol(string);
+		setTimestamp(time);
+		setLast(doubleValue);
+	}
+
 	public Tick set(String symbol, long timestamp, double last, double bid, double ask, int volume) {
 		setBytes();
 		setSymbol(symbol);

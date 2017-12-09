@@ -15,7 +15,7 @@ import info.bitrich.xchangestream.core.StreamingExchangeFactory;
 import info.bitrich.xchangestream.gdax.GDAXStreamingExchange;
 import net.openhft.chronicle.bytes.Bytes;
 
-public class GDAXStreamTape extends Tape {
+public class XchangeStreamTape extends Tape {
 
     private Bytes<?> bytes = Bytes.elasticByteBuffer();
     
@@ -33,10 +33,23 @@ public class GDAXStreamTape extends Tape {
 			exchange.connect().blockingAwait();
 	        
 			try{
+				
 	            exchange.getStreamingMarketDataService().getTicker(CurrencyPair.BTC_USD).subscribe(ticker -> {
 			    onTick(bytes.append(ticker.getTimestamp().getTime()).append(' ')
 			            .append(ticker.getLast().doubleValue()).append(' '));
 			    }, throwable -> LOG.error("ERROR in getting ticker: ", throwable));
+	            
+	            exchange.getStreamingMarketDataService().getTicker(CurrencyPair.ETH_USD).subscribe(ticker -> {
+			    onTick(bytes.append(ticker.getTimestamp().getTime()).append(' ')
+			            .append(ticker.getLast().doubleValue()).append(' '));
+			    }, throwable -> LOG.error("ERROR in getting ticker: ", throwable));
+	            
+	            exchange.getStreamingMarketDataService().getTicker(CurrencyPair.LTC_USD).subscribe(ticker -> {
+			    onTick(bytes.append(ticker.getTimestamp().getTime()).append(' ')
+			            .append(ticker.getLast().doubleValue()).append(' '));
+			    }, throwable -> LOG.error("ERROR in getting ticker: ", throwable));
+	            
+	            
 			} catch(Exception e){
 				
 			}
@@ -47,6 +60,11 @@ public class GDAXStreamTape extends Tape {
 		}
 		
     }
+    
+    @Override
+	public void subscribe(String symbol) {
+		symbols.add(symbol);
+	}
     
 	private static final EventTranslatorOneArg<Tick,Bytes<?>> BYTESTRANSLATOR =
             new EventTranslatorOneArg<Tick,Bytes<?>>() {
@@ -62,11 +80,9 @@ public class GDAXStreamTape extends Tape {
 
 	@Override
 	public void configure(Properties cfg) throws Exception {
-		
         for(EventHandler eh : tickEvents){
             eh.configure(cfg);	
-        }
-		
+        }		
 	}
 
 }
