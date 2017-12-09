@@ -24,6 +24,8 @@ public class XchangeLiveTape extends Tape {
     
     private Bytes<?> bytes = Bytes.elasticByteBuffer();
     
+    private int sleep;
+    
     @Override
     public void start() throws Exception {
         disruptor.start();
@@ -38,10 +40,10 @@ public class XchangeLiveTape extends Tape {
 							.append(ticker.getBid()).append(' ')
 							.append(ticker.getAsk()).append(' ')
 							.append(ticker.getVolume()).append(' '));
-	                Thread.sleep(1000);
+	                Thread.sleep(sleep);
             	}catch(Exception e){
             		LOGGER.error(e);
-            		Thread.sleep(10000);
+            		Thread.sleep(sleep);
             	}
           }
 	   }
@@ -51,6 +53,8 @@ public class XchangeLiveTape extends Tape {
 	public void configure(Properties props) throws Exception {
         
         setExchange(props.getProperty("xchange.exchange"));
+        
+        setSleep(Integer.parseInt(props.getProperty("sleep","10000")));
         
         String[] s = props.getProperty("symbols").split(",");
         for(int i = 0; i < s.length;i++){
@@ -65,6 +69,10 @@ public class XchangeLiveTape extends Tape {
 	
     private void setExchange(String exchange) {
 		EXCHANGE = TickerFunction.XCHANGEFUNC.apply(exchange);
+	}
+    
+    private void setSleep(int sleep) {
+		this.sleep = sleep;
 	}
 	
 }
