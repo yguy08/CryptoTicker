@@ -1,4 +1,4 @@
-package com.speculation1000.cryptoticker.app;
+package com.tickercash.tapereader.app;
 
 import com.speculation1000.cryptoticker.tapereader.TapeReader;
 

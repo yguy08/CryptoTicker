@@ -15,7 +15,6 @@ import com.speculation1000.cryptoticker.tape.FakeTape;
 import com.speculation1000.cryptoticker.tape.GDAXStreamTape;
 import com.speculation1000.cryptoticker.tape.Tape;
 import com.speculation1000.cryptoticker.tape.XchangeLiveTape;
-import com.speculation1000.cryptoticker.ticker.SimpleTicker;
 
 public class TickerFunction {
 
@@ -51,20 +50,6 @@ public class TickerFunction {
 	                return new CsvTape();
 	        	}
 	        };
-	
-	public static final Function<String,com.speculation1000.cryptoticker.ticker.Ticker> TICKERFUNC = 
-	        new Function<String,com.speculation1000.cryptoticker.ticker.Ticker>() {
-	
-	        @Override
-	        public com.speculation1000.cryptoticker.ticker.Ticker apply(String t){
-	            switch(t.toUpperCase()){
-	            case "SIMPLE":
-	                return new SimpleTicker();
-	            default:
-	                return new SimpleTicker();
-	        	}
-	        }
-	};
 
 	public static final Function<String,EventHandler> EVENTFACTORY = (String s) -> {
 			switch(s) {
