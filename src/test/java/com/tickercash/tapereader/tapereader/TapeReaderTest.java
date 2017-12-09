@@ -1,6 +1,6 @@
-package com.speculation1000.cryptoticker.tapereader;
+package com.tickercash.tapereader.tapereader;
 
-import com.speculation1000.cryptoticker.tapereader.TapeReader;
+import com.tickercash.tapereader.tapereader.TapeReader;
 
 public class TapeReaderTest {
     

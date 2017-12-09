@@ -1,4 +1,4 @@
-package com.speculation1000.cryptoticker.core;
+package com.tickercash.tapereader.core;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.junit.Test;
+
+import com.tickercash.tapereader.core.UniqueCurrentTimeMS;
 
 public class UniqueCurrentTimeMSTest {
 	@Test

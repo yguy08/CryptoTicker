@@ -1,4 +1,4 @@
-package com.speculation1000.cryptoticker.tape;
+package com.tickercash.tapereader.tape;
 
 import java.util.Properties;
 
@@ -8,9 +8,9 @@ import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Ticker;
 
-import com.speculation1000.cryptoticker.core.TickerFunction;
-import com.speculation1000.cryptoticker.core.UniqueCurrentTimeMS;
-import com.speculation1000.cryptoticker.event.handler.EventHandler;
+import com.tickercash.tapereader.core.TickerFunction;
+import com.tickercash.tapereader.core.UniqueCurrentTimeMS;
+import com.tickercash.tapereader.event.handler.EventHandler;
 
 import net.openhft.chronicle.bytes.Bytes;
 

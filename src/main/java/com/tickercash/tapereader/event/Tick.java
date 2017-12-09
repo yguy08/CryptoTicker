@@ -1,4 +1,4 @@
-package com.speculation1000.cryptoticker.event;
+package com.tickercash.tapereader.event;
 
 import static net.openhft.chronicle.bytes.StopCharTesters.SPACE_STOP;
 

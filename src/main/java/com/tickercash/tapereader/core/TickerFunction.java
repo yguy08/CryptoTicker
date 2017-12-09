@@ -1,4 +1,4 @@
-package com.speculation1000.cryptoticker.core;
+package com.tickercash.tapereader.core;
 
 import java.util.function.Function;
 import org.knowm.xchange.Exchange;
@@ -6,15 +6,15 @@ import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.bittrex.BittrexExchange;
 import org.knowm.xchange.poloniex.PoloniexExchange;
 
-import com.speculation1000.cryptoticker.event.handler.Counter;
-import com.speculation1000.cryptoticker.event.handler.EventHandler;
-import com.speculation1000.cryptoticker.event.handler.Log;
-import com.speculation1000.cryptoticker.event.handler.Save2File;
-import com.speculation1000.cryptoticker.tape.CsvTape;
-import com.speculation1000.cryptoticker.tape.FakeTape;
-import com.speculation1000.cryptoticker.tape.GDAXStreamTape;
-import com.speculation1000.cryptoticker.tape.Tape;
-import com.speculation1000.cryptoticker.tape.XchangeLiveTape;
+import com.tickercash.tapereader.event.handler.Counter;
+import com.tickercash.tapereader.event.handler.EventHandler;
+import com.tickercash.tapereader.event.handler.Log;
+import com.tickercash.tapereader.event.handler.Save2File;
+import com.tickercash.tapereader.tape.CsvTape;
+import com.tickercash.tapereader.tape.FakeTape;
+import com.tickercash.tapereader.tape.GDAXStreamTape;
+import com.tickercash.tapereader.tape.Tape;
+import com.tickercash.tapereader.tape.XchangeLiveTape;
 
 public class TickerFunction {
 

@@ -1,4 +1,4 @@
-package com.speculation1000.cryptoticker.core;
+package com.tickercash.tapereader.core;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 

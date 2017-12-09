@@ -1,4 +1,4 @@
-package com.speculation1000.cryptoticker.tape;
+package com.tickercash.tapereader.tape;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

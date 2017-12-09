@@ -1,6 +1,6 @@
 package com.tickercash.tapereader.app;
 
-import com.speculation1000.cryptoticker.tapereader.TapeReader;
+import com.tickercash.tapereader.tapereader.TapeReader;
 
 public class TapeSaver {
 

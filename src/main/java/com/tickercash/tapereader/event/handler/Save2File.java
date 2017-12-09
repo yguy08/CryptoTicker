@@ -1,4 +1,4 @@
-package com.speculation1000.cryptoticker.event.handler;
+package com.tickercash.tapereader.event.handler;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -8,8 +8,8 @@ import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.speculation1000.cryptoticker.core.UniqueCurrentTimeMS;
-import com.speculation1000.cryptoticker.event.Tick;
+import com.tickercash.tapereader.core.UniqueCurrentTimeMS;
+import com.tickercash.tapereader.event.Tick;
 
 public class Save2File implements EventHandler {
 

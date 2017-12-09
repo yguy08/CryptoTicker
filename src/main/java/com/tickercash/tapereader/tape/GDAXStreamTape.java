@@ -1,4 +1,4 @@
-package com.speculation1000.cryptoticker.tape;
+package com.tickercash.tapereader.tape;
 
 import java.util.Properties;
 
@@ -7,8 +7,8 @@ import org.apache.logging.log4j.Logger;
 import org.knowm.xchange.currency.CurrencyPair;
 
 import com.lmax.disruptor.EventTranslatorOneArg;
-import com.speculation1000.cryptoticker.event.Tick;
-import com.speculation1000.cryptoticker.event.handler.EventHandler;
+import com.tickercash.tapereader.event.Tick;
+import com.tickercash.tapereader.event.handler.EventHandler;
 
 import info.bitrich.xchangestream.core.StreamingExchange;
 import info.bitrich.xchangestream.core.StreamingExchangeFactory;

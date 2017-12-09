@@ -1,11 +1,11 @@
-package com.speculation1000.cryptoticker.tapereader;
+package com.tickercash.tapereader.tapereader;
 
 import java.io.FileInputStream;
 import java.util.Properties;
 
-import com.speculation1000.cryptoticker.core.TickerFunction;
-import com.speculation1000.cryptoticker.event.handler.EventHandler;
-import com.speculation1000.cryptoticker.tape.Tape;
+import com.tickercash.tapereader.core.TickerFunction;
+import com.tickercash.tapereader.event.handler.EventHandler;
+import com.tickercash.tapereader.tape.Tape;
 
 public class TapeReader {
 

@@ -1,8 +1,9 @@
-package com.speculation1000.cryptoticker.tape;
+package com.tickercash.tapereader.tape;
 
 import java.util.Properties;
 
-import com.speculation1000.cryptoticker.core.UniqueCurrentTimeMS;
+import com.tickercash.tapereader.core.UniqueCurrentTimeMS;
+
 import net.openhft.chronicle.bytes.Bytes;
 
 public class FakeTape extends Tape {

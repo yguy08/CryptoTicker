@@ -1,4 +1,4 @@
-package com.speculation1000.cryptoticker.tape;
+package com.tickercash.tapereader.tape;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,8 @@ import static net.openhft.chronicle.bytes.StopCharTesters.SPACE_STOP;
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
-import com.speculation1000.cryptoticker.event.Tick;
-import com.speculation1000.cryptoticker.event.handler.EventHandler;
+import com.tickercash.tapereader.event.Tick;
+import com.tickercash.tapereader.event.handler.EventHandler;
 
 import net.openhft.chronicle.bytes.Bytes;
 
