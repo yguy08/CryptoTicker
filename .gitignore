@@ -1,7 +1,7 @@
-#eclipse
 .classpath
 .project
 .settings
 /target/
 /bin/
 /activemq-data/
+.DS_Store
