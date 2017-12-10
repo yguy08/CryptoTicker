@@ -18,7 +18,6 @@ public class Log implements EventHandler {
 
 	@Override
 	public void configure(Properties prop) {
-		// TODO Auto-generated method stub
 		
 	}
 

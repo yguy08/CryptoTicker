@@ -43,7 +43,7 @@ public class XchangeLiveTape extends Tape {
 	                Thread.sleep(sleep);
             	}catch(Exception e){
             		LOGGER.error(e);
-            		Thread.sleep(sleep);
+            		Thread.sleep(60000);
             	}
           }
 	   }
