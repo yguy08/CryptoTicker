@@ -12,7 +12,7 @@ public class TapeReaderTest {
     
     public void start() throws Exception {
         //tapeReader set ticker
-    	tapeReader.configure("src/main/resources/application.properties");
+    	tapeReader.configure("application.properties");
     	
     	tapeReader.readTheTape();
 	}

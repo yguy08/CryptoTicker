@@ -8,11 +8,10 @@ import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Ticker;
 
+import com.tickercash.tapereader.core.Config;
 import com.tickercash.tapereader.core.TickerFunction;
 import com.tickercash.tapereader.core.UniqueCurrentTimeMS;
-import com.tickercash.tapereader.event.handler.EventHandler;
 
-import net.openhft.chronicle.bytes.Bytes;
 
 public class XchangeLiveTape extends Tape {
 
@@ -21,8 +20,6 @@ public class XchangeLiveTape extends Tape {
     public Exchange EXCHANGE = null;
     
     private Ticker ticker = null;
-    
-    private Bytes<?> bytes = Bytes.elasticByteBuffer();
     
     private int sleep;
     
@@ -33,13 +30,7 @@ public class XchangeLiveTape extends Tape {
             for(String symbol : symbols){
 	            try{
 	            	ticker = EXCHANGE.getMarketDataService().getTicker(new CurrencyPair(symbol));
-	            	onTick(bytes
-							.append(symbol).append(' ')
-							.append(UniqueCurrentTimeMS.uniqueCurrentTimeMS()).append(' ')
-							.append(ticker.getLast()).append(' ')
-							.append(ticker.getBid()).append(' ')
-							.append(ticker.getAsk()).append(' ')
-							.append(ticker.getVolume()).append(' '));
+	            	onTick(symbol,UniqueCurrentTimeMS.uniqueCurrentTimeMS(),ticker.getLast().doubleValue());
 	                Thread.sleep(sleep);
             	}catch(Exception e){
             		LOGGER.error(e);
@@ -50,20 +41,11 @@ public class XchangeLiveTape extends Tape {
     }
 
 	@Override
-	public void configure(Properties props) throws Exception {
+	public void configure() throws Exception {
         
-        setExchange(props.getProperty("xchange.exchange"));
+        setExchange(Config.getXchangeExchange());
         
-        setSleep(Integer.parseInt(props.getProperty("sleep","10000")));
-        
-        String[] s = props.getProperty("symbols").split(",");
-        for(int i = 0; i < s.length;i++){
-        	subscribe(s[i]);
-        }
-        
-        for(EventHandler eh : tickEvents){
-            eh.configure(props);	
-        }
+        setSleep(Config.getThrottle());
         
 	};
 	

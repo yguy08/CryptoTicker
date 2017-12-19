@@ -6,13 +6,10 @@ import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.bittrex.BittrexExchange;
 import org.knowm.xchange.poloniex.PoloniexExchange;
 
-import com.tickercash.tapereader.event.handler.Counter;
-import com.tickercash.tapereader.event.handler.EventHandler;
 import com.tickercash.tapereader.event.handler.Log;
 import com.tickercash.tapereader.event.handler.Save2File;
+import com.tickercash.tapereader.event.handler.TickEventHandler;
 import com.tickercash.tapereader.tape.CsvTape;
-import com.tickercash.tapereader.tape.FakeTape;
-import com.tickercash.tapereader.tape.XchangeStreamTape;
 import com.tickercash.tapereader.tape.Tape;
 import com.tickercash.tapereader.tape.XchangeLiveTape;
 
@@ -28,7 +25,7 @@ public class TickerFunction {
                     return ExchangeFactory.INSTANCE.createExchange(PoloniexExchange.class.getName());
                 case "TREX":
                 	return ExchangeFactory.INSTANCE.createExchange(BittrexExchange.class.getName());
-                case "GDAX-STREAM":
+                case "GDAX":
                 	return null;
                 default:
                 	return ExchangeFactory.INSTANCE.createExchange(PoloniexExchange.class.getName());
@@ -43,22 +40,17 @@ public class TickerFunction {
 	            case "CSV":
 	                return new CsvTape();
 	            case "FAKE":
-	            	return new FakeTape();
-                case "XCHANGE-STREAM":
-                	return new XchangeStreamTape();
 	            default:
 	                return new CsvTape();
 	        	}
 	        };
 
-	public static final Function<String,EventHandler> EVENTFACTORY = (String s) -> {
+	public static final Function<String,TickEventHandler> EVENTFACTORY = (String s) -> {
 			switch(s) {
 			case "LOG":
 				return new Log();
 			case "SAVE":
 				return new Save2File();
-			case "COUNT":
-				return new Counter();
 			default:
 				return new Log();
 			}

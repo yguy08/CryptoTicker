@@ -1,99 +1,54 @@
 package com.tickercash.tapereader.event;
 
-import static net.openhft.chronicle.bytes.StopCharTesters.SPACE_STOP;
-
-import net.openhft.chronicle.bytes.Bytes;
-
 public class Tick {
 	
-	private Bytes<?> bytes;
+	private String symbol;
+	private long timestamp;
+	private double last;
 	
 	public Tick() {
 		
 	}
 	
 	public Tick(String string, long time, double doubleValue) {
-		setBytes();
 		setSymbol(string);
 		setTimestamp(time);
 		setLast(doubleValue);
 	}
-
-	public Tick set(String symbol, long timestamp, double last, double bid, double ask, int volume) {
-		setBytes();
-		setSymbol(symbol);
-		setTimestamp(timestamp);
-		setLast(last);
-		setBid(bid);
-		setAsk(ask);
-		setVolume(volume);
+	
+	public Tick set(String string, long time, double doubleValue) {
+		setSymbol(string);
+		setTimestamp(time);
+		setLast(doubleValue);
 		return this;
 	}
 	
-	private void setBytes(){
-		bytes = Bytes.elasticByteBuffer();
-	}
-	
-	public Tick set(Tick t) {
-		return t;
-	}
-	
 	public String getSymbol(){
-		return bytes.parseUtf8(SPACE_STOP);
+		return symbol;
 	}
 	
 	public void setSymbol(String symbol) {
-		bytes.append(symbol).append(' ');
+		this.symbol = symbol;
 	}
 	
 	public long getTimestamp(){
-		return bytes.parseLong();
+		return timestamp;
 	}
 
 	public void setTimestamp(long timestamp) {
-		bytes.append(timestamp).append(' ');
+		this.timestamp = timestamp;
 	}
 	
 	public double getLast(){
-		return bytes.parseDouble();
+		return last;
 	}
 
 	public void setLast(double last) {
-		bytes.append(last).append(' ');
-	}
-	
-	public double getBid(){
-		return bytes.parseDouble();
-	}
-
-	public void setBid(double bid) {
-		bytes.append(bid).append(' ');
-	}
-	
-	public double getAsk(){
-		return bytes.parseDouble();
-	}
-
-	public void setAsk(double ask) {
-		bytes.append(ask).append(' ');
-	}
-	
-	public int getVolume(){
-		return (int) bytes.parseDouble();
-	}
-
-	public void setVolume(int volume) {
-		bytes.append(volume).append(' ');
+		this.last = last;
 	}
 	
 	@Override
 	public String toString() {
-		return bytes.toString();
-	}
-
-	public void set(long parseLong, double parseDouble) {
-		setBytes();
-		setTimestamp(parseLong);
-		setLast(parseDouble);
+		return this.symbol+" "+this.timestamp+" "+this.last;
 	}
 }

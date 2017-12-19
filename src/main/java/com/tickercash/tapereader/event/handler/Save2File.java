@@ -11,32 +11,26 @@ import org.apache.logging.log4j.Logger;
 import com.tickercash.tapereader.core.UniqueCurrentTimeMS;
 import com.tickercash.tapereader.event.Tick;
 
-public class Save2File implements EventHandler {
+public class Save2File extends TickEventHandler {
 
 	private static final Logger LOGGER = LogManager.getLogger("Save2File");
 	
 	private static String file; 
 	
 	private static BufferedWriter buffWriter;
-	
+
 	@Override
-	public void onTick(Tick tick, long sequence, boolean endOfBatch) throws Exception {
+	public void onEvent(Tick event, long sequence, boolean endOfBatch) throws Exception {
 		buffWriter.append('\n');
-		buffWriter.append(tick.toString());		
+		buffWriter.append(event.toString());		
 		buffWriter.flush();
+		
 	}
 
 	@Override
-	public void configure(Properties prop) {
-		String dir = prop.getProperty("file.directory");
-	    String name = prop.getProperty("file.name");
-        file = dir+"/"+name+UniqueCurrentTimeMS.uniqueCurrentTimeMS()+".csv";
+	public void configure() throws Exception {
+		// TODO Auto-generated method stub
 		
-		try {
-			buffWriter = new BufferedWriter(new FileWriter(file));
-		} catch (IOException e) {
-			LOGGER.error(e);
-		};
 	}
 	
 }

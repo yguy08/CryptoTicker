@@ -3,8 +3,9 @@ package com.tickercash.tapereader.tapereader;
 import java.io.FileInputStream;
 import java.util.Properties;
 
+import com.tickercash.tapereader.core.Config;
 import com.tickercash.tapereader.core.TickerFunction;
-import com.tickercash.tapereader.event.handler.EventHandler;
+import com.tickercash.tapereader.event.handler.TickEventHandler;
 import com.tickercash.tapereader.tape.Tape;
 
 public class TapeReader {
@@ -25,23 +26,27 @@ public class TapeReader {
 		tape.subscribe(symbol);
 	}
 
-	public void addEventHandler(EventHandler handler) {
+	public void addEventHandler(TickEventHandler handler) throws Exception {
 		tape.addEventHandler(handler);
 	}
 
 	public void configure(String path) throws Exception {
-        config = new Properties();
-        config.load(new FileInputStream(path));
+        Config.init(path);
         
-        setTape(TickerFunction.TAPEFACTORY.apply(config.getProperty("tape")));
+        setTape(TickerFunction.TAPEFACTORY.apply(Config.getTape()));
         
         //set events
-        String[] s = config.getProperty("event.handler").split(",");
+        String[] e = Config.getEventHandlers().split(",");
+        for(int i = 0; i < e.length;i++){
+            addEventHandler(TickerFunction.EVENTFACTORY.apply(e[i]));
+        }
+        
+        String[] s = Config.getSymbols().split(",");
         for(int i = 0; i < s.length;i++){
-            addEventHandler(TickerFunction.EVENTFACTORY.apply(s[i]));
+        	subscribe(s[i]);
         }
 		
-        tape.configure(config);
+        tape.configure();
 	}	
 
 }

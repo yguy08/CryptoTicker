@@ -5,15 +5,11 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Executors;
 
-import static net.openhft.chronicle.bytes.StopCharTesters.SPACE_STOP;
-
-import com.lmax.disruptor.EventTranslatorOneArg;
+import com.lmax.disruptor.EventTranslatorThreeArg;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.tickercash.tapereader.event.Tick;
-import com.tickercash.tapereader.event.handler.EventHandler;
-
-import net.openhft.chronicle.bytes.Bytes;
+import com.tickercash.tapereader.event.handler.TickEventHandler;
 
 public abstract class Tape {
 
@@ -23,7 +19,7 @@ public abstract class Tape {
 	
 	public RingBuffer<Tick> ringBuffer;
 	
-	public List<EventHandler> tickEvents;
+	public List<TickEventHandler> tickEvents;
 	
 	public List<String> symbols;
 	
@@ -34,12 +30,13 @@ public abstract class Tape {
 	}
 	
     @SuppressWarnings("unchecked")
-	public void addEventHandler(EventHandler handler){
-		disruptor.handleEventsWith(handler::onTick);
+	public void addEventHandler(TickEventHandler handler) throws Exception {
+		disruptor.handleEventsWith(handler::onEvent);
 		tickEvents.add(handler);
+		handler.configure();
     }
     
-    public abstract void configure(Properties cfg) throws Exception;
+    public abstract void configure() throws Exception;
     
     public Tape(){
     	disruptor = new Disruptor<>(Tick::new, BUFFER, Executors.defaultThreadFactory());
@@ -48,16 +45,18 @@ public abstract class Tape {
     	ringBuffer = disruptor.getRingBuffer();
     }
             
-	private static final EventTranslatorOneArg<Tick,Bytes<?>> BYTESTRANSLATOR =
-            new EventTranslatorOneArg<Tick,Bytes<?>>() {
-                public void translateTo(Tick event, long sequence,Bytes<?> bytes){
-                    event.set(bytes.parseUtf8(SPACE_STOP),bytes.parseLong(),bytes.parseDouble(),
-                    		bytes.parseDouble(),bytes.parseDouble(),(int) bytes.parseDouble());
-                }
+	private static final EventTranslatorThreeArg<Tick,String,Long,Double> BYTESTRANSLATOR =
+            new EventTranslatorThreeArg<Tick,String,Long,Double>() {
+
+				@Override
+				public void translateTo(Tick event, long sequence, String symbol, Long timestamp, Double last) {
+					event.set(symbol, timestamp, last);
+				}
+                
             };
    
-    void onTick(Bytes<?> bytes){
-       ringBuffer.publishEvent(BYTESTRANSLATOR, bytes);
+    public void onTick(String symbol, long timestamp, double last){
+       ringBuffer.publishEvent(BYTESTRANSLATOR, symbol, timestamp, last);
     }
 
 }
