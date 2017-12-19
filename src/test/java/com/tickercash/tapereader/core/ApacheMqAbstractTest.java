@@ -1,5 +1,6 @@
 package com.tickercash.tapereader.core;
 
+import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.Connection;
@@ -95,7 +96,7 @@ public class ApacheMqAbstractTest {
 	            try {
 	 
 	                // Create a ConnectionFactory
-	                ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("vm://localhost");
+	                ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnection.DEFAULT_BROKER_URL);
 	 
 	                // Create a Connection
 	                Connection connection = connectionFactory.createConnection();
@@ -113,7 +114,7 @@ public class ApacheMqAbstractTest {
 	                MessageConsumer consumer = session.createConsumer(destination);
 	 
 	                // Wait for a message
-	                Message message = consumer.receive(1000);
+	                Message message = consumer.receive();
 	 
 	                if (message instanceof TextMessage) {
 	                    TextMessage textMessage = (TextMessage) message;
@@ -122,10 +123,7 @@ public class ApacheMqAbstractTest {
 	                } else {
 	                    System.out.println("Received: " + message);
 	                }
-	 
-	                consumer.close();
-	                session.close();
-	                connection.close();
+	                
 	            } catch (Exception e) {
 	                System.out.println("Caught: " + e);
 	                e.printStackTrace();
