@@ -1,7 +1,23 @@
+# Eclipse
+.settings/
+.metadata/
 .classpath
 .project
-.settings
-/target/
-/bin/
-/activemq-data/
+
+# Generated
+target/
+javadoc/
+bin/
+log/
+classes/
+META-INF/
+activemq-data/
+
+# Misc.
 .DS_Store
+*.swp
+*.swo
+
+# externalized configuration file for keys
+exchangeConfiguration.json
+accountInfo.csv
