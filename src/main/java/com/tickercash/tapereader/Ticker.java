@@ -9,6 +9,7 @@ import com.lmax.disruptor.EventTranslatorThreeArg;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
+import com.tickercash.model.Tick;
 
 public abstract class Ticker implements ITicker {
         

@@ -7,6 +7,8 @@ import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Ticker;
 
+import com.tickercash.model.UniqueCurrentTimeMS;
+
 public class XchangeTicker extends com.tickercash.tapereader.Ticker {
     
     private final Logger LOGGER = LogManager.getLogger("XchangeTicker");

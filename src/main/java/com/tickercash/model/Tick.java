@@ -1,4 +1,4 @@
-package com.tickercash.tapereader;
+package com.tickercash.model;
 
 public class Tick {
     

@@ -2,8 +2,8 @@ package com.tickercash.app;
 
 import org.knowm.xchange.binance.BinanceExchange;
 
+import com.tickercash.model.Tick;
 import com.tickercash.tapereader.TapeReaderClerk;
-import com.tickercash.tapereader.Tick;
 import com.tickercash.tapereader.TipEngine;
 import com.tickercash.tapereader.XchangeTicker;
 

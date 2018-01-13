@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.espertech.esper.client.EventBean;
+import com.tickercash.model.Tick;
 
 public class TapeReaderClerk implements ITapeReader {
     

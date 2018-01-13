@@ -1,4 +1,4 @@
-package com.tickercash.tapereader;
+package com.tickercash.model;
 
 import java.util.concurrent.atomic.AtomicLong;
 

@@ -1,5 +1,7 @@
 package com.tickercash.tapereader;
 
+import com.tickercash.model.Tick;
+
 /**
  * Tape Reader Clerk sets the context
  * @author Wyatt 

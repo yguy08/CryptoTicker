@@ -10,9 +10,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.h2.tools.Server;
 
+import com.tickercash.model.Tick;
 import com.tickercash.tapereader.FakeTicker;
 import com.tickercash.tapereader.TapeReaderClerk;
-import com.tickercash.tapereader.Tick;
 
 public class CMCPersistantTicker extends TapeReaderClerk {
     

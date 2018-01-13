@@ -2,6 +2,8 @@ package com.tickercash.tapereader;
 
 import java.util.Random;
 
+import com.tickercash.model.UniqueCurrentTimeMS;
+
 public class FakeTicker extends Ticker {
     
     private Random random;
