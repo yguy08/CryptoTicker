@@ -1,4 +1,4 @@
-package com.tickercash.tapereader;
+package com.tickercash.quoteboy;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,9 +7,9 @@ import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Ticker;
 
-import com.tickercash.model.UniqueCurrentTimeMS;
+import com.tickercash.util.UniqueCurrentTimeMS;
 
-public class XchangeTicker extends com.tickercash.tapereader.Ticker {
+public class XchangeTicker extends com.tickercash.quoteboy.QuoteBoy {
     
     private final Logger LOGGER = LogManager.getLogger("XchangeTicker");
     

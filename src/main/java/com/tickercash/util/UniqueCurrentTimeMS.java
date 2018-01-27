@@ -1,4 +1,4 @@
-package com.tickercash.model;
+package com.tickercash.util;
 
 import java.util.concurrent.atomic.AtomicLong;
 

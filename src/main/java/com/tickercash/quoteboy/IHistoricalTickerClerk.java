@@ -1,8 +1,8 @@
-package com.tickercash.tapereader;
+package com.tickercash.quoteboy;
 
 import java.util.List;
 
-import com.tickercash.model.Tick;
+import com.tickercash.marketdata.Tick;
 
 public interface IHistoricalTickerClerk {
     

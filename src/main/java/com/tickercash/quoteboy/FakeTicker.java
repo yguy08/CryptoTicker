@@ -1,10 +1,10 @@
-package com.tickercash.tapereader;
+package com.tickercash.quoteboy;
 
 import java.util.Random;
 
-import com.tickercash.model.UniqueCurrentTimeMS;
+import com.tickercash.util.UniqueCurrentTimeMS;
 
-public class FakeTicker extends Ticker {
+public class FakeTicker extends QuoteBoy {
     
     private Random random;
     

@@ -1,4 +1,4 @@
-package com.tickercash.model;
+package com.tickercash.marketdata;
 
 public class Tick {
     
@@ -39,6 +39,6 @@ public class Tick {
     
     @Override
     public String toString() {
-        return this.symbol+" "+this.timestamp+" "+this.last;
+        return this.symbol+","+this.timestamp+","+this.last;
     }
 }

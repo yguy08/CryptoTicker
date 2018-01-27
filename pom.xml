@@ -87,7 +87,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <artifactId>junit</artifactId>
         <version>4.12</version>
         <scope>test</scope>
-    </dependency>  
+    </dependency>
+    
+    <dependency>
+        <groupId>org.yaml</groupId>
+        <artifactId>snakeyaml</artifactId>
+        <version>1.19</version>
+    </dependency> 
   </dependencies>
   
   <build>
