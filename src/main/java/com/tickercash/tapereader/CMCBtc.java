@@ -16,8 +16,8 @@ public class CMCBtc extends TapeReader {
 	private final CsvWriter writer;
 	
 	public CMCBtc() {
-		setQuoteBoy(new CMCQuoteBoy(60*24*1000));
-		writer = new CsvWriter("ticks/cmc/btc/CMCBTCPairs-"+LocalDate.now()+".csv");		
+		setQuoteBoy(new CMCQuoteBoy(60*60*1000));
+		writer = new CsvWriter("./ticks/cmc/btc/CMCBTCPairs-"+LocalDate.now()+".csv");		
 	}
 	
 	@Override
