@@ -1,185 +1,199 @@
 package com.tickercash.window;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TimeZone;
 
-import com.googlecode.lanterna.SGR;
-import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.bundle.LanternaThemes;
+import com.googlecode.lanterna.gui2.BasicWindow;
+import com.googlecode.lanterna.gui2.Button;
+import com.googlecode.lanterna.gui2.ComboBox;
+import com.googlecode.lanterna.gui2.Direction;
+import com.googlecode.lanterna.gui2.EmptySpace;
+import com.googlecode.lanterna.gui2.GridLayout;
+import com.googlecode.lanterna.gui2.Label;
+import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
+import com.googlecode.lanterna.gui2.Panel;
+import com.googlecode.lanterna.gui2.Separator;
+import com.googlecode.lanterna.gui2.TextBox;
+import com.googlecode.lanterna.gui2.TextGUI;
+import com.googlecode.lanterna.gui2.Window;
+import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
+import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
+import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
+import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
-import com.googlecode.lanterna.terminal.Terminal;
 
 public class TerminalStarter {
 	
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
         /*
-        This is the first tutorial and entrypoint for learning more about how to use lanterna. We will use the lower
-        layer in this tutorial to demonstrate how to move around the cursor and how to output text in different
-        styles and color.
-        */
+        In this forth tutorial we will finally look at creating a multi-window text GUI, all based on text. Just like
+        the Screen-layer in the previous tutorial was based on the lower-level Terminal layer, the GUI classes we will
+        use here are all build upon the Screen interface. Because of this, if you use these classes, you should never
+        interact with the underlying Screen that backs the GUI directly, as it might modify the screen in a way the
+        GUI isn't aware of.
 
-        /*
-        First of all, we need to get hold of a Terminal object. This will be our main way of interacting with the
-        terminal itself. There are a couple of implementation available and it's important you pick the correct one:
-         * UnixTerminal - Uses ANSI escape codes through standard input/output to carry out the operations
-         * SwingTerminal - Creates a Swing JComponent extending surface that is implementing a terminal emulator
-         * SwingTerminalFrame - Creates a Swing JFrame containing a surface that is implementing a terminal emulator
-         * AWTTerminal - Creates an AWT Component extending surface that is implementing a terminal emulator
-         * AWTTerminalFrame - Creates an AWT Frame containing a surface that is implementing a terminal emulator
-         * TelnetTerminal - Through TelnetTerminalServer, this allows you control the output to the client through the Terminal interface
-         * VirtualTerminal - Complete in-memory implementation
-        If you intend to write a program that runs in a standard console, like for example on a remote server you're
-        connecting to through some terminal emulator and ssh, what you want is UnixTerminal. However, when developing
-        the program in your IDE, you might have issues as the IDE's console probably doesn't implement the ANSI escape
-        codes correctly and the output is complete garbage. Because of this, you might want to use one of the graphical
-        terminal emulators (Swing or AWT), which will open a new window when you run the program instead of writing to
-        standard output, and then switch to UnixTerminal when the application is ready. In order to simplify this,
-        lanterna provides a TerminalFactory with a DefaultTerminalFactory implementation that tries to figure out which
-        implementation to use. It's mainly checking for if the runtime system has a graphical frontend or not (i.e. if
-        Java considers the system headless) and if Java is detecting a semi-standard terminal or not (checking if
-        System.console() returns something), giving you either a terminal emulator or a UnixTerminal.
-        */
-
-        DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
-        /*
-        The DefaultTerminalFactory can be further tweaked, but we'll leave it with default settings in this tutorial.
+        The GUI system is designed around a background surface that is usually static, but can have components, and
+        multiple windows. The recommended approach it to make all windows modal and not let the user switch between
+        windows, but the latter can also be done. Components are added to windows by using a layout manager that
+        determines the position of each component.
          */
+        DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory();
+        Screen screen = null;
 
-        Terminal terminal = null;
         try {
             /*
-            Let the factory do its magic and figure out which implementation to use by calling createTerminal()
+            The DefaultTerminalFactory class doesn't provide any helper method for creating a Text GUI, you'll need to
+             get a Screen like we did in the previous tutorial and start it so it puts the terminal in private mode.
              */
-            terminal = defaultTerminalFactory.createTerminal();
+            screen = terminalFactory.createScreen();
+            screen.startScreen();
 
             /*
-            If we got a terminal emulator (probably Swing) then we are currently looking at an empty terminal emulator
-            window at this point. If the code ran in another terminal emulator (putty, gnome-terminal, konsole, etc) by
-            invoking java manually, there is yet no changes to the content.
+            There are a couple of different constructors to MultiWindowTextGUI, we are going to go with the defaults for
+            most of these values. The one thing to consider is threading; with the default options, lanterna will use
+            the calling thread for all UI operations which mean that you are basically letting the calling thread block
+            until the GUI is shut down. There is a separate TextGUIThread implementaiton you can use if you'd like
+            Lanterna to create a dedicated UI thread and not lock the caller. Just like with AWT and Swing, you should
+            be scheduling any kind of UI operation to always run on the UI thread but lanterna tries to be best-effort
+            if you attempt to mutate the GUI from another thread. Another default setting that will be applied is that
+            the background of the GUI will be solid blue.
              */
+            final WindowBasedTextGUI textGUI = new MultiWindowTextGUI(screen,TextColor.ANSI.BLACK);
 
             /*
-            Let's print some text, this has the same as calling System.out.println("Hello");
+            Creating a new window is relatively uncomplicated, you can optionally supply a title for the window
              */
-            terminal.putCharacter('H');
-            terminal.putCharacter('e');
-            terminal.putCharacter('l');
-            terminal.putCharacter('l');
-            terminal.putCharacter('o');
-            terminal.putCharacter('\n');
-            terminal.flush();
-            /*
-            Notice the flush() call above; it is necessary to finish off terminal output operations with a call to
-            flush() both in the case of native terminal and the bundled terminal emulators. Lanterna's Unix terminal
-            doesn't buffer the output by itself but one can assume the underlying I/O layer does. In the case of the
-            terminal emulators bundled in lanterna, the flush call will signal a repaint to the underlying UI component.
-             */
-            Thread.sleep(2000);
+            final Window window = new BasicWindow("Tape Reader");
+            window.setTheme(LanternaThemes.getRegisteredTheme("businessmachine"));
 
             /*
-            At this point the cursor should be on start of the next line, immediately after the Hello that was just
-            printed. Let's move the cursor to a new position, relative to the current position. Notice we still need to
-            call flush() to ensure the change is immediately visible (i.e. the user can see the text cursor moved to the
-            new position).
-            One thing to notice here is that if you are running this in a 'proper' terminal and the cursor position is
-            at the bottom line, it won't actually move the text up. Attempts at setting the cursor position outside the
-            terminal bounds are usually rounded to the first/last column/row. If you run into this, please clear the
-            terminal content so the cursor is at the top again before running this code.
+            The window has no content initially, you need to call setComponent to populate it with something. In this
+            case, and quite often in fact, you'll want to use more than one component so we'll create a composite
+            'Panel' component that can hold multiple sub-components. This is where we decide what the layout manager
+            should be.
              */
-            TerminalPosition startPosition = terminal.getCursorPosition();
-            terminal.setCursorPosition(startPosition.withRelativeColumn(3).withRelativeRow(2));
-            terminal.flush();
-            Thread.sleep(2000);
+            Panel contentPanel = new Panel(new GridLayout(2));
+
+            /**
+             * Lanterna contains a number of built-in layout managers, the simplest one being LinearLayout that simply
+             * arranges components in either a horizontal or a vertical line. In this tutorial, we'll use the GridLayout
+             * which is based on the layout manager with the same name in SWT. In the constructor above we have
+             * specified that we want to have a grid with two columns, below we customize the layout further by adding
+             * some spacing between the columns.
+             */
+            GridLayout gridLayout = (GridLayout)contentPanel.getLayoutManager();
+            gridLayout.setHorizontalSpacing(3);
 
             /*
-            Let's continue by changing the color of the text printed. This doesn't change any currently existing text,
-            it will only take effect on whatever we print after this.
+            Since the grid has two columns, we can do something like this to add components when we don't need to
+            customize them any further.
              */
-            terminal.setBackgroundColor(TextColor.ANSI.BLUE);
-            terminal.setForegroundColor(TextColor.ANSI.YELLOW);
+            contentPanel.addComponent(new Label("Text Box (aligned)"));
+            contentPanel.addComponent(
+                    new TextBox()
+                        .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.BEGINNING, GridLayout.Alignment.CENTER)));
 
             /*
-            Now print text with these new colors
+            Here is an example of customizing the regular text box component so it masks the content and can work for
+            password input.
              */
-            terminal.putCharacter('Y');
-            terminal.putCharacter('e');
-            terminal.putCharacter('l');
-            terminal.putCharacter('l');
-            terminal.putCharacter('o');
-            terminal.putCharacter('w');
-            terminal.putCharacter(' ');
-            terminal.putCharacter('o');
-            terminal.putCharacter('n');
-            terminal.putCharacter(' ');
-            terminal.putCharacter('b');
-            terminal.putCharacter('l');
-            terminal.putCharacter('u');
-            terminal.putCharacter('e');
-            terminal.flush();
-            Thread.sleep(2000);
+            contentPanel.addComponent(new Label("Password Box (right aligned)"));
+            contentPanel.addComponent(
+                    new TextBox()
+                        .setMask('*')
+                        .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.BEGINNING, GridLayout.Alignment.CENTER)));
 
             /*
-            In addition to colors, most terminals supports some sort of style that can be selectively enabled. The most
-            common one is bold mode, which on many terminal implementations (emulators and otherwise) is not actually
-            using bold text at all but rather shifts the tint of the foreground color so it stands out a bit. Let's
-            print the same text as above in bold mode to compare.
-            Notice that startPosition has the same value as when we retrieved it with getTerminalSize(), the
-            TerminalPosition class is immutable and calling the with* methods will return a copy. So the following
-            setCursorPosition(..) call will put us exactly one row below the previous row.
+            While we are not going to demonstrate all components here, here is an example of combo-boxes, one that is
+            read-only and one that is editable.
              */
-            terminal.setCursorPosition(startPosition.withRelativeColumn(3).withRelativeRow(3));
-            terminal.flush();
-            Thread.sleep(2000);
-            terminal.enableSGR(SGR.BOLD);
-            terminal.putCharacter('Y');
-            terminal.putCharacter('e');
-            terminal.putCharacter('l');
-            terminal.putCharacter('l');
-            terminal.putCharacter('o');
-            terminal.putCharacter('w');
-            terminal.putCharacter(' ');
-            terminal.putCharacter('o');
-            terminal.putCharacter('n');
-            terminal.putCharacter(' ');
-            terminal.putCharacter('b');
-            terminal.putCharacter('l');
-            terminal.putCharacter('u');
-            terminal.putCharacter('e');
-            terminal.flush();
-            Thread.sleep(2000);
+            contentPanel.addComponent(new Label("Read-only Combo Box (forced size)"));
+            List<String> timezonesAsStrings = new ArrayList<String>();
+            for(String id: TimeZone.getAvailableIDs()) {
+                timezonesAsStrings.add(id);
+            }
+            ComboBox<String> readOnlyComboBox = new ComboBox<String>(timezonesAsStrings);
+            readOnlyComboBox.setReadOnly(true);
+            readOnlyComboBox.setPreferredSize(new TerminalSize(20, 1));
+            contentPanel.addComponent(readOnlyComboBox);
+
+            contentPanel.addComponent(new Label("Editable Combo Box (filled)"));
+            contentPanel.addComponent(
+                    new ComboBox<String>("Item #1", "Item #2", "Item #3", "Item #4")
+                            .setReadOnly(false)
+                            .setLayoutData(GridLayout.createHorizontallyFilledLayoutData(1)));
 
             /*
-            Ok, that's enough for now. Let's reset colors and SGR modifiers and move down one more line
+            Some user interactions, like buttons, work by registering callback methods. In this example here, we're
+            using one of the pre-defined dialogs when the button is triggered.
              */
-            terminal.resetColorAndSGR();
-            terminal.setCursorPosition(terminal.getCursorPosition().withColumn(0).withRelativeRow(1));
-            terminal.putCharacter('D');
-            terminal.putCharacter('o');
-            terminal.putCharacter('n');
-            terminal.putCharacter('e');
-            terminal.putCharacter('\n');
-            terminal.flush();
-
-            Thread.sleep(2000);
+            contentPanel.addComponent(new Label("Button (centered)"));
+            contentPanel.addComponent(new Button("Button", new Runnable() {
+                @Override
+                public void run() {
+                    MessageDialog.showMessageDialog(textGUI, "MessageBox", "This is a message box", MessageDialogButton.OK);
+                }
+            }).setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.CENTER, GridLayout.Alignment.CENTER)));
 
             /*
-            Beep and exit
+            Close off with an empty row and a separator, then a button to close the window
              */
-            terminal.bell();
-            terminal.flush();
-            Thread.sleep(200);
+            contentPanel.addComponent(
+                    new EmptySpace()
+                            .setLayoutData(
+                                    GridLayout.createHorizontallyFilledLayoutData(2)));
+            contentPanel.addComponent(
+                    new Separator(Direction.HORIZONTAL)
+                            .setLayoutData(
+                                    GridLayout.createHorizontallyFilledLayoutData(2)));
+            contentPanel.addComponent(
+                    new Button("Close", new Runnable() {
+                        @Override
+                        public void run() {
+                            window.close();
+                        }
+                    }).setLayoutData(
+                            GridLayout.createHorizontallyEndAlignedLayoutData(2)));
+
+            /*
+            We now have the content panel fully populated with components. A common mistake is to forget to attach it to
+            the window, so let's make sure to do that.
+             */
+            window.setComponent(contentPanel);
+
+            /*
+            Now the window is created and fully populated. As discussed above regarding the threading model, we have the
+            option to fire off the GUI here and then later on decide when we want to stop it. In order for this to work,
+            you need a dedicated UI thread to run all the GUI operations, usually done by passing in a
+            SeparateTextGUIThread object when you create the TextGUI. In this tutorial, we are using the conceptually
+            simpler SameTextGUIThread, which essentially hijacks the caller thread and uses it as the GUI thread until
+            some stop condition is met. The absolutely simplest way to do this is to simply ask lanterna to display the
+            window and wait for it to be closed. This will initiate the event loop and make the GUI functional. In the
+            "Close" button above, we tied a call to the close() method on the Window object when the button is
+            triggered, this will then break the even loop and our call finally returns.
+             */
+            textGUI.addWindowAndWait(window);
+
+            /*
+            When our call has returned, the window is closed and no longer visible. The screen still contains the last
+            state the TextGUI left it in, so we can easily add and display another window without any flickering. In
+            this case, we want to shut down the whole thing and return to the ordinary prompt. We just need to stop the
+            underlying Screen for this, the TextGUI system does not require any additional disassembly.
+             */
+
         }
-        catch(IOException e) {
+        catch (IOException e) {
             e.printStackTrace();
         }
         finally {
-            if(terminal != null) {
+            if(screen != null) {
                 try {
-                    /*
-                    Closing the terminal doesn't always do something, but if you run the Swing or AWT bundled terminal
-                    emulators for example, it will close the window and allow this application to terminate. Calling it
-                    on a UnixTerminal will not have any affect.
-                     */
-                    terminal.close();
+                    screen.stopScreen();
                 }
                 catch(IOException e) {
                     e.printStackTrace();
