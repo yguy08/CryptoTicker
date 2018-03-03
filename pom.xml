@@ -93,6 +93,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <groupId>org.yaml</groupId>
         <artifactId>snakeyaml</artifactId>
         <version>1.19</version>
+    </dependency>
+    <dependency>
+        <groupId>com.googlecode.lanterna</groupId>
+        <artifactId>lanterna</artifactId>
+        <version>3.0.0</version>
     </dependency> 
   </dependencies>
   
