@@ -6,6 +6,14 @@ public class Tick {
     private long timestamp;
     private double last;
     
+    public Tick(){}
+    
+    public Tick(String symbol, long timestamp, double last){
+    	setSymbol(symbol);
+    	setTimestamp(timestamp);
+    	setLast(last);
+    }
+    
     public Tick set(String string, long time, double doubleValue) {
         setSymbol(string);
         setTimestamp(time);

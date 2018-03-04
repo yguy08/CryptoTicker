@@ -1,4 +1,4 @@
-package com.tickercash.quoteboy;
+package com.tickercash.clerk;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,7 +9,7 @@ import org.knowm.xchange.dto.marketdata.Ticker;
 
 import com.tickercash.util.UniqueCurrentTimeMS;
 
-public class XchangeTicker extends com.tickercash.quoteboy.QuoteBoy {
+public class XchangeTicker extends com.tickercash.clerk.QuoteBoy {
     
     private final Logger LOGGER = LogManager.getLogger("XchangeTicker");
     

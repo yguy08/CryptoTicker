@@ -1,9 +1,9 @@
 package com.tickercash.tapereader;
 
 import com.espertech.esper.client.EventBean;
+import com.tickercash.clerk.QuoteBoy;
 import com.tickercash.config.TapeReaderConfig;
 import com.tickercash.marketdata.Tick;
-import com.tickercash.quoteboy.QuoteBoy;
 import com.tickercash.tip.Tip;
 
 public class TapeReader {

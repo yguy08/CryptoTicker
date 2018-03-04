@@ -19,7 +19,6 @@ import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
 import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.Separator;
 import com.googlecode.lanterna.gui2.TextBox;
-import com.googlecode.lanterna.gui2.TextGUI;
 import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
@@ -30,18 +29,6 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 public class TerminalStarter {
 	
 	public static void main(String[] args) {
-        /*
-        In this forth tutorial we will finally look at creating a multi-window text GUI, all based on text. Just like
-        the Screen-layer in the previous tutorial was based on the lower-level Terminal layer, the GUI classes we will
-        use here are all build upon the Screen interface. Because of this, if you use these classes, you should never
-        interact with the underlying Screen that backs the GUI directly, as it might modify the screen in a way the
-        GUI isn't aware of.
-
-        The GUI system is designed around a background surface that is usually static, but can have components, and
-        multiple windows. The recommended approach it to make all windows modal and not let the user switch between
-        windows, but the latter can also be done. Components are added to windows by using a layout manager that
-        determines the position of each component.
-         */
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory();
         Screen screen = null;
 
@@ -63,13 +50,12 @@ public class TerminalStarter {
             if you attempt to mutate the GUI from another thread. Another default setting that will be applied is that
             the background of the GUI will be solid blue.
              */
-            final WindowBasedTextGUI textGUI = new MultiWindowTextGUI(screen,TextColor.ANSI.BLACK);
+            final WindowBasedTextGUI textGUI = new MultiWindowTextGUI(screen);
 
             /*
             Creating a new window is relatively uncomplicated, you can optionally supply a title for the window
              */
             final Window window = new BasicWindow("Tape Reader");
-            window.setTheme(LanternaThemes.getRegisteredTheme("businessmachine"));
 
             /*
             The window has no content initially, you need to call setComponent to populate it with something. In this
@@ -88,25 +74,6 @@ public class TerminalStarter {
              */
             GridLayout gridLayout = (GridLayout)contentPanel.getLayoutManager();
             gridLayout.setHorizontalSpacing(3);
-
-            /*
-            Since the grid has two columns, we can do something like this to add components when we don't need to
-            customize them any further.
-             */
-            contentPanel.addComponent(new Label("Text Box (aligned)"));
-            contentPanel.addComponent(
-                    new TextBox()
-                        .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.BEGINNING, GridLayout.Alignment.CENTER)));
-
-            /*
-            Here is an example of customizing the regular text box component so it masks the content and can work for
-            password input.
-             */
-            contentPanel.addComponent(new Label("Password Box (right aligned)"));
-            contentPanel.addComponent(
-                    new TextBox()
-                        .setMask('*')
-                        .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.BEGINNING, GridLayout.Alignment.CENTER)));
 
             /*
             While we are not going to demonstrate all components here, here is an example of combo-boxes, one that is

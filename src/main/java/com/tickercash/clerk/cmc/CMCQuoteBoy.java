@@ -1,4 +1,4 @@
-package com.tickercash.quoteboy.cmc;
+package com.tickercash.clerk.cmc;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,7 +7,7 @@ import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.coinmarketcap.CoinMarketCapExchange;
 import org.knowm.xchange.coinmarketcap.service.CoinMarketCapMarketDataService;
 
-import com.tickercash.quoteboy.QuoteBoy;
+import com.tickercash.clerk.QuoteBoy;
 import com.tickercash.util.UniqueCurrentTimeMS;
 
 public class CMCQuoteBoy extends QuoteBoy {

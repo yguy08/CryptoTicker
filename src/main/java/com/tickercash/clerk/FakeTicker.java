@@ -1,4 +1,4 @@
-package com.tickercash.quoteboy;
+package com.tickercash.clerk;
 
 import java.util.Random;
 

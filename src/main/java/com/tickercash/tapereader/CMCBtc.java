@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.tickercash.clerk.cmc.CMCQuoteBoy;
 import com.tickercash.marketdata.Tick;
-import com.tickercash.quoteboy.cmc.CMCQuoteBoy;
 import com.tickercash.util.CsvWriter;
 
 @SuppressWarnings("unchecked")
