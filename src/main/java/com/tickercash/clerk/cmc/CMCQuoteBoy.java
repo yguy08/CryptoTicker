@@ -7,10 +7,10 @@ import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.coinmarketcap.CoinMarketCapExchange;
 import org.knowm.xchange.coinmarketcap.service.CoinMarketCapMarketDataService;
 
-import com.tickercash.clerk.QuoteBoy;
+import com.tickercash.clerk.LiveDataClerk;
 import com.tickercash.util.UniqueCurrentTimeMS;
 
-public class CMCQuoteBoy extends QuoteBoy {
+public class CMCQuoteBoy extends LiveDataClerk {
 	
     private static final Logger LOGGER = LogManager.getLogger("CMCQuoteBoy");
     

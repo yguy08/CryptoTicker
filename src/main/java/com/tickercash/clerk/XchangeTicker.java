@@ -9,7 +9,7 @@ import org.knowm.xchange.dto.marketdata.Ticker;
 
 import com.tickercash.util.UniqueCurrentTimeMS;
 
-public class XchangeTicker extends com.tickercash.clerk.QuoteBoy {
+public class XchangeTicker extends com.tickercash.clerk.LiveDataClerk {
     
     private final Logger LOGGER = LogManager.getLogger("XchangeTicker");
     

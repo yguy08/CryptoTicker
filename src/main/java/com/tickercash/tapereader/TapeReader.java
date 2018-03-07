@@ -1,30 +1,20 @@
 package com.tickercash.tapereader;
 
 import com.espertech.esper.client.EventBean;
-import com.tickercash.clerk.QuoteBoy;
-import com.tickercash.config.TapeReaderConfig;
+import com.tickercash.clerk.LiveDataClerk;
 import com.tickercash.marketdata.Tick;
 import com.tickercash.tip.Tip;
 
 public class TapeReader {
     
-	protected TapeReaderConfig config;
-    protected QuoteBoy quoteBoy;
+    protected LiveDataClerk quoteBoy;
     protected Tip tip;
     
-    public TapeReaderConfig getTapeReaderConfig() {
-    	return config;
-    }
-    
-    public void setTapeReaderConfig(TapeReaderConfig cfg) {
-    	config = cfg;
-    }
-    
-    public QuoteBoy getQuoteBoy() {
+    public LiveDataClerk getQuoteBoy() {
     	return quoteBoy;
     }
     
-    public void setQuoteBoy(QuoteBoy quoteBoy) {
+    public void setQuoteBoy(LiveDataClerk quoteBoy) {
     	this.quoteBoy = quoteBoy;
     }
     

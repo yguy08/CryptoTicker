@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.tickercash.util.UniqueCurrentTimeMS;
 
-public class FakeTicker extends QuoteBoy {
+public class FakeTicker extends LiveDataClerk {
     
     private Random random;
     
