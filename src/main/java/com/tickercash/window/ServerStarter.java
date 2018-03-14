@@ -1,5 +1,6 @@
 package com.tickercash.window;
 
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.googlecode.lanterna.graphics.TextGraphics;
@@ -12,25 +13,24 @@ public class ServerStarter {
 
 	public static void main(String[] args) throws Exception {
 		Terminal terminal = new DefaultTerminalFactory().createTerminal();
-		Screen screen = new TerminalScreen(terminal);
-
-		String liveService = args[0];
+		Screen screen = new TerminalScreen(terminal);		
+		
 		TextGraphics tGraphics = screen.newTextGraphics();
-
+		
 		screen.startScreen();
 		screen.clear();
 		screen.setCursorPosition(null);
 		
-		for(int i = 0; i < args[0].length(); i++) {
-			tGraphics.setCharacter(i, 1, args[0].charAt(i));
+		String welcome = Stream.of(args).collect(Collectors.joining(" "));
+		for(int i = 0; i < welcome.length(); i++){
+			tGraphics.setCharacter(i, 1, welcome.charAt(i));
 			slowType();
 			screen.refresh();
 		}
-		
-		screen.refresh();
 
 		screen.readInput();
 		screen.stopScreen();
+		screen.close();
 
 	}
 	
