@@ -8,6 +8,7 @@ import com.tickercash.tip.Tip;
 public class TapeReader {
     
     protected LiveDataClerk quoteBoy;
+    
     protected Tip tip;
     
     public LiveDataClerk getQuoteBoy() {

@@ -22,7 +22,6 @@ public class XchangeTicker extends com.tickercash.clerk.LiveDataClerk {
     private int throttle = 1000;
     
     public XchangeTicker(String exchangeName) {
-        super();
         EXCHANGE = ExchangeFactory.INSTANCE.createExchange(exchangeName);
     }
 
