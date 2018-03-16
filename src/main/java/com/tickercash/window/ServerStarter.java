@@ -2,6 +2,8 @@ package com.tickercash.window;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
@@ -21,6 +23,10 @@ import com.lmax.disruptor.EventHandler;
 import com.tickercash.clerk.FakeTicker;
 import com.tickercash.clerk.LiveDataClerk;
 import com.tickercash.marketdata.Tick;
+import com.tickercash.enums.Broker;
+import com.tickercash.enums.DataSource;
+import com.tickercash.enums.Displayable;
+import com.tickercash.enums.MarketDataSource;
 
 public class ServerStarter {
     
@@ -52,6 +58,11 @@ public class ServerStarter {
         GridLayout gridLayout = (GridLayout)contentPanel.getLayoutManager();
         gridLayout.setHorizontalSpacing(4);
         
+        contentPanel.addComponent(
+        new EmptySpace()
+                .setLayoutData(
+                        GridLayout.createHorizontallyFilledLayoutData(3)));
+        
         Label liveFeed = new Label("Market Data");
         contentPanel.addComponent(liveFeed);
         
@@ -61,23 +72,18 @@ public class ServerStarter {
         Label dataSourceLbl = new Label("Data Source");
         contentPanel.addComponent(dataSourceLbl);
         
-        ComboBox<String> marketData = new ComboBox<>();
-        marketData.addItem("Poloniex");
-        marketData.addItem("GDAX");
-        marketData.addItem("Binance");
-        marketData.addItem("Kucoin");
-        marketData.addItem("Noop");
+        contentPanel.addComponent(new Separator(Direction.HORIZONTAL).setLayoutData(GridLayout.createHorizontallyFilledLayoutData(3)));
+        
+        ComboBox<String> marketData = createComboBox(MarketDataSource.values());
         contentPanel.addComponent(marketData);
         
-        ComboBox<String> broker = new ComboBox<>();
-        broker.addItem("N/A");
+        ComboBox<String> broker = createComboBox(Broker.values());
         contentPanel.addComponent(broker);
         
-        ComboBox<String> dataSource = new ComboBox<>();
-        dataSource.addItem("N/A");
-        dataSource.addItem("H2 DB");
-        dataSource.addItem("CSV");
+        ComboBox<String> dataSource = createComboBox(DataSource.values());
         contentPanel.addComponent(dataSource);
+        
+        contentPanel.addComponent(new Separator(Direction.HORIZONTAL).setLayoutData(GridLayout.createHorizontallyFilledLayoutData(3)));
         
         Button start = new Button("Start", new Runnable() {
 
@@ -98,15 +104,16 @@ public class ServerStarter {
                 clerk.start();
             }
             
-        });
+        }).setLayoutData(GridLayout.createHorizontallyEndAlignedLayoutData(3));
         contentPanel.addComponent(start);
         
         
         window.setComponent(contentPanel);
         textGUI.addWindowAndWait(window);
         
-        
-        
-        
+    }
+    
+    private static ComboBox<String> createComboBox(Displayable[] displayable){
+        return new ComboBox<>(Stream.of(displayable).map(d -> d.getDisplayName()).toArray(String[]::new));
     }
 }
