@@ -49,6 +49,6 @@ public abstract class LiveDataClerk {
         ringBuffer.publishEvent(this::translateTo, symbol, timestamp, last);
     }
     
-    public abstract void start();
+    public abstract void start() throws Exception;
 
 }

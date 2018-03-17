@@ -18,7 +18,7 @@ public class CMCQuoteBoy extends LiveDataClerk {
     
     private final CoinMarketCapMarketDataService CMC_MARKET_DATA_SERVICE;
     
-    private int throttle = 10000;
+    private int throttle = 1000;
 	
 	public CMCQuoteBoy() {
 		CMC_EXCHANGE = ExchangeFactory.INSTANCE.createExchange(CoinMarketCapExchange.class.getName());
@@ -28,11 +28,11 @@ public class CMCQuoteBoy extends LiveDataClerk {
 	public CMCQuoteBoy(int seconds) {
 		CMC_EXCHANGE = ExchangeFactory.INSTANCE.createExchange(CoinMarketCapExchange.class.getName());
 		CMC_MARKET_DATA_SERVICE = (CoinMarketCapMarketDataService) CMC_EXCHANGE.getMarketDataService();
-		throttle = seconds;
+		throttle = seconds*1000;
 	}
 
 	@Override
-	public void start() {
+	public void start() throws Exception {
 		disruptor.start();
 		while(true) {
 			try {
@@ -41,6 +41,7 @@ public class CMCQuoteBoy extends LiveDataClerk {
 				Thread.sleep(throttle);
 			} catch (Exception e) {
 				LOGGER.error(e);
+				Thread.sleep(throttle);
 			}
 		}		
 	}

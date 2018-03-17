@@ -1,5 +1,7 @@
 package com.tickercash.marketdata;
 
+import java.math.BigDecimal;
+
 public class Tick {
     
     private String symbol;
