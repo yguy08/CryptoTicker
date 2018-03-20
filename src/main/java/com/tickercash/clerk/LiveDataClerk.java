@@ -9,20 +9,20 @@ import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
-import com.tickercash.marketdata.Tick;
+import com.tickercash.marketdata.MarketEvent;
 
 public abstract class LiveDataClerk {
         
     protected static final int BUFFER = 1024;
     
-    protected final Disruptor<Tick> disruptor;
+    protected final Disruptor<MarketEvent> disruptor;
     
-    protected final RingBuffer<Tick> ringBuffer;
+    protected final RingBuffer<MarketEvent> ringBuffer;
 
     protected final List<String> subscriptions;
 
     public LiveDataClerk() {
-        disruptor = new Disruptor<Tick>(Tick::new, BUFFER, Executors.defaultThreadFactory(),
+        disruptor = new Disruptor<MarketEvent>(MarketEvent::new, BUFFER, Executors.defaultThreadFactory(),
                 ProducerType.SINGLE, new BlockingWaitStrategy());
         ringBuffer = disruptor.getRingBuffer();
         subscriptions = new ArrayList<>();
@@ -37,16 +37,16 @@ public abstract class LiveDataClerk {
     }
     
     @SuppressWarnings("unchecked")
-    public void addHandler(EventHandler<Tick>... handler) {
+    public void addHandler(EventHandler<MarketEvent>... handler) {
         disruptor.handleEventsWith(handler);
     }
         
-    protected void translateTo(Tick event, long sequence, String symbol, Long timestamp, Double last) {
-    	event.set(symbol, timestamp, last);
+    protected void translateTo(MarketEvent push, long sequence, MarketEvent pull) {
+    	push.set(pull);
     }
 
-    protected void onTick(String symbol, long timestamp, double last){
-        ringBuffer.publishEvent(this::translateTo, symbol, timestamp, last);
+    protected void onTick(MarketEvent c){
+        ringBuffer.publishEvent(this::translateTo, c);
     }
     
     public abstract void start() throws Exception;

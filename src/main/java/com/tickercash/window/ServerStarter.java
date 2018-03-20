@@ -72,7 +72,7 @@ public class ServerStarter {
             
             contentPanel.addComponent(new Separator(Direction.HORIZONTAL).setLayoutData(GridLayout.createHorizontallyFilledLayoutData(3)));
             
-            Button start = new Button("Start", new FastTickerTextUI(screen, window,1))
+            Button start = new Button("Start", new FastTickerTextUI(screen, window,5))
             		.setLayoutData(GridLayout.createHorizontallyEndAlignedLayoutData(3));
             contentPanel.addComponent(start);
             

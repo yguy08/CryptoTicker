@@ -8,6 +8,7 @@ import org.knowm.xchange.coinmarketcap.CoinMarketCapExchange;
 import org.knowm.xchange.coinmarketcap.service.CoinMarketCapMarketDataService;
 
 import com.tickercash.clerk.LiveDataClerk;
+import com.tickercash.marketdata.Tick;
 import com.tickercash.util.UniqueCurrentTimeMS;
 
 public class CMCQuoteBoy extends LiveDataClerk {
@@ -37,7 +38,7 @@ public class CMCQuoteBoy extends LiveDataClerk {
 		while(true) {
 			try {
 				CMC_MARKET_DATA_SERVICE.getCoinMarketCapTickers().stream().forEach((s) 
-						-> onTick(s.getIsoCode()+"/BTC", UniqueCurrentTimeMS.uniqueCurrentTimeMS(), s.getPriceBTC().doubleValue()));
+						-> onTick(new Tick(s.getIsoCode()+"/BTC", UniqueCurrentTimeMS.uniqueCurrentTimeMS(), s.getPriceBTC().doubleValue())));
 				Thread.sleep(throttle);
 			} catch (Exception e) {
 				LOGGER.error(e);

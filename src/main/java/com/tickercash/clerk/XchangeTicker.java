@@ -7,6 +7,7 @@ import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Ticker;
 
+import com.tickercash.marketdata.Tick;
 import com.tickercash.util.UniqueCurrentTimeMS;
 
 public class XchangeTicker extends LiveDataClerk {
@@ -33,7 +34,7 @@ public class XchangeTicker extends LiveDataClerk {
                 pair = new CurrencyPair(s);
                 try {
                     ticker = EXCHANGE.getMarketDataService().getTicker(pair);
-                    onTick(pair.toString(), UniqueCurrentTimeMS.uniqueCurrentTimeMS(),ticker.getLast().doubleValue());
+                    onTick(new Tick(pair.toString(), UniqueCurrentTimeMS.uniqueCurrentTimeMS(),ticker.getLast().doubleValue()));
                     Thread.sleep(throttle);
                 }catch(Exception e) {
                     LOGGER.error(e);

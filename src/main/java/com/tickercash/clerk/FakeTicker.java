@@ -2,6 +2,7 @@ package com.tickercash.clerk;
 
 import java.util.Random;
 
+import com.tickercash.marketdata.Tick;
 import com.tickercash.util.UniqueCurrentTimeMS;
 
 public class FakeTicker extends LiveDataClerk {
@@ -16,7 +17,7 @@ public class FakeTicker extends LiveDataClerk {
     public void start() {
         disruptor.start();
         while(true){
-            onTick("FAKE/BTC",UniqueCurrentTimeMS.uniqueCurrentTimeMS(), random.nextDouble());
+            onTick(new Tick("FAKE/BTC",UniqueCurrentTimeMS.uniqueCurrentTimeMS(), random.nextDouble()));
             try{
                 Thread.sleep(1000);
             }catch(Exception e){

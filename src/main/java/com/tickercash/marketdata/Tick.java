@@ -1,8 +1,8 @@
 package com.tickercash.marketdata;
 
-import java.math.BigDecimal;
+import com.tickercash.util.NumberFormatPatterns;
 
-public class Tick {
+public class Tick extends MarketEvent {
     
     private String symbol;
     private long timestamp;
@@ -49,6 +49,6 @@ public class Tick {
     
     @Override
     public String toString() {
-        return this.symbol+","+this.timestamp+","+this.last;
+        return this.symbol+","+this.timestamp+","+NumberFormatPatterns.SAT_FORMAT.format(this.last);
     }
 }
