@@ -8,7 +8,6 @@ import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.screen.Screen;
 import com.lmax.disruptor.EventHandler;
 import com.tickercash.clerk.cmc.CMCQuoteBoy;
-import com.tickercash.event.handler.MarketEventLogger;
 import com.tickercash.marketdata.MarketEvent;
 
 public class FastTickerTextUI implements WindowClerk {
@@ -22,13 +21,6 @@ public class FastTickerTextUI implements WindowClerk {
     private int throttle;
     
     private static TerminalSize terminalSize;
-    
-    public FastTickerTextUI(Screen screen, Window window) throws Exception {
-    	this.screen = screen;
-    	this.writer = screen.newTextGraphics();
-    	this.window = window;
-    	this.throttle = 1;
-    }
     
     public FastTickerTextUI(Screen screen, Window window, int seconds) {
     	this.screen = screen;
@@ -52,7 +44,7 @@ public class FastTickerTextUI implements WindowClerk {
         	
             LiveDataClerk clerk = new CMCQuoteBoy(throttle);
             clerk.addHandler(TICK_EVENT);
-            clerk.addHandler(new MarketEventLogger());
+            clerk.addHandler(MarketEvent.MARKET_EVENT_LOGGER);
             clerk.start();
         } catch (Exception e1) {
             e1.printStackTrace();
@@ -79,11 +71,12 @@ public class FastTickerTextUI implements WindowClerk {
             		terminalSize = screen.getTerminalSize();
             	}
             	index = 0;
-            	screen.clear();
             	screen.refresh();
+            	Thread.sleep(500);
         	}
-            writer.putString(1, index, event.toString());
+            writer.putString(1, terminalSize.getRows()-index, event.get().toString());
             screen.refresh();
+        	Thread.sleep(200);
         }
         
     };

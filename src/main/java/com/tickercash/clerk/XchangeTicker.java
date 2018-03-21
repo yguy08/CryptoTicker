@@ -1,19 +1,16 @@
 package com.tickercash.clerk;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Ticker;
 
-import com.tickercash.marketdata.Tick;
+import com.tickercash.marketdata.MarketEvent;
+import com.tickercash.util.TapeLogger;
 import com.tickercash.util.UniqueCurrentTimeMS;
 
 public class XchangeTicker extends LiveDataClerk {
-    
-    private final Logger LOGGER = LogManager.getLogger("XchangeTicker");
-    
+        
     private Exchange EXCHANGE = null;
     
     private Ticker ticker = null;
@@ -21,23 +18,28 @@ public class XchangeTicker extends LiveDataClerk {
     private CurrencyPair pair;
     
     private int throttle = 1000;
-    
+        
     public XchangeTicker(String exchangeName) {
         EXCHANGE = ExchangeFactory.INSTANCE.createExchange(exchangeName);
     }
 
     @Override
     public void start() {
-        disruptor.start();        
+        try{
+        	
+        }catch(Exception e){
+        	
+        }
+    	disruptor.start();        
         while(true) {
             for(String s : subscriptions) {
                 pair = new CurrencyPair(s);
                 try {
                     ticker = EXCHANGE.getMarketDataService().getTicker(pair);
-                    onTick(new Tick(pair.toString(), UniqueCurrentTimeMS.uniqueCurrentTimeMS(),ticker.getLast().doubleValue()));
+                    ringBuffer.publishEvent(MarketEvent.TRANSLATOR_SYMBOL_TS_LAST::translateTo, pair.toString(), UniqueCurrentTimeMS.uniqueCurrentTimeMS(),ticker.getLast().doubleValue());
                     Thread.sleep(throttle);
                 }catch(Exception e) {
-                    LOGGER.error(e);
+                    TapeLogger.getLogger().error(e);
                 }
             }
        }        

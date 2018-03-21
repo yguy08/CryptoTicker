@@ -2,13 +2,9 @@ package com.tickercash.clerk;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-
-import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
-import com.lmax.disruptor.dsl.ProducerType;
 import com.tickercash.marketdata.MarketEvent;
 
 public abstract class LiveDataClerk {
@@ -22,8 +18,7 @@ public abstract class LiveDataClerk {
     protected final List<String> subscriptions;
 
     public LiveDataClerk() {
-        disruptor = new Disruptor<MarketEvent>(MarketEvent::new, BUFFER, Executors.defaultThreadFactory(),
-                ProducerType.SINGLE, new BlockingWaitStrategy());
+        disruptor = MarketEvent.createDefaultMarketEventDisruptor();
         ringBuffer = disruptor.getRingBuffer();
         subscriptions = new ArrayList<>();
     }
@@ -40,15 +35,7 @@ public abstract class LiveDataClerk {
     public void addHandler(EventHandler<MarketEvent>... handler) {
         disruptor.handleEventsWith(handler);
     }
-        
-    protected void translateTo(MarketEvent push, long sequence, MarketEvent pull) {
-    	push.set(pull);
-    }
-
-    protected void onTick(MarketEvent c){
-        ringBuffer.publishEvent(this::translateTo, c);
-    }
-    
+                
     public abstract void start() throws Exception;
 
 }

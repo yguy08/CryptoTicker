@@ -1,20 +1,17 @@
 package com.tickercash.clerk.cmc;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.coinmarketcap.CoinMarketCapExchange;
 import org.knowm.xchange.coinmarketcap.service.CoinMarketCapMarketDataService;
 
 import com.tickercash.clerk.LiveDataClerk;
-import com.tickercash.marketdata.Tick;
+import com.tickercash.marketdata.MarketEvent;
+import com.tickercash.util.TapeLogger;
 import com.tickercash.util.UniqueCurrentTimeMS;
 
 public class CMCQuoteBoy extends LiveDataClerk {
-	
-    private static final Logger LOGGER = LogManager.getLogger("CMCQuoteBoy");
-    
+	    
     private final Exchange CMC_EXCHANGE;
     
     private final CoinMarketCapMarketDataService CMC_MARKET_DATA_SERVICE;
@@ -37,11 +34,12 @@ public class CMCQuoteBoy extends LiveDataClerk {
 		disruptor.start();
 		while(true) {
 			try {
-				CMC_MARKET_DATA_SERVICE.getCoinMarketCapTickers().stream().forEach((s) 
-						-> onTick(new Tick(s.getIsoCode()+"/BTC", UniqueCurrentTimeMS.uniqueCurrentTimeMS(), s.getPriceBTC().doubleValue())));
+				CMC_MARKET_DATA_SERVICE.getCoinMarketCapTickers(100).stream().forEach((s) 
+						-> ringBuffer.publishEvent(MarketEvent.TRANSLATOR_SYMBOL_TS_LAST::translateTo, 
+								s.getIsoCode()+"/BTC", UniqueCurrentTimeMS.uniqueCurrentTimeMS(), s.getPriceBTC().doubleValue()));
 				Thread.sleep(throttle);
 			} catch (Exception e) {
-				LOGGER.error(e);
+				TapeLogger.getLogger().error(e);
 				Thread.sleep(throttle);
 			}
 		}		
