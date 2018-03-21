@@ -4,10 +4,11 @@ public enum MarketDataSource implements Displayable {
     
     POLONIEX("Poloniex"),
     BINANCE("Binance"),
+    CMC("CMC"),
     GDAX("GDAX"),
     KUCOIN("Kucoin"),
-    CMC("CMC");
-    
+    FAKE("Fake");
+	
     private String displayName;
     
     MarketDataSource(String displayName){

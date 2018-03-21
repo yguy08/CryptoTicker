@@ -3,6 +3,9 @@ package com.tickercash.window;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.Button;
 import com.googlecode.lanterna.gui2.ComboBox;
@@ -18,31 +21,53 @@ import com.googlecode.lanterna.gui2.Window.Hint;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
+import com.tickercash.clerk.FakeTicker;
 import com.tickercash.clerk.FastTickerTextUI;
+import com.tickercash.clerk.LiveDataClerk;
+import com.tickercash.clerk.TransmitterClerk;
+import com.tickercash.clerk.cmc.CMCQuoteBoy;
 import com.tickercash.enums.Broker;
 import com.tickercash.enums.DataSource;
 import com.tickercash.enums.Displayable;
 import com.tickercash.enums.MarketDataSource;
+import com.tickercash.marketdata.MarketEvent;
+import com.tickercash.util.TapeLogger;
 
 public class ServerStarter {
+	
+	static DefaultTerminalFactory terminalFactory;
+	
+	static Screen screen;
+	
+	static WindowBasedTextGUI textGUI;
+	
+    static final Window window = new BasicWindow("Market Data Server");
     
+    static Panel contentPanel;
+    
+    static GridLayout gridLayout;
+    
+    static ComboBox<String> marketDataComboBox;
+    
+    static ComboBox<String> brokerComboBox;
+    
+    static ComboBox<String> dataSourceComboBox;
+    
+    private static final Logger LOGGER = LogManager.getLogger("ServerStarter");
+ 
     public static void main(String[] args) throws Exception {
-    	
-        DefaultTerminalFactory terminalFactory = null;
-        Screen screen = null;
 
         try {
             terminalFactory = new DefaultTerminalFactory();
             screen = terminalFactory.createScreen();
             screen.startScreen();
             
-            WindowBasedTextGUI textGUI = new MultiWindowTextGUI(screen);
-            final Window window = new BasicWindow("Market Data Server");
+            textGUI = new MultiWindowTextGUI(screen);
             window.setHints(Arrays.asList(Hint.CENTERED));
             
-            Panel contentPanel = new Panel(new GridLayout(3));
+            contentPanel = new Panel(new GridLayout(3));
             
-            GridLayout gridLayout = (GridLayout)contentPanel.getLayoutManager();
+            gridLayout = (GridLayout)contentPanel.getLayoutManager();
             gridLayout.setHorizontalSpacing(3);
             
             contentPanel.addComponent(
@@ -61,30 +86,69 @@ public class ServerStarter {
             
             contentPanel.addComponent(new Separator(Direction.HORIZONTAL).setLayoutData(GridLayout.createHorizontallyFilledLayoutData(3)));
             
-            ComboBox<String> marketData = createComboBox(MarketDataSource.values());
-            contentPanel.addComponent(marketData);
+            marketDataComboBox = createComboBox(MarketDataSource.values());
+            contentPanel.addComponent(marketDataComboBox);
             
-            ComboBox<String> broker = createComboBox(Broker.values());
-            contentPanel.addComponent(broker);
+            brokerComboBox = createComboBox(Broker.values());
+            contentPanel.addComponent(brokerComboBox);
             
-            ComboBox<String> dataSource = createComboBox(DataSource.values());
-            contentPanel.addComponent(dataSource);
+            dataSourceComboBox = createComboBox(DataSource.values());
+            contentPanel.addComponent(dataSourceComboBox);
             
             contentPanel.addComponent(new Separator(Direction.HORIZONTAL).setLayoutData(GridLayout.createHorizontallyFilledLayoutData(3)));
             
-            Button start = new Button("Start", new FastTickerTextUI(screen, window,5))
-            		.setLayoutData(GridLayout.createHorizontallyEndAlignedLayoutData(3));
+            Button start = new Button("Start", new Runnable(){
+
+				@Override
+				public void run() {
+					runSelections().run();
+				}
+            	
+            }).setLayoutData(GridLayout.createHorizontallyEndAlignedLayoutData(3));
             contentPanel.addComponent(start);
             
             window.setComponent(contentPanel);
             textGUI.addWindowAndWait(window);
         }catch(Exception e) {
-        	
+        	LOGGER.error(e.getMessage());
         }finally {
-        	screen.close();
-        	System.exit(1);
+        	LOGGER.error("Exit Server Starter");
+        	//screen.close();
+        	//System.exit(1);
         }
         
+    }
+    
+    private static Runnable runSelections(){
+    	String liveDataSel = marketDataComboBox.getSelectedItem();
+    	String brokerSel = brokerComboBox.getSelectedItem();
+    	String dataSourceSel = dataSourceComboBox.getSelectedItem();
+    	
+    	LiveDataClerk dataClerk = null;
+    	switch(MarketDataSource.valueOf(liveDataSel.toUpperCase())) {
+    	case CMC:
+    		dataClerk = new CMCQuoteBoy();
+    		break;
+    	case POLONIEX:
+    	case GDAX:
+    	case FAKE:
+    		dataClerk = new FakeTicker();
+    		break;
+    	default:
+    		dataClerk = new FakeTicker();
+    		break;
+    	}
+    	
+    	dataClerk.addHandler(MarketEvent.MARKET_EVENT_LOGGER);
+    	
+    	try{
+    		dataClerk.addHandler(new TransmitterClerk());
+    	}catch(Exception e){
+    		TapeLogger.getLogger().error("MQ Start up Failed");
+    	}
+    	
+    	return new FastTickerTextUI(screen, window, dataClerk);
+    	
     }
     
     private static ComboBox<String> createComboBox(Displayable[] displayable){

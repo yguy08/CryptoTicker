@@ -1,13 +1,14 @@
 package com.tickercash.clerk;
 
 import java.io.IOException;
+
+import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.screen.Screen;
 import com.lmax.disruptor.EventHandler;
-import com.tickercash.clerk.cmc.CMCQuoteBoy;
 import com.tickercash.marketdata.MarketEvent;
 
 public class FastTickerTextUI implements WindowClerk {
@@ -17,16 +18,16 @@ public class FastTickerTextUI implements WindowClerk {
     private TextGraphics writer;
     
     private Window window;
-    
-    private int throttle;
-    
+        
     private static TerminalSize terminalSize;
     
-    public FastTickerTextUI(Screen screen, Window window, int seconds) {
+    private LiveDataClerk clerk;
+    
+    public FastTickerTextUI(Screen screen, Window window, LiveDataClerk dataClerk) {
     	this.screen = screen;
     	this.writer = screen.newTextGraphics();
     	this.window = window;
-    	this.throttle = seconds;
+    	this.clerk = dataClerk;
     }
 
     @SuppressWarnings("unchecked")
@@ -42,10 +43,24 @@ public class FastTickerTextUI implements WindowClerk {
         	screen.clear();
         	screen.refresh();
         	
-            LiveDataClerk clerk = new CMCQuoteBoy(throttle);
-            clerk.addHandler(TICK_EVENT);
-            clerk.addHandler(MarketEvent.MARKET_EVENT_LOGGER);
-            clerk.start();
+        	clerk.addHandler(TICK_EVENT);
+        	
+        	Runnable r = new Runnable(){
+
+				@Override
+				public void run() {
+					try {
+						clerk.start();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+        		
+        	};
+        	
+        	r.run();
+        	
         } catch (Exception e1) {
             e1.printStackTrace();
         }finally {
@@ -71,12 +86,10 @@ public class FastTickerTextUI implements WindowClerk {
             		terminalSize = screen.getTerminalSize();
             	}
             	index = 0;
-            	screen.refresh();
-            	Thread.sleep(500);
         	}
+            writer.fillRectangle(new TerminalPosition(0,terminalSize.getRows()-index), TerminalSize.ONE, ' ');
             writer.putString(1, terminalSize.getRows()-index, event.get().toString());
             screen.refresh();
-        	Thread.sleep(200);
         }
         
     };
