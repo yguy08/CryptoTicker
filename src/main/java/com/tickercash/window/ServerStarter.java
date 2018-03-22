@@ -24,13 +24,13 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.tickercash.clerk.FakeTicker;
 import com.tickercash.clerk.FastTickerTextUI;
 import com.tickercash.clerk.LiveDataClerk;
-import com.tickercash.clerk.TransmitterClerk;
 import com.tickercash.clerk.cmc.CMCQuoteBoy;
 import com.tickercash.enums.Broker;
 import com.tickercash.enums.DataSource;
 import com.tickercash.enums.Displayable;
 import com.tickercash.enums.MarketDataSource;
-import com.tickercash.marketdata.MarketEvent;
+import com.tickercash.event.handler.MarketEventLogger;
+import com.tickercash.event.handler.Transmitter;
 import com.tickercash.util.TapeLogger;
 
 public class ServerStarter {
@@ -139,16 +139,15 @@ public class ServerStarter {
     		break;
     	}
     	
-    	dataClerk.addHandler(MarketEvent.MARKET_EVENT_LOGGER);
+    	dataClerk.addHandler(new MarketEventLogger());
     	
     	try{
-    		dataClerk.addHandler(new TransmitterClerk());
+    		dataClerk.addHandler(new Transmitter());
     	}catch(Exception e){
     		TapeLogger.getLogger().error("MQ Start up Failed");
     	}
     	
     	return new FastTickerTextUI(screen, window, dataClerk);
-    	
     }
     
     private static ComboBox<String> createComboBox(Displayable[] displayable){
