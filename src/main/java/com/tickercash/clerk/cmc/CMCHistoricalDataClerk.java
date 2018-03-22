@@ -26,7 +26,7 @@ public class CMCHistoricalDataClerk implements HistoricalDataClerk {
         Elements elements = document.getElementById("historical-data").getElementsByTag("tr");
         return  elements.stream().skip(1)
                 .map(td -> td.getElementsByTag("td"))
-                .map(t -> new Tick(symbol, cmcDateToEpochSeconds(t.get(0).text()), Double.parseDouble(t.get(4).text())))
+                .map(t -> new Tick(symbol, "CMCHistorical", cmcDateToEpochSeconds(t.get(0).text()), Double.parseDouble(t.get(4).text())))
                 .collect(Collectors.toList());
     }
     
