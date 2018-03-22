@@ -9,10 +9,11 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.screen.Screen;
 import com.lmax.disruptor.EventHandler;
-import com.tickercash.marketdata.MarketEvent;
+import com.tickercash.event.MarketDataEvent;
+import com.tickercash.marketdata.MarketDataEventVO;
 
 public class FastTickerTextUI implements WindowClerk {
-	
+    
     private Screen screen;
     
     private TextGraphics writer;
@@ -24,69 +25,69 @@ public class FastTickerTextUI implements WindowClerk {
     private LiveDataClerk clerk;
     
     public FastTickerTextUI(Screen screen, Window window, LiveDataClerk dataClerk) {
-    	this.screen = screen;
-    	this.writer = screen.newTextGraphics();
-    	this.window = window;
-    	this.clerk = dataClerk;
+        this.screen = screen;
+        this.writer = screen.newTextGraphics();
+        this.window = window;
+        this.clerk = dataClerk;
     }
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public void run() {
     
         try {
-        	window.close();
+            window.close();
             writer.setForegroundColor(TextColor.ANSI.GREEN);
-        	writer.setBackgroundColor(TextColor.ANSI.BLACK);
-        	screen.setCursorPosition(null);
-        	terminalSize = screen.getTerminalSize();
-        	screen.clear();
-        	screen.refresh();
-        	
-        	clerk.addHandler(TICK_EVENT);
-        	
-        	Runnable r = new Runnable(){
+            writer.setBackgroundColor(TextColor.ANSI.BLACK);
+            screen.setCursorPosition(null);
+            terminalSize = screen.getTerminalSize();
+            screen.clear();
+            screen.refresh();
+            
+            clerk.addHandler(TICK_EVENT);
+            
+            Runnable r = new Runnable(){
 
-				@Override
-				public void run() {
-					try {
-						clerk.start();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-        		
-        	};
-        	
-        	r.run();
-        	
+                @Override
+                public void run() {
+                    try {
+                        clerk.start();
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+                
+            };
+            
+            r.run();
+            
         } catch (Exception e1) {
             e1.printStackTrace();
         }finally {
-        	try {
-				screen.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+            try {
+                screen.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         
     }
-	
-    private final EventHandler<MarketEvent> TICK_EVENT = new EventHandler<MarketEvent>(){
+    
+    private final EventHandler<MarketDataEvent> TICK_EVENT = new EventHandler<MarketDataEvent>(){
         
-    	int index;
-    	
+        int index;
+        
         @Override
-        public void onEvent(MarketEvent event, long sequence, boolean endOfBatch) throws Exception {
-        	index++;
-        	if(index > terminalSize.getRows()){
-            	terminalSize = screen.doResizeIfNecessary();
-            	if(terminalSize==null) {
-            		terminalSize = screen.getTerminalSize();
-            	}
-            	index = 0;
-        	}
+        public void onEvent(MarketDataEvent event, long sequence, boolean endOfBatch) throws Exception {
+            index++;
+            if(index > terminalSize.getRows()){
+                terminalSize = screen.doResizeIfNecessary();
+                if(terminalSize==null) {
+                    terminalSize = screen.getTerminalSize();
+                }
+                index = 0;
+            }
             writer.fillRectangle(new TerminalPosition(0,terminalSize.getRows()-index), TerminalSize.ONE, ' ');
             writer.putString(1, terminalSize.getRows()-index, event.get().toString());
             screen.refresh();

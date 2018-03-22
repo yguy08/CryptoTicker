@@ -5,9 +5,9 @@ import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Ticker;
 
-import com.tickercash.marketdata.MarketEvent;
+import com.tickercash.event.translator.MarketDataTranslator;
 import com.tickercash.util.TapeLogger;
-import com.tickercash.util.UniqueCurrentTimeMS;
+
 
 public class XchangeTicker extends LiveDataClerk {
         
@@ -36,7 +36,7 @@ public class XchangeTicker extends LiveDataClerk {
                 pair = new CurrencyPair(s);
                 try {
                     ticker = EXCHANGE.getMarketDataService().getTicker(pair);
-                    ringBuffer.publishEvent(MarketEvent.TRANSLATOR_SYMBOL_TS_LAST::translateTo, pair.toString(), UniqueCurrentTimeMS.uniqueCurrentTimeMS(),ticker.getLast().doubleValue());
+                    ringBuffer.publishEvent(MarketDataTranslator::translateTo, EXCHANGE.getExchangeSpecification().getExchangeName(), ticker);
                     Thread.sleep(throttle);
                 }catch(Exception e) {
                     TapeLogger.getLogger().error(e);

@@ -1,21 +1,16 @@
 package com.tickercash.clerk;
 
-import java.util.Random;
-
-import com.tickercash.marketdata.MarketEvent;
-import com.tickercash.util.UniqueCurrentTimeMS;
+import com.tickercash.event.translator.MarketDataTranslator;
 
 public class FakeTicker extends LiveDataClerk {
-    
-    private static final Random random = new Random();
 
     @Override
-    public void start() {
+    public void start() throws Exception {
         disruptor.start();
         while(true){
-            ringBuffer.publishEvent(MarketEvent.TRANSLATOR_SYMBOL_TS_LAST::translateTo, 
-            		"FAKE/BTC",UniqueCurrentTimeMS.uniqueCurrentTimeMS(), random.nextDouble());
-        }        
+            ringBuffer.publishEvent(MarketDataTranslator::translateToFakeTick);
+            Thread.sleep(1000);
+        }
     }
 
 }
