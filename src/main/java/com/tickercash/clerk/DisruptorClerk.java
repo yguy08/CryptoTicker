@@ -5,13 +5,17 @@ import java.util.concurrent.Executors;
 import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
-import com.tickercash.event.MarketDataEvent;
+import com.tickercash.marketdata.Tick;
 
 public class DisruptorClerk {
 
-    public static final Disruptor<MarketDataEvent> createDefaultMarketEventDisruptor(){
-        return new Disruptor<MarketDataEvent>(MarketDataEvent.MARKET_EVENT_FACTORY, 1024, Executors.defaultThreadFactory(),
+    public static final Disruptor<Tick> createDefaultMarketEventDisruptor(){
+        return new Disruptor<Tick>(Tick::new, 1024, Executors.defaultThreadFactory(),
                 ProducerType.SINGLE, new BlockingWaitStrategy());
+    }
+    
+    public static final Disruptor<String> createStringDisruptor(){
+        return new Disruptor<String>(String::new, 1024, Executors.defaultThreadFactory(), ProducerType.SINGLE, new BlockingWaitStrategy());
     }
 
 }
