@@ -11,7 +11,8 @@ import com.tickercash.util.UniqueCurrentTimeMS;
 public class MarketDataTranslator {
     
     public static final void translateTo(MarketDataEvent event, long sequence, CoinMarketCapTicker ticker) {
-        event.set(new Tick(ticker.getName(),"CMC", UniqueCurrentTimeMS.uniqueCurrentTimeMS(), ticker.getPriceBTC().doubleValue()));
+        event.set(new Tick(ticker.getID().toUpperCase()+"/BTC", ":CMC", 
+        		UniqueCurrentTimeMS.uniqueCurrentTimeMS(), ticker.getPriceBTC().doubleValue()));
     }
     
     public static final void translateTo(MarketDataEvent event, long sequence, String feed, Ticker ticker) {

@@ -28,7 +28,7 @@ public abstract class MarketDataEventVO {
     
     @Override
     public String toString(){
-        return Instant.ofEpochMilli(this.unixTimeMS/1000).toString()+" "+this.symbol+":"+this.feed;
+        return Instant.ofEpochMilli(this.unixTimeMS/1000).toString()+" "+this.symbol+this.feed;
     }
 
 }

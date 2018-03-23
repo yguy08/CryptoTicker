@@ -7,7 +7,7 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.tickercash.event.MarketDataEvent;
 
-public abstract class LiveDataClerk {
+public abstract class QuoteBoy {
     
     protected static final int BUFFER = 1024;
     
@@ -17,7 +17,7 @@ public abstract class LiveDataClerk {
 
     protected final List<String> subscriptions;
 
-    public LiveDataClerk() {
+    public QuoteBoy() {
         disruptor = DisruptorClerk.createDefaultMarketEventDisruptor();
         ringBuffer = disruptor.getRingBuffer();
         subscriptions = new ArrayList<>();
@@ -35,7 +35,7 @@ public abstract class LiveDataClerk {
     public void addHandler(EventHandler<MarketDataEvent>... handler) {
         disruptor.handleEventsWith(handler);
     }
-
+    
     public abstract void start() throws Exception;
 
 }

@@ -2,7 +2,7 @@ package com.tickercash.clerk;
 
 import com.tickercash.event.translator.MarketDataTranslator;
 
-public class FakeTicker extends LiveDataClerk {
+public class FakeTicker extends QuoteBoy {
 
     @Override
     public void start() throws Exception {

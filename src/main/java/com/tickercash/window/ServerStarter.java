@@ -1,11 +1,18 @@
 package com.tickercash.window;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TerminalSize;
+import com.googlecode.lanterna.TextCharacter;
+import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.Button;
 import com.googlecode.lanterna.gui2.ComboBox;
@@ -22,8 +29,7 @@ import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.tickercash.clerk.FakeTicker;
-import com.tickercash.clerk.FastTickerTextUI;
-import com.tickercash.clerk.LiveDataClerk;
+import com.tickercash.clerk.QuoteBoy;
 import com.tickercash.clerk.cmc.CMCQuoteBoy;
 import com.tickercash.enums.Broker;
 import com.tickercash.enums.DataSource;
@@ -31,7 +37,6 @@ import com.tickercash.enums.Displayable;
 import com.tickercash.enums.MarketDataSource;
 import com.tickercash.event.handler.MarketEventLogger;
 import com.tickercash.event.handler.Transmitter;
-import com.tickercash.util.TapeLogger;
 
 public class ServerStarter {
 	
@@ -41,17 +46,17 @@ public class ServerStarter {
 	
 	static WindowBasedTextGUI textGUI;
 	
-    static final Window window = new BasicWindow("Market Data Server");
+	private static final Window window = new BasicWindow("Market Data Server");
     
-    static Panel contentPanel;
+    private static Panel contentPanel;
     
-    static GridLayout gridLayout;
+    private static GridLayout gridLayout;
     
-    static ComboBox<String> marketDataComboBox;
+    private static ComboBox<String> marketDataComboBox;
     
-    static ComboBox<String> brokerComboBox;
+    private static ComboBox<String> brokerComboBox;
     
-    static ComboBox<String> dataSourceComboBox;
+    private static ComboBox<String> dataSourceComboBox;
     
     private static final Logger LOGGER = LogManager.getLogger("ServerStarter");
  
@@ -101,7 +106,11 @@ public class ServerStarter {
 
 				@Override
 				public void run() {
-					runSelections().run();
+					try {
+						startWithSelections();
+					} catch (Exception e) {
+						LOGGER.error(e.getMessage());
+					}
 				}
             	
             }).setLayoutData(GridLayout.createHorizontallyEndAlignedLayoutData(3));
@@ -111,20 +120,95 @@ public class ServerStarter {
             textGUI.addWindowAndWait(window);
         }catch(Exception e) {
         	LOGGER.error(e.getMessage());
-        }finally {
-        	LOGGER.error("Exit Server Starter");
-        	//screen.close();
-        	//System.exit(1);
         }
         
     }
     
-    private static Runnable runSelections(){
-    	String liveDataSel = marketDataComboBox.getSelectedItem();
-    	String brokerSel = brokerComboBox.getSelectedItem();
-    	String dataSourceSel = dataSourceComboBox.getSelectedItem();
+    private static void startWithSelections() throws Exception {
+    	window.close();
     	
-    	LiveDataClerk dataClerk = null;
+        TextGraphics writer = screen.newTextGraphics();
+        
+        writer.setForegroundColor(TextColor.ANSI.GREEN);
+        writer.setBackgroundColor(TextColor.ANSI.BLACK);
+        
+        screen.setCursorPosition(null);
+        
+        writer.fill(' ');
+        writer.putString(1, 1, "Want to run...");
+        writer.putString(1, 5, "\tMarket Data Feed: "+marketDataComboBox.getSelectedItem());
+        
+        screen.refresh();
+        
+        while(screen.pollInput()==null){
+        	writer.putString(1, 10, "Press Enter to Continue...");
+            screen.refresh();
+        	Thread.sleep(100);
+        	for(int i = 0; i < 100; i++){
+        		screen.setCharacter(i, 10, new TextCharacter(
+                        ' ',
+                        TextColor.ANSI.DEFAULT,
+                        // This will pick a random background color
+                        TextColor.ANSI.BLACK));
+        	}
+            screen.refresh();
+        	Thread.sleep(100);
+        }
+    	
+        //Timer would be cool here...progress bar
+		QuoteBoy clerk = getLiveDataClerk();
+		clerk.addHandler(new MarketEventLogger());
+		try {
+			clerk.addHandler(new Transmitter());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        
+        
+        Runnable r = new Runnable(){
+
+			@Override
+			public void run() {
+				try {
+					clerk.start();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+        	
+        };
+        
+        Thread t = new Thread(r);
+        t.start();
+        
+        ClientStarter client = new ClientStarter();
+            
+        String next = null;
+        while(screen.pollInput()==null){
+        		next = client.nextMessage();
+        		if(next!= null){
+                	writer.putString(1, 10, next);
+                    screen.refresh();
+                	//Thread.sleep(100);
+                	for(int i = 0; i < 100; i++){
+                		screen.setCharacter(i, 10, new TextCharacter(
+                                ' ',
+                                TextColor.ANSI.DEFAULT,
+                                // This will pick a random background color
+                                TextColor.ANSI.BLACK));
+                	}
+                    screen.refresh();
+        		}
+        	
+        }
+        
+        screen.close();
+        
+    }
+    
+    private static QuoteBoy getLiveDataClerk(){
+    	String liveDataSel = marketDataComboBox.getSelectedItem();
+    	QuoteBoy dataClerk = null;
     	switch(MarketDataSource.valueOf(liveDataSel.toUpperCase())) {
     	case CMC:
     		dataClerk = new CMCQuoteBoy();
@@ -138,16 +222,7 @@ public class ServerStarter {
     		dataClerk = new FakeTicker();
     		break;
     	}
-    	
-    	dataClerk.addHandler(new MarketEventLogger());
-    	
-    	try{
-    		dataClerk.addHandler(new Transmitter());
-    	}catch(Exception e){
-    		TapeLogger.getLogger().error("MQ Start up Failed");
-    	}
-    	
-    	return new FastTickerTextUI(screen, window, dataClerk);
+    	return dataClerk;
     }
     
     private static ComboBox<String> createComboBox(Displayable[] displayable){

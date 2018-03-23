@@ -1,15 +1,17 @@
 package com.tickercash.clerk;
 
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.Ticker;
 
 import com.tickercash.event.translator.MarketDataTranslator;
-import com.tickercash.util.TapeLogger;
 
-
-public class XchangeTicker extends LiveDataClerk {
+public class XchangeTicker extends QuoteBoy {
         
     private Exchange EXCHANGE = null;
     
@@ -18,18 +20,15 @@ public class XchangeTicker extends LiveDataClerk {
     private CurrencyPair pair;
     
     private int throttle = 1000;
+    
+    private static final Logger LOGGER = LogManager.getLogger("XchangeTicker");
         
     public XchangeTicker(String exchangeName) {
         EXCHANGE = ExchangeFactory.INSTANCE.createExchange(exchangeName);
     }
 
     @Override
-    public void start() {
-        try{
-        	
-        }catch(Exception e){
-        	
-        }
+    public void start() throws Exception {
     	disruptor.start();        
         while(true) {
             for(String s : subscriptions) {
@@ -39,7 +38,8 @@ public class XchangeTicker extends LiveDataClerk {
                     ringBuffer.publishEvent(MarketDataTranslator::translateTo, EXCHANGE.getExchangeSpecification().getExchangeName(), ticker);
                     Thread.sleep(throttle);
                 }catch(Exception e) {
-                    TapeLogger.getLogger().error(e);
+                	LOGGER.error(e);
+    				Thread.sleep(throttle);
                 }
             }
        }        
