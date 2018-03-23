@@ -1,8 +1,7 @@
 package com.tickercash.event.handler;
 
 import com.lmax.disruptor.EventHandler;
-import com.tickercash.event.MarketDataEvent;
-import com.tickercash.marketdata.MarketDataEventVO;
+import com.tickercash.marketdata.Tick;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -17,9 +16,7 @@ import org.apache.activemq.broker.BrokerService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Transmitter implements EventHandler<MarketDataEvent> {
-
-      private static String clientId;
+public class Transmitter implements EventHandler<Tick> {
       
       private static Connection connection;
       
@@ -31,28 +28,24 @@ public class Transmitter implements EventHandler<MarketDataEvent> {
       
       private static Topic topic;
       
+      private static TextMessage textMessage;
+      
       private static final Logger LOGGER = LogManager.getLogger("Transmitter");
       
-      public Transmitter() throws Exception {
-            clientId = "TransmitterClerk";
-            
+      public Transmitter(String topicStr) throws Exception {
             broker = new BrokerService();
             broker.addConnector("tcp://localhost:61616");
-            
+            broker.setDeleteAllMessagesOnStartup(true);
             broker.start();
-            
-            broker.deleteAllMessages();
-    
+
             // create a Connection Factory
             ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
-    
+
             // create a Connection
             connection = connectionFactory.createConnection();
-            connection.setClientID(clientId);
-    
+
             // create a Session
-            session =
-                connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             
             // create the Topic to which messages will be sent
             topic = session.createTopic("GLOBAL");
@@ -65,25 +58,15 @@ public class Transmitter implements EventHandler<MarketDataEvent> {
         connection.close();
     }
     
-    private static TextMessage textMessage;
-    
     @Override
-    public void onEvent(MarketDataEvent event, long sequence, boolean endOfBatch) throws Exception {
-    	        
+    public void onEvent(Tick event, long sequence, boolean endOfBatch) throws Exception {
         try{
-        	
-        	MarketDataEventVO m = event.get();
-        	
-            textMessage = session.createTextMessage(event.get().toString());
-            
+            textMessage = session.createTextMessage(event.toString());
             messageProducer.send(textMessage);
-            
-            LOGGER.info("MESSAGE:"+topic.getTopicName()+" "+event.get().toString());
-            
+            LOGGER.info("MESSAGE:"+topic.getTopicName()+" "+event.toString());
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
-
     }
     
 }
