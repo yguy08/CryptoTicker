@@ -1,10 +1,10 @@
 package com.tickercash.window;
 
-import com.tickercash.clerk.Receiver;
-import com.tickercash.clerk.TipClerk;
-import com.tickercash.marketdata.Tick;
-import com.tickercash.tip.TipEngine;
-import com.tickercash.tip.TipEngineImpl;
+import com.tickercash.tapereader.clerk.TipClerk;
+import com.tickercash.tapereader.event.Receiver;
+import com.tickercash.tapereader.event.Tick;
+import com.tickercash.tapereader.tip.TipEngine;
+import com.tickercash.tapereader.tip.TipEngineImpl;
 
 public class TipStarter {
     
