@@ -25,8 +25,8 @@ import com.googlecode.lanterna.gui2.Window.Hint;
 import com.tickercash.clerk.QuoteBoy;
 import com.tickercash.enums.BrokerType;
 import com.tickercash.enums.TapeType;
-import com.tickercash.event.MarketEventLogger;
-import com.tickercash.event.Transmitter;
+import com.tickercash.event.handler.MarketEventLogger;
+import com.tickercash.event.handler.Transmitter;
 import com.tickercash.enums.Displayable;
 import com.tickercash.enums.QuoteBoyType;
 
