@@ -20,15 +20,15 @@ import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.Separator;
 import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
+import com.tickercash.tapereader.bucketshop.BucketShopType;
+import com.tickercash.tapereader.clerk.QuoteBoy;
+import com.tickercash.tapereader.clerk.QuoteBoyType;
+import com.tickercash.tapereader.event.MarketEventLogger;
+import com.tickercash.tapereader.event.Transmitter;
+import com.tickercash.tapereader.gui.Displayable;
+import com.tickercash.tapereader.tape.TapeType;
 import com.googlecode.lanterna.gui2.ComboBox.Listener;
 import com.googlecode.lanterna.gui2.Window.Hint;
-import com.tickercash.clerk.QuoteBoy;
-import com.tickercash.enums.BrokerType;
-import com.tickercash.enums.TapeType;
-import com.tickercash.event.handler.MarketEventLogger;
-import com.tickercash.event.handler.Transmitter;
-import com.tickercash.enums.Displayable;
-import com.tickercash.enums.QuoteBoyType;
 
 public class ServerTUI extends ScreenBase {
     
@@ -163,7 +163,7 @@ public class ServerTUI extends ScreenBase {
         });
         contentPanel.addComponent(quoteBoyComboBox);
         //Broker
-        ComboBox<String> brokerComboBox = createComboBoxList(BrokerType.values());
+        ComboBox<String> brokerComboBox = createComboBoxList(BucketShopType.values());
         broker = brokerComboBox.getSelectedItem();
         brokerComboBox.addListener(new Listener(){
             @Override
