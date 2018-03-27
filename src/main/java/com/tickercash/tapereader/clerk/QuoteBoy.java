@@ -9,7 +9,7 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.tickercash.tapereader.clerk.cmc.CMCQuoteBoy;
 import com.tickercash.tapereader.clerk.polo.PoloQuoteBoy;
-import com.tickercash.tapereader.event.Tick;
+import com.tickercash.tapereader.model.Tick;
 import com.tickercash.tapereader.util.DisruptorFactory;
 
 public abstract class QuoteBoy {
@@ -45,7 +45,7 @@ public abstract class QuoteBoy {
         disruptor.handleEventsWith(handler);
     }
     
-    public abstract String getName();
+    public abstract String getTopicName();
     
     public abstract void start() throws Exception;
     

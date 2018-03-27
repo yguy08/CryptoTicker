@@ -1,21 +1,21 @@
 package com.tickercash.tapereader.clerk;
 
-import com.espertech.esper.client.EventBean;
-import com.tickercash.tapereader.tip.TipEngine;
-import com.tickercash.tapereader.tip.TipListener;
+import com.tickercash.tapereader.event.TickEventListener;
+import com.tickercash.tapereader.model.Tick;
 
-public class TipClerk implements TipListener {
+public class TipClerk implements TickEventListener {
     
-    public TipClerk(TipEngine tip){
-        tip.addListener(this::onTick);
+    public TipClerk(){
+    	
+    }
+    
+    public String getTipName() {
+    	return "GLOBAL";
     }
 
-    @Override
-    public void onTick(EventBean[] newTick, EventBean[] oldData) {
-        String symbol = (String) newTick[0].get("symbol");
-        String feed = (String) newTick[0].get("feed");
-        long timestamp = (Long) newTick[0].get("timestamp");
-        double last = (Double) newTick[0].get("last");
-        System.out.println(String.format("Symbol: %s, Feed: %s, Timestamp: %d, Last: %f", symbol, feed, timestamp, last));
-    }
+	@Override
+	public void onTick(Tick tick) {
+		// send order
+		System.out.println("SENDING ORDER: "+tick.toString());
+	}
 }

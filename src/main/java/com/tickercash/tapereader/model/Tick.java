@@ -1,4 +1,4 @@
-package com.tickercash.tapereader.event;
+package com.tickercash.tapereader.model;
 
 import com.tickercash.tapereader.util.NumberFormatPatterns;
 

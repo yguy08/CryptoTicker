@@ -21,7 +21,7 @@ public class PoloQuoteBoy extends XQuoteBoy {
     }
 
     @Override
-    public String getName() {
+    public String getTopicName() {
         return QuoteBoyType.POLONIEX.toString();
     }
 

@@ -47,7 +47,7 @@ public class CMCQuoteBoy extends QuoteBoy {
     }
 
     @Override
-    public String getName() {
+    public String getTopicName() {
         return QuoteBoyType.CMC.toString();
     }
 

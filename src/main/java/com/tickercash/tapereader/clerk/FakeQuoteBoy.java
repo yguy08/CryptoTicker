@@ -35,7 +35,7 @@ public class FakeQuoteBoy extends QuoteBoy {
     }
 
     @Override
-    public String getName() {
+    public String getTopicName() {
         return QuoteBoyType.FAKE.toString();
     }
 

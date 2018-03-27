@@ -4,19 +4,33 @@ import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
 import com.espertech.esper.client.UpdateListener;
-import com.tickercash.tapereader.event.Tick;
+import com.tickercash.tapereader.model.Tick;
 
 public class TipEngineImpl implements TipEngine {
     
     private EPServiceProvider engine;
     
     private EPStatement statement;
+    
+    public TipEngineImpl() {
+        engine = EPServiceProviderManager.getDefaultProvider();
+        engine.getEPAdministrator().getConfiguration().addEventType(Tick.class);
+    }
 
     public TipEngineImpl(Class<?> eventType, String stmt) {
         engine = EPServiceProviderManager.getDefaultProvider();
         engine.getEPAdministrator().getConfiguration().addEventType(eventType);
         statement = engine.getEPAdministrator().createEPL(stmt);
     }
+    
+    public void addEventType(Class<?> eventType) {
+    	engine.getEPAdministrator().getConfiguration().addEventType(eventType);
+    }
+    
+    @Override
+	public void addStatement(String stmt) {
+		engine.getEPAdministrator().createEPL(stmt);
+	}
     
     public void addListener(UpdateListener listener){
         statement.addListener(listener);

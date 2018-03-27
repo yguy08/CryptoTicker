@@ -1,6 +1,6 @@
-package com.tickercash.window;
+package com.tickercash.tapereader.window;
 
-import com.tickercash.tapereader.textui.ServerTUI;
+import com.tickercash.tapereader.gui.ServerTUI;
 
 public class ServerStarter {
  
