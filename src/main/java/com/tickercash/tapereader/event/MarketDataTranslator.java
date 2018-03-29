@@ -3,7 +3,7 @@ package com.tickercash.tapereader.event;
 import org.knowm.xchange.coinmarketcap.dto.marketdata.CoinMarketCapTicker;
 import org.knowm.xchange.dto.marketdata.Ticker;
 
-import com.tickercash.tapereader.model.Tick;
+import com.tickercash.tapereader.marketdata.Tick;
 import com.tickercash.tapereader.util.UniqueCurrentTimeMS;
 
 import net.openhft.chronicle.bytes.Bytes;

@@ -3,7 +3,7 @@ package com.tickercash.tapereader.clerk.polo;
 import org.knowm.xchange.poloniex.dto.marketdata.PoloniexMarketData;
 
 import com.tickercash.tapereader.clerk.QuoteBoyType;
-import com.tickercash.tapereader.model.Tick;
+import com.tickercash.tapereader.marketdata.Tick;
 import com.tickercash.tapereader.util.UniqueCurrentTimeMS;
 
 public class PoloTranslator {

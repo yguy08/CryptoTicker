@@ -1,13 +1,11 @@
 package com.tickercash.tapereader.tip;
 
 import com.espertech.esper.client.UpdateListener;
-import com.tickercash.tapereader.model.Tick;
+import com.tickercash.tapereader.marketdata.Tick;
 
 public interface TipEngine {
     
     public void addListener(UpdateListener listener);
-    
-    void addEventType(Class<?> eventType);
     
     void addStatement(String stmt);
     

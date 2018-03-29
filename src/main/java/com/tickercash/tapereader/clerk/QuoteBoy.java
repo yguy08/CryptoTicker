@@ -9,7 +9,7 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.tickercash.tapereader.clerk.cmc.CMCQuoteBoy;
 import com.tickercash.tapereader.clerk.polo.PoloQuoteBoy;
-import com.tickercash.tapereader.model.Tick;
+import com.tickercash.tapereader.marketdata.Tick;
 import com.tickercash.tapereader.util.DisruptorFactory;
 
 public abstract class QuoteBoy {

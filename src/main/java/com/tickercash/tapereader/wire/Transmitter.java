@@ -1,56 +1,43 @@
 package com.tickercash.tapereader.wire;
 
 import com.lmax.disruptor.EventHandler;
-import com.tickercash.tapereader.model.Tick;
+import com.tickercash.tapereader.marketdata.Tick;
 
 import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
-import javax.jms.TextMessage;
-import javax.jms.Topic;
-
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Transmitter implements EventHandler<Tick> {
       
-	  private static Connection connection;
+	private Connection connection;
 	  
-	  private static Session session;
+	private Session session;
 	  
-	  private static MessageProducer messageProducer;
+	private MessageProducer messageProducer;
 	  
-	  private static Topic topic;
+	private static final Logger LOGGER = LogManager.getLogger("Transmitter");
 	  
-	  private static TextMessage textMessage;
-	  
-	  private static final Logger LOGGER = LogManager.getLogger("Transmitter");
-	  
-	  public Transmitter(String topicStr) throws Exception {
-	        MQBroker.initDefaultMQBroker();
-	        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
-	        connection = connectionFactory.createConnection();
-	        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-	        topic = session.createTopic("GLOBAL");
-	        messageProducer = session.createProducer(topic);
-	  }
+	public Transmitter(String topicStr) throws Exception {
+	      MQBroker.initDefaultMQBroker();
+	      connection = new ActiveMQConnectionFactory("tcp://localhost:61616").createConnection();
+	      session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+	      messageProducer = session.createProducer(session.createTopic(topicStr));
+	}
 
-	public static void closeConnection() throws JMSException {
+	public void closeConnection() throws JMSException {
 	    connection.close();
 	}
 	
 	@Override
 	public void onEvent(Tick event, long sequence, boolean endOfBatch) throws Exception {
 	    try{
-	        textMessage = session.createTextMessage(event.toString());
-	        messageProducer.send(textMessage);
-	        LOGGER.info("MESSAGE:"+topic.getTopicName()+" "+event.toString());
+	        messageProducer.send(session.createTextMessage(event.toString()));
 	    }catch(Exception e){
 	        LOGGER.error(e.getMessage());
 	    }
-	}
-    
+	}    
 }

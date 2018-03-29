@@ -4,7 +4,7 @@ import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
 import com.espertech.esper.client.UpdateListener;
-import com.tickercash.tapereader.model.Tick;
+import com.tickercash.tapereader.marketdata.Tick;
 
 public class TipEngineImpl implements TipEngine {
     
@@ -23,13 +23,9 @@ public class TipEngineImpl implements TipEngine {
         statement = engine.getEPAdministrator().createEPL(stmt);
     }
     
-    public void addEventType(Class<?> eventType) {
-    	engine.getEPAdministrator().getConfiguration().addEventType(eventType);
-    }
-    
     @Override
 	public void addStatement(String stmt) {
-		engine.getEPAdministrator().createEPL(stmt);
+		statement = engine.getEPAdministrator().createEPL(stmt);
 	}
     
     public void addListener(UpdateListener listener){

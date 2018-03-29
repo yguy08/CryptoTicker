@@ -3,7 +3,7 @@ package com.tickercash.tapereader.clerk;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.tickercash.tapereader.model.Tick;
+import com.tickercash.tapereader.marketdata.Tick;
 
 public interface HistoricalDataClerk {
     
