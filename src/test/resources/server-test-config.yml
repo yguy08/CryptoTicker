@@ -1,0 +1,4 @@
+!!com.tickercash.tapereader.config.ServerConfig
+quoteBoy: FAKE
+quoteThrottle: 5
+wireURL: tcp://localhost:61616
