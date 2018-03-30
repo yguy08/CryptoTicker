@@ -55,7 +55,7 @@ public class CMCQuoteBoy extends QuoteBoy {
     }
     
     private final void translateTo(Tick event, long sequence, CoinMarketCapTicker ticker) {
-        event.set(ticker.getID().toUpperCase()+"/BTC", getTopicName(), UniqueCurrentTimeMS.uniqueCurrentTimeMS(), ticker.getPriceBTC().doubleValue());
+        event.set(ticker.getIsoCode()+"/BTC", getTopicName(), UniqueCurrentTimeMS.uniqueCurrentTimeMS(), ticker.getPriceBTC().doubleValue());
     }
 
 }
