@@ -23,7 +23,7 @@ import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.tickercash.tapereader.bucketshop.BucketShopType;
 import com.tickercash.tapereader.clerk.QuoteBoy;
 import com.tickercash.tapereader.clerk.QuoteBoyType;
-import com.tickercash.tapereader.event.MarketEventLogger;
+import com.tickercash.tapereader.event.handler.TickLogger;
 import com.tickercash.tapereader.tape.TapeType;
 import com.tickercash.tapereader.wire.Transmitter;
 import com.googlecode.lanterna.gui2.ComboBox.Listener;
@@ -134,9 +134,9 @@ public class ServerTUI extends ScreenBase {
 
         TextUiHelper.flash80sContinue(screen, writer, "Press Enter to Continue, Esc to Exit...", 1, 10);
         
-        QuoteBoy clerk = QuoteBoy.createQuoteBoy(quoteBoy);
+        QuoteBoy clerk = QuoteBoy.createQuoteBoy(QuoteBoyType.valueOf(quoteBoy.toUpperCase()));
         
-        clerk.addHandler(new MarketEventLogger());
+        clerk.addHandler(new TickLogger());
         clerk.addHandler(new Transmitter(clerk.getTopicName()));
         
         Thread thread = new Thread(() -> {

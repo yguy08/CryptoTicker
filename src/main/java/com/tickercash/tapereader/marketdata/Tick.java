@@ -53,6 +53,10 @@ public class Tick {
     public void setFeed(String feed) {
         this.feed = feed;
     }
+    
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
 
     public String getSymbol() {
         return symbol;

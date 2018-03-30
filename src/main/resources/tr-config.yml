@@ -1,0 +1,3 @@
+!!com.tickercash.tapereader.config.TRConfig
+quoteBoy: CMC
+preFeed: true 

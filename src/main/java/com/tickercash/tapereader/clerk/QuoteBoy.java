@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
@@ -23,6 +26,8 @@ public abstract class QuoteBoy {
     protected final List<String> subscriptions;
     
     protected int throttle = 1000;
+    
+    protected AtomicBoolean running = new AtomicBoolean(false);
     
     protected final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
@@ -45,28 +50,29 @@ public abstract class QuoteBoy {
         disruptor.handleEventsWith(handler);
     }
     
+    public void stop() throws Exception {
+        running.set(false);
+        disruptor.shutdown(1000, TimeUnit.MILLISECONDS);
+    }
+    
     public abstract String getTopicName();
     
     public abstract void start() throws Exception;
-    
-    public static final QuoteBoy createQuoteBoy(String dataSource){
-        QuoteBoy dataClerk = null;
-        switch(QuoteBoyType.valueOf(dataSource.toUpperCase())) {
+        
+    public static final QuoteBoy createQuoteBoy(QuoteBoyType type) {
+        
+        switch(type) {
             case CMC:
-                dataClerk = new CMCQuoteBoy();
-                break;
+                return new CMCQuoteBoy();
             case POLONIEX:
-                dataClerk = new PoloQuoteBoy();
-                break;
+                return new PoloQuoteBoy();
             case GDAX:
             case FAKE:
-                dataClerk = new FakeQuoteBoy();
-                break;
+                return new FakeQuoteBoy();
             default:
-                dataClerk = new FakeQuoteBoy();
-                break;
+                return new FakeQuoteBoy();
         }
-        return dataClerk;
-    }
+        
+   }
 
 }

@@ -5,11 +5,13 @@ import org.apache.logging.log4j.Logger;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.coinmarketcap.CoinMarketCapExchange;
+import org.knowm.xchange.coinmarketcap.dto.marketdata.CoinMarketCapTicker;
 import org.knowm.xchange.coinmarketcap.service.CoinMarketCapMarketDataService;
 
 import com.tickercash.tapereader.clerk.QuoteBoy;
 import com.tickercash.tapereader.clerk.QuoteBoyType;
-import com.tickercash.tapereader.event.MarketDataTranslator;
+import com.tickercash.tapereader.marketdata.Tick;
+import com.tickercash.tapereader.util.UniqueCurrentTimeMS;
 
 public class CMCQuoteBoy extends QuoteBoy {
         
@@ -34,10 +36,11 @@ public class CMCQuoteBoy extends QuoteBoy {
     @Override
     public void start() throws Exception {
         disruptor.start();
-        while(true) {
+        running.set(true);
+        while(running.get()) {
             try {
                 CMC_MARKET_DATA_SERVICE.getCoinMarketCapTickers(100).stream().forEach((s) 
-                        -> ringBuffer.publishEvent(MarketDataTranslator::translateTo, s));
+                        -> ringBuffer.publishEvent(this::translateTo, s));
                 Thread.sleep(throttle);
             } catch (Exception e) {
                 LOGGER.error(e);
@@ -49,6 +52,10 @@ public class CMCQuoteBoy extends QuoteBoy {
     @Override
     public String getTopicName() {
         return QuoteBoyType.CMC.toString();
+    }
+    
+    private final void translateTo(Tick event, long sequence, CoinMarketCapTicker ticker) {
+        event.set(ticker.getID().toUpperCase()+"/BTC", getTopicName(), UniqueCurrentTimeMS.uniqueCurrentTimeMS(), ticker.getPriceBTC().doubleValue());
     }
 
 }

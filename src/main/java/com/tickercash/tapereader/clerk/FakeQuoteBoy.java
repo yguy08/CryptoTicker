@@ -3,9 +3,7 @@ package com.tickercash.tapereader.clerk;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
-
-import com.tickercash.tapereader.event.MarketDataTranslator;
+import com.tickercash.tapereader.marketdata.Tick;
 import com.tickercash.tapereader.util.UniqueCurrentTimeMS;
 
 public class FakeQuoteBoy extends QuoteBoy {
@@ -19,24 +17,22 @@ public class FakeQuoteBoy extends QuoteBoy {
     @Override
     public void start() throws Exception {
         disruptor.start();
-        
-        Runnable task = () -> {
-            try{
-                symbol = SYMBOLS.get(random.nextInt(SYMBOLS.size()));
-                ringBuffer.publishEvent(MarketDataTranslator::translateTo, 
-                        new String[]{symbol,QuoteBoyType.FAKE.name()}, 
-                        UniqueCurrentTimeMS.uniqueCurrentTimeMS(), 
-                        symbol.endsWith("USD") ? random.nextInt(10000) : random.nextDouble());
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        };
-        executor.scheduleWithFixedDelay(task, 0, 1, TimeUnit.SECONDS);
+        running.set(true);
+        while(running.get()) {
+            ringBuffer.publishEvent(this::translateTo);
+            Thread.sleep(throttle);
+        }
     }
 
     @Override
     public String getTopicName() {
         return QuoteBoyType.FAKE.toString();
+    }
+    
+    public final void translateTo(Tick event, long sequence){
+        symbol = SYMBOLS.get(random.nextInt(SYMBOLS.size()));
+        event.set(symbol, QuoteBoyType.FAKE.name(),UniqueCurrentTimeMS.uniqueCurrentTimeMS(), 
+                symbol.endsWith("USD") ? random.nextInt(10000) : random.nextDouble());
     }
 
 }

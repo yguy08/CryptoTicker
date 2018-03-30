@@ -1,14 +1,22 @@
-package com.tickercash.tapereader.clerk;
+package com.tickercash.tapereader;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
 import com.lmax.disruptor.EventHandler;
+import com.tickercash.tapereader.clerk.HistoricalDataClerk;
+import com.tickercash.tapereader.clerk.QuoteBoy;
+import com.tickercash.tapereader.config.TRConfig;
 import com.tickercash.tapereader.marketdata.Tick;
 import com.tickercash.tapereader.tip.TipEngine;
 import com.tickercash.tapereader.tip.TipEngineImpl;
 import com.tickercash.tapereader.wire.Receiver;
 
 public class TapeReader {
+    
+    private TRConfig config;
 	
 	private QuoteBoy quoteBoy;
 	
@@ -22,6 +30,14 @@ public class TapeReader {
 	
 	private String tip = "select symbol, feed, timestamp, last from Tick";
 	
+	public void setConfig(TRConfig config) {
+	    this.config = config;
+	}
+	
+	public TRConfig getConfig() {
+	    return config;
+	}
+	
 	public void setQuoteBoy(QuoteBoy quoteBoy) {
 		this.quoteBoy = quoteBoy;
 	}
@@ -29,16 +45,20 @@ public class TapeReader {
     public void setTipEngine(TipEngine tipEngine) {
         this.tipEngine = tipEngine;
     }
+    
+    public TipEngine getTipEngine() {
+        return tipEngine;
+    }
 	
 	public void setReceiver(Receiver receiver) {
 		this.receiver = receiver;
 	}
 	
-	public void setEventHandler(EventHandler<Tick> handler) {
+	public void addEventHandler(EventHandler<Tick> handler) {
 		receiver.setEventHandler(handler);
 	}
 	
-	public void setTipListener(UpdateListener listener) {
+	public void addTipListener(UpdateListener listener) {
 	    tipEngine.addListener(listener);
 	}
 	
@@ -48,7 +68,7 @@ public class TapeReader {
 	}
 	
 	public void readTheTape() throws Exception {
-		setQuoteBoy(new FakeQuoteBoy());
+		setQuoteBoy(QuoteBoy.createQuoteBoy(config.getQuoteBoy()));
 		setTipEngine(new TipEngineImpl());
 		setReceiver(new Receiver(quoteBoy.getTopicName()));
 		
@@ -59,7 +79,7 @@ public class TapeReader {
             }
 		};
 		
-		setEventHandler(tickEventHandler);
+		addEventHandler(tickEventHandler);
 		
         tipEngine.addStatement(tip);
 		tipListener = new UpdateListener() {
@@ -73,7 +93,15 @@ public class TapeReader {
             }		    
 		};
 		
-		setTipListener(tipListener);
+		addTipListener(tipListener);
+		
+		if(getConfig().getPreFeed()) {
+		    HistoricalDataClerk hClerk = HistoricalDataClerk.createHistoricalDataClerk(config.getQuoteBoy());
+		    List<Tick> hTicks = hClerk.getHistoricalTicks("bitcoin", LocalDateTime.of(2017, 12, 01, 01, 00), LocalDateTime.of(2019, 12, 01, 01, 00));
+		    for(Tick tick : hTicks) {
+		        getTipEngine().sendNewTick(tick);
+		    }
+		}
 		
 		receiver.startReceiving();
 		
