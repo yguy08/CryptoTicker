@@ -12,12 +12,12 @@ import org.yaml.snakeyaml.Yaml;
 
 import com.tickercash.tapereader.clerk.QuoteBoyType;
 
-public class ServerConfigTest {
+public class ConfigTest {
     @Test
     public void testServerConfig() throws Exception {  
         Yaml yaml = new Yaml();  
         try(InputStream in = Files.newInputStream(Paths.get("src/test/resources/server-test-config.yml"))) {
-            ServerConfig config = yaml.loadAs(in, ServerConfig.class);
+            Config config = yaml.loadAs(in, Config.class);
             assertNotNull(config);
             assertEquals(QuoteBoyType.FAKE, config.getQuoteBoy());
             assertEquals(5, config.getQuoteThrottle());

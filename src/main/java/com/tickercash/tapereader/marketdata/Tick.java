@@ -74,6 +74,10 @@ public class Tick {
         return last;
     }
     
+    public void setLast(double last){
+    	this.last = last;
+    }
+    
     public int getVolume() {
         return volume;
     }

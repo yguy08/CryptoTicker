@@ -1,3 +1,4 @@
 !!com.tickercash.tapereader.config.TRConfig
-quoteBoy: CMC
+quoteBoy: POLONIEX
+wireURL: tcp://localhost:61616
 preFeed: true 

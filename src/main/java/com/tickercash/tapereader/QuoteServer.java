@@ -1,21 +1,22 @@
 package com.tickercash.tapereader;
 
 import com.tickercash.tapereader.clerk.QuoteBoy;
-import com.tickercash.tapereader.config.ServerConfig;
+import com.tickercash.tapereader.config.Config;
+import com.tickercash.tapereader.wire.Transmitter;
 
 public class QuoteServer {
     
-    private ServerConfig config;
+    private Config config;
     
     private QuoteBoy quoteBoy;
     
     private String brokerURL;
 
-    public ServerConfig getConfig() {
+    public Config getConfig() {
         return config;
     }
 
-    public void setConfig(ServerConfig config) {
+    public void setConfig(Config config) {
         this.config = config;
     }
 
@@ -34,4 +35,14 @@ public class QuoteServer {
     public void setBrokerURL(String brokerURL) {
         this.brokerURL = brokerURL;
     }
+    
+    public void init() throws Exception {
+    	setQuoteBoy(QuoteBoy.createQuoteBoy(config.getQuoteBoy()));
+    	getQuoteBoy().addHandler(new Transmitter(config.getQuoteBoy().toString()));
+    }
+    
+    public void start() throws Exception {
+    	getQuoteBoy().start();
+    }
+    
 }

@@ -17,7 +17,6 @@ public class PoloQuoteBoy extends XQuoteBoy {
     
     private PoloniexMarketDataServiceRaw marketDataService;
     
-    
     public PoloQuoteBoy() {
         super(PoloniexExchange.class.getName());
         marketDataService = (PoloniexMarketDataServiceRaw) (PoloniexMarketDataService) EXCHANGE.getMarketDataService();

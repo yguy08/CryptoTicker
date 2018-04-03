@@ -6,8 +6,9 @@ import java.nio.file.Paths;
 
 import org.yaml.snakeyaml.Yaml;
 
+import com.tickercash.tapereader.DoubleYou;
 import com.tickercash.tapereader.TapeReader;
-import com.tickercash.tapereader.config.TRConfig;
+import com.tickercash.tapereader.config.Config;
 
 public class TapeReaderStarter {
     
@@ -19,9 +20,10 @@ public class TapeReaderStarter {
   
         Yaml yaml = new Yaml();  
         try(InputStream in = Files.newInputStream(Paths.get(args[0]))) {
-            TRConfig config = yaml.loadAs(in, TRConfig.class);
-            TapeReader reader = new TapeReader();
+            Config config = yaml.loadAs(in, Config.class);
+            TapeReader reader = new DoubleYou();
             reader.setConfig(config);
+            reader.init();
             reader.readTheTape();
         }
     }

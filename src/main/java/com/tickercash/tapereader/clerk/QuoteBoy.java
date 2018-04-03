@@ -46,7 +46,7 @@ public abstract class QuoteBoy {
     }
     
     @SuppressWarnings("unchecked")
-    public void addHandler(EventHandler<Tick>... handler) {
+    public void addHandler(EventHandler<Tick> handler) {
         disruptor.handleEventsWith(handler);
     }
     

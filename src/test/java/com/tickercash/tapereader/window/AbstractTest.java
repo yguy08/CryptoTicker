@@ -4,13 +4,13 @@ import java.io.IOException;
 import org.yaml.snakeyaml.Yaml;
 
 import com.tickercash.tapereader.clerk.QuoteBoyType;
-import com.tickercash.tapereader.config.TRConfig;
+import com.tickercash.tapereader.config.Config;
 
 public class AbstractTest {
 
     public static void main(String[] args) throws IOException {
         Yaml yaml = new Yaml();
-        TRConfig config = new TRConfig();
+        Config config = new Config();
         config.setPreFeed(true);
         config.setQuoteBoy(QuoteBoyType.CMC);
         System.out.println(yaml.dump(config));

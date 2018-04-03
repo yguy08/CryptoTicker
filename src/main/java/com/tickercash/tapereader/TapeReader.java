@@ -8,7 +8,7 @@ import com.espertech.esper.client.UpdateListener;
 import com.lmax.disruptor.EventHandler;
 import com.tickercash.tapereader.clerk.HistoricalDataClerk;
 import com.tickercash.tapereader.clerk.QuoteBoy;
-import com.tickercash.tapereader.config.TRConfig;
+import com.tickercash.tapereader.config.Config;
 import com.tickercash.tapereader.marketdata.Tick;
 import com.tickercash.tapereader.tip.TipEngine;
 import com.tickercash.tapereader.tip.TipEngineImpl;
@@ -16,25 +16,19 @@ import com.tickercash.tapereader.wire.Receiver;
 
 public class TapeReader {
     
-    private TRConfig config;
+    private Config config;
 	
 	private QuoteBoy quoteBoy;
 	
 	private TipEngine tipEngine;
 	
 	private Receiver receiver;
-	
-	private EventHandler<Tick> tickEventHandler;
-	
-	private UpdateListener tipListener;
-	
-	private String tip = "select symbol, feed, timestamp, last from Tick";
-	
-	public void setConfig(TRConfig config) {
+		
+	public void setConfig(Config config) {
 	    this.config = config;
 	}
 	
-	public TRConfig getConfig() {
+	public Config getConfig() {
 	    return config;
 	}
 	
@@ -54,6 +48,10 @@ public class TapeReader {
 		this.receiver = receiver;
 	}
 	
+	public Receiver getReceiver(){
+		return receiver;
+	}
+	
 	public void addEventHandler(EventHandler<Tick> handler) {
 		receiver.setEventHandler(handler);
 	}
@@ -67,33 +65,30 @@ public class TapeReader {
                 tick.getSymbol(), tick.getFeed(), tick.getTimestamp(), tick.getLast()));
 	}
 	
-	public void readTheTape() throws Exception {
+	protected void onEvent(Tick event, long sequence, boolean endOfBatch) throws Exception {
+		tipEngine.sendNewTick(event);
+	}
+	
+	protected void update(EventBean[] newTick, EventBean[] oldTick){
+        String symbol = (String) newTick[0].get("symbol");
+        String feed = (String) newTick[0].get("feed");
+        long timestamp = (Long) newTick[0].get("timestamp");
+        double last = (Double) newTick[0].get("last");
+        int volume = (Integer) newTick[0].get("volume");
+        onTick(new Tick(symbol, feed, timestamp, last));
+	}
+	
+	public void init() throws Exception {
 		setQuoteBoy(QuoteBoy.createQuoteBoy(config.getQuoteBoy()));
 		setTipEngine(new TipEngineImpl());
 		setReceiver(new Receiver(quoteBoy.getTopicName()));
-		
-		tickEventHandler = new EventHandler<Tick>() {
-		    @Override
-            public void onEvent(Tick event, long sequence, boolean endOfBatch) throws Exception {
-                tipEngine.sendNewTick(event);
-            }
-		};
-		
-		addEventHandler(tickEventHandler);
-		
+		addEventHandler(this::onEvent);
+	}
+	
+	public void readTheTape() throws Exception {
+		String tip = "select symbol, feed, timestamp, last from Tick";
         tipEngine.addStatement(tip);
-		tipListener = new UpdateListener() {
-            @Override
-            public void update(EventBean[] newTick, EventBean[] oldTick) {
-                String symbol = (String) newTick[0].get("symbol");
-                String feed = (String) newTick[0].get("feed");
-                long timestamp = (Long) newTick[0].get("timestamp");
-                double last = (Double) newTick[0].get("last");
-                onTick(new Tick(symbol, feed, timestamp, last));
-            }		    
-		};
-		
-		addTipListener(tipListener);
+		addTipListener(this::update);
 		
 		if(getConfig().getPreFeed()) {
 		    HistoricalDataClerk hClerk = HistoricalDataClerk.createHistoricalDataClerk(config.getQuoteBoy());
