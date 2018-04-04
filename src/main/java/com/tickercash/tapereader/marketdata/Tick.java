@@ -1,7 +1,5 @@
 package com.tickercash.tapereader.marketdata;
 
-import com.tickercash.tapereader.util.NumberFormatPatterns;
-
 public class Tick {
     
     private String symbol;
@@ -21,14 +19,6 @@ public class Tick {
         this.last = last;
     }
     
-    public Tick(String symbol, String feed, long timestamp, double last, int volume){
-        this.symbol = symbol;
-        this.feed = feed;
-        this.timestamp = timestamp;
-        this.last = last;
-        this.volume = volume;
-    }
-    
     public Tick set(String symbol, String feed, long timestamp, double last){
         this.symbol = symbol;
         this.feed = feed;
@@ -45,17 +35,25 @@ public class Tick {
         this.volume = volume;
         return this;
     }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+    
+    public void setSymbol(String symbol){
+        this.symbol = symbol;
     }
 
     public void setFeed(String feed) {
         this.feed = feed;
     }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
     
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
+    public void setLast(double last){
+        this.last = last;
+    }
+    
+    public void setVolume(int volume){
+        this.volume = volume;
     }
 
     public String getSymbol() {
@@ -74,16 +72,12 @@ public class Tick {
         return last;
     }
     
-    public void setLast(double last){
-    	this.last = last;
-    }
-    
     public int getVolume() {
         return volume;
     }
     
     @Override
     public String toString() {
-        return this.symbol+" "+this.feed+" "+this.timestamp+" "+NumberFormatPatterns.SAT_FORMAT.format(this.last);
+        return this.symbol+" "+this.feed+" "+this.timestamp+" "+this.last;
     }
 }
