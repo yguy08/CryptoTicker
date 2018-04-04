@@ -11,7 +11,7 @@ import com.tickercash.tapereader.clerk.QuoteBoyType;
 
 public class Config {
     
-    private QuoteBoyType quoteBoy;
+    private QuoteBoyType quoteBoyType;
     
     private int quoteThrottle;
     
@@ -19,12 +19,16 @@ public class Config {
     
     private Boolean preFeed;
     
-    public QuoteBoyType getQuoteBoy() {
-        return quoteBoy;
+    private String tip;
+    
+    private String readCsvPath;
+    
+    public QuoteBoyType getQuoteBoyType() {
+        return quoteBoyType;
     }
 
-    public void setQuoteBoy(QuoteBoyType quoteBoyType) {
-        this.quoteBoy = quoteBoyType;
+    public void setQuoteBoyType(QuoteBoyType quoteBoyType) {
+        this.quoteBoyType = quoteBoyType;
     }
 
     public int getQuoteThrottle(){
@@ -43,28 +47,44 @@ public class Config {
         this.wireURL = wireURL;
     }
     
-	public Boolean getPreFeed() {
-		return preFeed;
-	}
+    public Boolean getPreFeed() {
+        return preFeed;
+    }
 
-	public void setPreFeed(Boolean preFeed) {
-		this.preFeed = preFeed;
-	}
-	
-	public static Config loadConfig(String path) throws IOException{
-		Yaml yaml = new Yaml();
+    public void setPreFeed(Boolean preFeed) {
+        this.preFeed = preFeed;
+    }
+    
+    public String getTip() {
+        return tip;
+    }
+
+    public void setTip(String tip) {
+        this.tip = tip;
+    }
+    
+    public static Config loadConfig(String path) throws IOException{
+        Yaml yaml = new Yaml();
         try(InputStream in = Files.newInputStream(Paths.get(path))) {
             Config config = yaml.loadAs(in, Config.class);
             return config;
         }
-	}
+    }
     
     @Override
     public String toString(){
         return new StringBuilder()
-                .append(String.format("Quote Boy: %s\n", quoteBoy.toString()))
+                .append(String.format("Quote Boy: %s\n", quoteBoyType.toString()))
                 .append(String.format("Quote Throttle: %d\n", quoteThrottle))
                 .append(String.format("Wire URL: %d\n", wireURL))
                 .toString();
+    }
+
+    public String getReadCsvPath() {
+        return readCsvPath;
+    }
+
+    public void setReadCsvPath(String readCsvPath) {
+        this.readCsvPath = readCsvPath;
     }
 }
