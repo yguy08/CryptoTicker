@@ -17,8 +17,6 @@ import com.tickercash.tapereader.util.DisruptorFactory;
 
 public abstract class QuoteBoy {
     
-    protected static final int BUFFER = 1024;
-    
     protected final Disruptor<Tick> disruptor;
     
     protected final RingBuffer<Tick> ringBuffer;
@@ -69,6 +67,8 @@ public abstract class QuoteBoy {
             case GDAX:
             case FAKE:
                 return new FakeQuoteBoy();
+            case CSV:
+                return new CsvQuoteBoy();
             default:
                 return new FakeQuoteBoy();
         }

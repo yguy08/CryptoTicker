@@ -9,7 +9,8 @@ public enum QuoteBoyType implements Displayable {
     CMC("CMC"),
     GDAX("GDAX"),
     KUCOIN("Kucoin"),
-    FAKE("Fake");
+    FAKE("Fake"),
+    CSV("Csv");
 	
     private String displayName;
     
