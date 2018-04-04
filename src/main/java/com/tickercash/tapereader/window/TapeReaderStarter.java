@@ -17,8 +17,7 @@ public class TapeReaderStarter {
             System.out.println( "Usage: <file.yml>" );
             return;
         }
-  
-        Yaml yaml = new Yaml();  
+        Yaml yaml = new Yaml();
         try(InputStream in = Files.newInputStream(Paths.get(args[0]))) {
             Config config = yaml.loadAs(in, Config.class);
             TapeReader reader = new DoubleYou();
