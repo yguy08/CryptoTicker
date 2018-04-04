@@ -1,0 +1,12 @@
+// Declare the name for the module
+module com.tickercash.tapereader.doubleyou;
+
+// Import any Java/.NET classes in an application package 
+import com.tickercash.tapereader.marketdata.*;
+
+// Declare an event type based on a Java class in the package that was imported as above
+create schema TickEvent as Tick;
+
+// Sample statement
+@Name('All')
+select timestamp, last, max(last) as maxClose from TickEvent#length(25);
