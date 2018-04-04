@@ -37,8 +37,8 @@ public class QuoteServer {
     }
     
     public void init() throws Exception {
-    	setQuoteBoy(QuoteBoy.createQuoteBoy(config.getQuoteBoy()));
-    	getQuoteBoy().addHandler(new Transmitter(config.getQuoteBoy().toString()));
+        setQuoteBoy(QuoteBoy.createQuoteBoy(config.getQuoteBoyType()));
+        getQuoteBoy().addHandler(new Transmitter(config.getQuoteBoyType().toString()));
     }
     
     public void start() throws Exception {
