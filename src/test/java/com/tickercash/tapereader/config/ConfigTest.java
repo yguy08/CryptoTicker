@@ -19,7 +19,6 @@ public class ConfigTest {
         try(InputStream in = Files.newInputStream(Paths.get("src/test/resources/server-test-config.yml"))) {
             Config config = yaml.loadAs(in, Config.class);
             assertNotNull(config);
-            assertEquals(QuoteBoyType.FAKE, config.getQuoteBoy());
             assertEquals(5, config.getQuoteThrottle());
             assertEquals("tcp://localhost:61616", config.getWireURL());
         }

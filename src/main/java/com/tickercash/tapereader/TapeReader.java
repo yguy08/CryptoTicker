@@ -1,13 +1,9 @@
 package com.tickercash.tapereader;
 
-import java.io.File;
 import java.time.Instant;
 
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
-import com.espertech.esper.client.deploy.DeploymentOptions;
-import com.espertech.esper.client.deploy.EPDeploymentAdmin;
-import com.espertech.esper.client.deploy.Module;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.LifecycleAware;
 import com.tickercash.tapereader.clerk.CsvQuoteBoy;
@@ -82,10 +78,14 @@ public class TapeReader implements EventHandler<Tick>, LifecycleAware, UpdateLis
     }
     
     public void update(EventBean[] newTick, EventBean[] oldTick) {
-        double last = (Double) newTick[0].get("last");
-        long ts = (Long) newTick[0].get("timestamp");
-        double max = (Double) newTick[0].get("maxClose");
-        System.out.println(Instant.ofEpochSecond(ts).toString()+ " Last "+ last + " MAX: " + max);
+    	String symbol = (String) newTick[0].get("symbol");
+        //long ts = (Long) newTick[0].get("timestamp");
+        //ts/=1000; // nanos
+        //double last = (Double) newTick[0].get("last");
+        //double max = (Double) newTick[0].get("maxLast");
+        //System.out.println(symbol+" "+Instant.ofEpochSecond(ts).toString()+" Last: "+ last 
+        	//	+ " MAX: " + max);
+        System.out.println(newTick);
     }
     
     public void init() throws Exception {
@@ -96,10 +96,8 @@ public class TapeReader implements EventHandler<Tick>, LifecycleAware, UpdateLis
         setTipEngine(new TipEngineImpl());
         setReceiver(new Receiver(quoteBoy.getTopicName()));
         addEventHandler(this::onEvent);
-        EPDeploymentAdmin deployAdmin = getTipEngine().getEngine().getEPAdministrator().getDeploymentAdmin();
-        Module module = deployAdmin.read(new File("src/main/resources/DoubleYou.epl"));
-        deployAdmin.deploy(module, new DeploymentOptions());
-        getTipEngine().getEngine().getEPAdministrator().getStatement(config.getTip()).addListener(this::update);
+        getTipEngine().deployModule(config.getTip());
+        getTipEngine().addListener(config.getTip(),this::update);
     }
     
     public void readTheTape() throws Exception {

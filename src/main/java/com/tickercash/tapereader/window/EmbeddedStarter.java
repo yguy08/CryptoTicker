@@ -1,10 +1,7 @@
 package com.tickercash.tapereader.window;
 
-import java.io.File;
-import com.espertech.esper.client.deploy.DeploymentOptions;
-import com.espertech.esper.client.deploy.EPDeploymentAdmin;
-import com.espertech.esper.client.deploy.Module;
 import com.tickercash.tapereader.TapeReader;
+import com.tickercash.tapereader.clerk.QuoteBoy;
 import com.tickercash.tapereader.config.Config;
 import com.tickercash.tapereader.tip.TipEngineImpl;
 
@@ -14,12 +11,18 @@ public class EmbeddedStarter {
         Config config = Config.loadConfig(args[0]);
         TapeReader reader = new TapeReader();
         reader.setConfig(config);
-        
+        reader.setQuoteBoy(QuoteBoy.createQuoteBoy(config.getQuoteBoyType()));
+        reader.getQuoteBoy().addHandler(reader::onEvent);
+
         reader.setTipEngine(new TipEngineImpl());
-        EPDeploymentAdmin deployAdmin = reader.getTipEngine().getEngine().getEPAdministrator().getDeploymentAdmin();
-        Module module = deployAdmin.read(new File("src/main/resources/DoubleYou.epl"));
-        deployAdmin.deploy(module, new DeploymentOptions());
-        reader.getTipEngine().getEngine().getEPAdministrator().getStatement(config.getTip()).addListener(reader::update);
+        
+        char c = (char) 0023;
+        String stmt = "@Name(SelectAll) select * from Tick"+Character.toString(c)+"#length(5)";
+        reader.getTipEngine().addStatement(stmt);
+        reader.getTipEngine().addListener(reader::update);
+        
+        reader.getQuoteBoy().start();
+        
     }
 
 }

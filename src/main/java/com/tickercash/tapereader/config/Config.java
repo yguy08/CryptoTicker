@@ -21,6 +21,8 @@ public class Config {
     
     private String tip;
     
+    private String tipPath;
+    
     private String readCsvPath;
     
     public QuoteBoyType getQuoteBoyType() {
@@ -87,4 +89,12 @@ public class Config {
     public void setReadCsvPath(String readCsvPath) {
         this.readCsvPath = readCsvPath;
     }
+
+	public String getTipPath() {
+		return tipPath;
+	}
+
+	public void setTipPath(String tipPath) {
+		this.tipPath = tipPath;
+	}
 }

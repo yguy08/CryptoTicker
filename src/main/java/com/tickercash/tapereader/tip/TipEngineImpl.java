@@ -1,9 +1,13 @@
 package com.tickercash.tapereader.tip;
 
+import java.io.File;
 import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.EPStatement;
 import com.espertech.esper.client.UpdateListener;
+import com.espertech.esper.client.deploy.DeploymentOptions;
+import com.espertech.esper.client.deploy.EPDeploymentAdmin;
+import com.espertech.esper.client.deploy.Module;
 import com.tickercash.tapereader.marketdata.Tick;
 
 public class TipEngineImpl implements TipEngine {
@@ -36,5 +40,22 @@ public class TipEngineImpl implements TipEngine {
     public void sendNewTick(Tick tick) {
         engine.getEPRuntime().sendEvent(tick);
     }
+
+	@Override
+	public EPServiceProvider getEngine() {
+		return engine;
+	}
+
+	@Override
+	public void deployModule(String eplFile) throws Exception {
+		EPDeploymentAdmin deployAdmin = engine.getEPAdministrator().getDeploymentAdmin();
+        Module module = deployAdmin.read(new File(eplFile));
+        deployAdmin.deploy(module, new DeploymentOptions());
+	}
+
+	@Override
+	public void addListener(String stmtName, UpdateListener listener) {
+		engine.getEPAdministrator().getStatement(stmtName).addListener(listener);
+	}
 
 }

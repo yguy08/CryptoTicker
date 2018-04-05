@@ -12,7 +12,6 @@ public class AbstractTest {
         Yaml yaml = new Yaml();
         Config config = new Config();
         config.setPreFeed(true);
-        config.setQuoteBoy(QuoteBoyType.CMC);
         System.out.println(yaml.dump(config));
     }
 

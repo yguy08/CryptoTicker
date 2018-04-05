@@ -9,4 +9,4 @@ create schema TickEvent as Tick;
 
 // Sample statement
 @Name('All')
-select timestamp, last, max(last) as maxClose from TickEvent#length(25);
+select *, max(last) as maxClose from TickEvent#length(25) group by symbol;
