@@ -2,29 +2,35 @@ package com.tickercash.tapereader;
 
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
+import com.google.inject.Inject;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.LifecycleAware;
-import com.tickercash.tapereader.clerk.CsvQuoteBoy;
-import com.tickercash.tapereader.clerk.AbstractQuoteBoy;
-import com.tickercash.tapereader.clerk.QuoteBoyType;
+import com.tickercash.tapereader.clerk.QuoteBoy;
 import com.tickercash.tapereader.config.Config;
 import com.tickercash.tapereader.marketdata.Tick;
 import com.tickercash.tapereader.tip.TipEngine;
-import com.tickercash.tapereader.tip.TipEngineImpl;
-import com.tickercash.tapereader.wire.Receiver;
+import com.tickercash.tapereader.wire.AbstractReceiver;
 import com.tickercash.tapereader.wire.AirTransmitter;
+import com.tickercash.tapereader.wire.Receiver;
 
 public class TapeReader implements EventHandler<Tick>, LifecycleAware, UpdateListener {
     
     private Config config;
     
+    private QuoteBoy quoteBoy;
+    
     private TipEngine tipEngine;
     
-    private AbstractQuoteBoy quoteBoy;
+    private AirTransmitter transmitter;
     
     private Receiver receiver;
     
-    private AirTransmitter transmitter;
+    @Inject
+    protected TapeReader(QuoteBoy quoteBoy, TipEngine engine, Receiver receiver){
+        this.quoteBoy = quoteBoy;
+        this.tipEngine = engine;
+        this.receiver = receiver;
+    }
     
     public void setConfig(Config config) {
         this.config = config;
@@ -34,11 +40,11 @@ public class TapeReader implements EventHandler<Tick>, LifecycleAware, UpdateLis
         return config;
     }
     
-    public void setQuoteBoy(AbstractQuoteBoy quoteBoy) {
+    public void setQuoteBoy(QuoteBoy quoteBoy) {
         this.quoteBoy = quoteBoy;
     }
     
-    public AbstractQuoteBoy getQuoteBoy(){
+    public QuoteBoy getQuoteBoy(){
         return quoteBoy;
     }
     
@@ -50,7 +56,7 @@ public class TapeReader implements EventHandler<Tick>, LifecycleAware, UpdateLis
         return tipEngine;
     }
     
-    public void setReceiver(Receiver receiver) {
+    public void setReceiver(AbstractReceiver receiver) {
         this.receiver = receiver;
     }
     
@@ -76,25 +82,30 @@ public class TapeReader implements EventHandler<Tick>, LifecycleAware, UpdateLis
     }
     
     public void update(EventBean[] newTick, EventBean[] oldTick) {
-    	
+    	System.out.println(newTick);
     }
     
     public void init() throws Exception {
-        setQuoteBoy(AbstractQuoteBoy.createQuoteBoy(config.getQuoteBoyType()));
-        if(config.getQuoteBoyType()==QuoteBoyType.CSV){
-            ((CsvQuoteBoy) getQuoteBoy()).init(config.getReadCsvPath());
-        }
-        setTipEngine(new TipEngineImpl());
-        //setReceiver(new Receiver(quoteBoy.getTopicName()));
-        addEventHandler(this::onEvent);
-        getTipEngine().deployModule(config.getTip());
-        getTipEngine().addListener(config.getTip(),this::update);
+        
     }
     
     public void readTheTape() throws Exception {
+        Thread t = new Thread(() -> {
+            try {
+                getQuoteBoy().getQuotes();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
+        
+        t.setDaemon(true);
+        t.start();
+        
         String tip = "select symbol, feed, timestamp, last from Tick";
         tipEngine.addStatement(tip);
         addTipListener(this::update);
+        addEventHandler(this::onEvent);
         receiver.startReceiving();
     }
 
