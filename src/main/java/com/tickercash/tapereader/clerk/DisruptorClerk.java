@@ -1,4 +1,4 @@
-package com.tickercash.tapereader.util;
+package com.tickercash.tapereader.clerk;
 
 import java.util.concurrent.Executors;
 
@@ -7,7 +7,7 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.tickercash.tapereader.marketdata.Tick;
 
-public class DisruptorFactory {
+public class DisruptorClerk {
 
     public static final Disruptor<Tick> createDefaultMarketEventDisruptor(){
         return new Disruptor<Tick>(Tick::new, 1024, Executors.defaultThreadFactory(),

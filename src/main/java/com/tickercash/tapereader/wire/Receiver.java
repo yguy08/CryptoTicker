@@ -17,8 +17,8 @@ import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
+import com.tickercash.tapereader.clerk.DisruptorClerk;
 import com.tickercash.tapereader.marketdata.Tick;
-import com.tickercash.tapereader.util.DisruptorFactory;
 
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.bytes.StopCharTesters;
@@ -36,7 +36,7 @@ public class Receiver implements MessageListener {
     private RingBuffer<Tick> ringBuffer;
     
 	public Receiver(String topicName) throws Exception {
-        disruptor = DisruptorFactory.createDefaultMarketEventDisruptor();
+        disruptor = DisruptorClerk.createDefaultMarketEventDisruptor();
         ringBuffer = disruptor.getRingBuffer();
         initConnection(topicName);
     }

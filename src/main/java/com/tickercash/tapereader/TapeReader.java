@@ -1,20 +1,18 @@
 package com.tickercash.tapereader;
 
-import java.time.Instant;
-
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.LifecycleAware;
 import com.tickercash.tapereader.clerk.CsvQuoteBoy;
-import com.tickercash.tapereader.clerk.QuoteBoy;
+import com.tickercash.tapereader.clerk.AbstractQuoteBoy;
 import com.tickercash.tapereader.clerk.QuoteBoyType;
 import com.tickercash.tapereader.config.Config;
 import com.tickercash.tapereader.marketdata.Tick;
 import com.tickercash.tapereader.tip.TipEngine;
 import com.tickercash.tapereader.tip.TipEngineImpl;
 import com.tickercash.tapereader.wire.Receiver;
-import com.tickercash.tapereader.wire.Transmitter;
+import com.tickercash.tapereader.wire.AirTransmitter;
 
 public class TapeReader implements EventHandler<Tick>, LifecycleAware, UpdateListener {
     
@@ -22,11 +20,11 @@ public class TapeReader implements EventHandler<Tick>, LifecycleAware, UpdateLis
     
     private TipEngine tipEngine;
     
-    private QuoteBoy quoteBoy;
+    private AbstractQuoteBoy quoteBoy;
     
     private Receiver receiver;
     
-    private Transmitter transmitter;
+    private AirTransmitter transmitter;
     
     public void setConfig(Config config) {
         this.config = config;
@@ -36,11 +34,11 @@ public class TapeReader implements EventHandler<Tick>, LifecycleAware, UpdateLis
         return config;
     }
     
-    public void setQuoteBoy(QuoteBoy quoteBoy) {
+    public void setQuoteBoy(AbstractQuoteBoy quoteBoy) {
         this.quoteBoy = quoteBoy;
     }
     
-    public QuoteBoy getQuoteBoy(){
+    public AbstractQuoteBoy getQuoteBoy(){
         return quoteBoy;
     }
     
@@ -78,23 +76,16 @@ public class TapeReader implements EventHandler<Tick>, LifecycleAware, UpdateLis
     }
     
     public void update(EventBean[] newTick, EventBean[] oldTick) {
-    	String symbol = (String) newTick[0].get("symbol");
-        //long ts = (Long) newTick[0].get("timestamp");
-        //ts/=1000; // nanos
-        //double last = (Double) newTick[0].get("last");
-        //double max = (Double) newTick[0].get("maxLast");
-        //System.out.println(symbol+" "+Instant.ofEpochSecond(ts).toString()+" Last: "+ last 
-        	//	+ " MAX: " + max);
-        System.out.println(newTick);
+    	
     }
     
     public void init() throws Exception {
-        setQuoteBoy(QuoteBoy.createQuoteBoy(config.getQuoteBoyType()));
+        setQuoteBoy(AbstractQuoteBoy.createQuoteBoy(config.getQuoteBoyType()));
         if(config.getQuoteBoyType()==QuoteBoyType.CSV){
             ((CsvQuoteBoy) getQuoteBoy()).init(config.getReadCsvPath());
         }
         setTipEngine(new TipEngineImpl());
-        setReceiver(new Receiver(quoteBoy.getTopicName()));
+        //setReceiver(new Receiver(quoteBoy.getTopicName()));
         addEventHandler(this::onEvent);
         getTipEngine().deployModule(config.getTip());
         getTipEngine().addListener(config.getTip(),this::update);
@@ -119,11 +110,11 @@ public class TapeReader implements EventHandler<Tick>, LifecycleAware, UpdateLis
         
     }
 
-    public Transmitter getTransmitter() {
+    public AirTransmitter getTransmitter() {
         return transmitter;
     }
 
-    public void setTransmitter(Transmitter transmitter) {
+    public void setTransmitter(AirTransmitter transmitter) {
         this.transmitter = transmitter;
     }
 }

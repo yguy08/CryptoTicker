@@ -5,29 +5,29 @@ import java.util.List;
 import java.util.Random;
 import com.tickercash.tapereader.marketdata.Tick;
 import com.tickercash.tapereader.util.UniqueCurrentTimeMS;
+import com.tickercash.tapereader.wire.Transmitter;
 
-public class FakeQuoteBoy extends QuoteBoy {
+public class FakeQuoteBoy extends AbstractQuoteBoy {
     
-    private static final List<String> SYMBOLS = Arrays.asList("BTC/USD","ETH/BTC","XRP/BTC","BCH/BTC","LTC/BTC");
-    
-    private static final Random random = new Random();
+    public FakeQuoteBoy(Transmitter transmitter) {
+		super(transmitter);
+	}
 
-    private static String symbol;
+	private final List<String> SYMBOLS = Arrays.asList("BTC/USD","ETH/BTC","XRP/BTC","BCH/BTC","LTC/BTC");
     
-    @Override
-    public void start() throws Exception {
+    private final Random random = new Random();
+
+    private String symbol;
+    
+	@Override
+	public void getQuotes() throws Exception {
         disruptor.start();
         running.set(true);
         while(running.get()) {
             ringBuffer.publishEvent(this::translateTo);
-            Thread.sleep(throttle);
+            Thread.sleep(1000);
         }
-    }
-
-    @Override
-    public String getTopicName() {
-        return QuoteBoyType.FAKE.toString();
-    }
+	}
     
     public final void translateTo(Tick event, long sequence){
         symbol = SYMBOLS.get(random.nextInt(SYMBOLS.size()));

@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import com.lmax.disruptor.EventHandler;
-import com.tickercash.tapereader.clerk.QuoteBoy;
+import com.tickercash.tapereader.clerk.AbstractQuoteBoy;
 import com.tickercash.tapereader.clerk.cmc.CMCQuoteBoy;
 import com.tickercash.tapereader.marketdata.Tick;
 
@@ -14,7 +14,7 @@ public class CMCQuoteBoyTest {
 
     @Test
     public void testCMCQuoteBoy() throws Exception {
-        QuoteBoy quoteBoy = new CMCQuoteBoy();
+        AbstractQuoteBoy quoteBoy = new CMCQuoteBoy();
         
         quoteBoy.addHandler(new EventHandler<Tick>() {
             @Override

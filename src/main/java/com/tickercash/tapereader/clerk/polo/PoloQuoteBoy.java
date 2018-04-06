@@ -12,23 +12,19 @@ import com.tickercash.tapereader.clerk.QuoteBoyType;
 import com.tickercash.tapereader.clerk.XQuoteBoy;
 import com.tickercash.tapereader.marketdata.Tick;
 import com.tickercash.tapereader.util.UniqueCurrentTimeMS;
+import com.tickercash.tapereader.wire.Transmitter;
 
 public class PoloQuoteBoy extends XQuoteBoy {
     
     private PoloniexMarketDataServiceRaw marketDataService;
     
-    public PoloQuoteBoy() {
-        super(PoloniexExchange.class.getName());
+    public PoloQuoteBoy(Transmitter transmitter) {
+        super(transmitter, PoloniexExchange.class.getName());
         marketDataService = (PoloniexMarketDataServiceRaw) (PoloniexMarketDataService) EXCHANGE.getMarketDataService();
     }
 
-    @Override
-    public String getTopicName() {
-        return QuoteBoyType.POLONIEX.toString();
-    }
-
-    @Override
-    public void start() throws Exception {
+	@Override
+	public void getQuotes() throws Exception {
         disruptor.start();
         Runnable task = () -> {
             try {
@@ -38,8 +34,8 @@ public class PoloQuoteBoy extends XQuoteBoy {
                 e.printStackTrace();
             }
         };
-        executor.scheduleWithFixedDelay(task, 0, 5, TimeUnit.SECONDS);
-    }
+        executor.scheduleWithFixedDelay(task, 0, 5, TimeUnit.SECONDS);		
+	}
     
     private final void translateTo(Tick event, long sequence, String symbol, PoloniexMarketData chartData) {
         event.set(symbol, QuoteBoyType.POLONIEX.toString(), UniqueCurrentTimeMS.uniqueCurrentTimeMS(), 

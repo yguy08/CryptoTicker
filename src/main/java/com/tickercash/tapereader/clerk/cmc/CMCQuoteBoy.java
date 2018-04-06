@@ -8,12 +8,13 @@ import org.knowm.xchange.coinmarketcap.CoinMarketCapExchange;
 import org.knowm.xchange.coinmarketcap.dto.marketdata.CoinMarketCapTicker;
 import org.knowm.xchange.coinmarketcap.service.CoinMarketCapMarketDataService;
 
-import com.tickercash.tapereader.clerk.QuoteBoy;
+import com.tickercash.tapereader.clerk.AbstractQuoteBoy;
 import com.tickercash.tapereader.clerk.QuoteBoyType;
 import com.tickercash.tapereader.marketdata.Tick;
 import com.tickercash.tapereader.util.UniqueCurrentTimeMS;
+import com.tickercash.tapereader.wire.Transmitter;
 
-public class CMCQuoteBoy extends QuoteBoy {
+public class CMCQuoteBoy extends AbstractQuoteBoy {
         
     private final Exchange CMC_EXCHANGE;
     
@@ -21,41 +22,31 @@ public class CMCQuoteBoy extends QuoteBoy {
     
     private static final Logger LOGGER = LogManager.getLogger("CMCQuoteBoy");
     
-    public CMCQuoteBoy() {
+    public CMCQuoteBoy(Transmitter transmitter) {
+    	super(transmitter);
         CMC_EXCHANGE = ExchangeFactory.INSTANCE.createExchange(CoinMarketCapExchange.class.getName());
         CMC_MARKET_DATA_SERVICE = (CoinMarketCapMarketDataService) CMC_EXCHANGE.getMarketDataService();
-        throttle = 5000;
-    }
-    
-    public CMCQuoteBoy(int seconds) {
-        CMC_EXCHANGE = ExchangeFactory.INSTANCE.createExchange(CoinMarketCapExchange.class.getName());
-        CMC_MARKET_DATA_SERVICE = (CoinMarketCapMarketDataService) CMC_EXCHANGE.getMarketDataService();
-        throttle = seconds*1000;
     }
 
-    @Override
-    public void start() throws Exception {
+	@Override
+	public void getQuotes() throws Exception {
         disruptor.start();
         running.set(true);
         while(running.get()) {
             try {
                 CMC_MARKET_DATA_SERVICE.getCoinMarketCapTickers(100).stream().forEach((s) 
                         -> ringBuffer.publishEvent(this::translateTo, s));
-                Thread.sleep(throttle);
+                Thread.sleep(1000);
             } catch (Exception e) {
                 LOGGER.error(e);
-                Thread.sleep(throttle);
+                Thread.sleep(1000);
             }
         }
-    }
-
-    @Override
-    public String getTopicName() {
-        return QuoteBoyType.CMC.toString();
-    }
-    
+	}
+	
     private final void translateTo(Tick event, long sequence, CoinMarketCapTicker ticker) {
-        event.set(ticker.getIsoCode()+"/BTC", getTopicName(), UniqueCurrentTimeMS.uniqueCurrentTimeMS(), ticker.getPriceBTC().doubleValue());
+        event.set(ticker.getIsoCode()+"/BTC", QuoteBoyType.CMC.toString(), 
+        		UniqueCurrentTimeMS.uniqueCurrentTimeMS(), ticker.getPriceBTC().doubleValue());
     }
 
 }

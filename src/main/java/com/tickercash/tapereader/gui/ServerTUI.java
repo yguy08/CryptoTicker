@@ -21,11 +21,8 @@ import com.googlecode.lanterna.gui2.Separator;
 import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.tickercash.tapereader.bucketshop.BucketShopType;
-import com.tickercash.tapereader.clerk.QuoteBoy;
 import com.tickercash.tapereader.clerk.QuoteBoyType;
-import com.tickercash.tapereader.event.handler.TickLogger;
 import com.tickercash.tapereader.tape.TapeType;
-import com.tickercash.tapereader.wire.Transmitter;
 import com.googlecode.lanterna.gui2.ComboBox.Listener;
 import com.googlecode.lanterna.gui2.Window.Hint;
 
@@ -133,21 +130,6 @@ public class ServerTUI extends ScreenBase {
         TextUiHelper.slow80sType(screen, writer, dataSourceSel, 4, 7);
 
         TextUiHelper.flash80sContinue(screen, writer, "Press Enter to Continue, Esc to Exit...", 1, 10);
-        
-        QuoteBoy clerk = QuoteBoy.createQuoteBoy(QuoteBoyType.valueOf(quoteBoy.toUpperCase()));
-        
-        clerk.addHandler(new TickLogger());
-        clerk.addHandler(new Transmitter(clerk.getTopicName()));
-        
-        Thread thread = new Thread(() -> {
-            try {
-                clerk.start();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        thread.setDaemon(true);
-        thread.start();
     }
     
     private void createComboBoxes(Panel contentPanel){
