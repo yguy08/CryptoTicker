@@ -22,7 +22,7 @@ public abstract class AbstractQuoteBoy implements QuoteBoy {
     protected final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     
     @Inject
-	public AbstractQuoteBoy(Transmitter transmitter) {
+    public AbstractQuoteBoy(Transmitter transmitter) {
         disruptor = DisruptorClerk.createDefaultMarketEventDisruptor();
         ringBuffer = disruptor.getRingBuffer();
         disruptor.handleEventsWith(transmitter);
