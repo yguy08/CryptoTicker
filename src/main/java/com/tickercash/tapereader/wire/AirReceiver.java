@@ -14,6 +14,7 @@ import javax.jms.TextMessage;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.RingBuffer;
@@ -24,7 +25,7 @@ import com.tickercash.tapereader.marketdata.Tick;
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.bytes.StopCharTesters;
 
-public class AbstractReceiver implements Receiver, MessageListener {
+public class AirReceiver implements Receiver, MessageListener {
     
     private MessageConsumer consumer;
     
@@ -36,24 +37,18 @@ public class AbstractReceiver implements Receiver, MessageListener {
     
     private RingBuffer<Tick> ringBuffer;
     
-    private String topic = "FAKE";
-    
     @Inject
-    public AbstractReceiver() throws Exception {
+    public AirReceiver(@Named("ActiveMQBrokerURL") String brokerURL) throws Exception {
         disruptor = DisruptorClerk.createDefaultMarketEventDisruptor();
         ringBuffer = disruptor.getRingBuffer();
-        initConnection(topic);
-    }
-	
-	private void initConnection(String topicName) throws Exception {
-	    MQBroker.initDefaultMQBroker();
-        Connection connection = new ActiveMQConnectionFactory("tcp://localhost:61616").createConnection();
+        MQBroker.initDefaultMQBroker();
+        Connection connection = new ActiveMQConnectionFactory(brokerURL).createConnection();
         connection.start();
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        destination = session.createTopic(topicName);
+        destination = session.createTopic("FAKE");
         consumer = session.createConsumer(destination);
         consumer.setMessageListener(this);
-	}
+    }
     
     public void startReceiving(){
         disruptor.start();

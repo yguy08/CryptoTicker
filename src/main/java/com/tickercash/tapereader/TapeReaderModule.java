@@ -1,23 +1,23 @@
 package com.tickercash.tapereader;
 
 import com.google.inject.AbstractModule;
-import com.tickercash.tapereader.clerk.QuoteBoy;
-import com.tickercash.tapereader.clerk.fake.FakeQuoteBoy;
-import com.tickercash.tapereader.tip.TipEngine;
-import com.tickercash.tapereader.tip.TipEngineImpl;
-import com.tickercash.tapereader.wire.AbstractReceiver;
-import com.tickercash.tapereader.wire.AirTransmitter;
-import com.tickercash.tapereader.wire.Receiver;
-import com.tickercash.tapereader.wire.Transmitter;
+import com.tickercash.tapereader.tape.EmbeddedTape;
+import com.tickercash.tapereader.tape.Tape;
+import com.tickercash.tapereader.ticker.Ticker;
+import com.tickercash.tapereader.ticker.fake.FakeTicker;
+import com.tickercash.tapereader.tip.DefaultTip;
+import com.tickercash.tapereader.tip.Tip;
+import com.tickercash.tapereader.tip.TipConfirmedListener;
+import com.tickercash.tapereader.tip.TipListener;
 
 public class TapeReaderModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(QuoteBoy.class).to(FakeQuoteBoy.class);
-        bind(TipEngine.class).to(TipEngineImpl.class);
-        bind(Transmitter.class).to(AirTransmitter.class);
-        bind(Receiver.class).to(AbstractReceiver.class);
+        bind(TipListener.class).to(TipConfirmedListener.class);
+        bind(Tip.class).to(DefaultTip.class);
+        bind(Ticker.class).to(FakeTicker.class);
+        bind(Tape.class).to(EmbeddedTape.class);
     }
 
 }

@@ -97,7 +97,6 @@ public class ServerTUI extends ScreenBase {
         }
     }
     
-    @SuppressWarnings("unchecked")
     private void startWithSelections() throws Exception {
         
         TextGraphics writer = screen.newTextGraphics();
