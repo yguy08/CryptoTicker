@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.h2.tools.Csv;
 
-import com.tickercash.tapereader.marketdata.Tick;
+import com.tickercash.tapereader.tick.Tick;
 import com.tickercash.tapereader.wire.Transmitter;
 
 public class CsvQuoteBoy extends AbstractQuoteBoy {

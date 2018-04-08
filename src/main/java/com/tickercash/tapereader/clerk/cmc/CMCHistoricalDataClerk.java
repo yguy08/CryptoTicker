@@ -13,7 +13,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import com.tickercash.tapereader.clerk.HistoricalDataClerk;
-import com.tickercash.tapereader.marketdata.Tick;
+import com.tickercash.tapereader.tick.Tick;
 import com.tickercash.tapereader.util.DateTimePatterns;
 
 public class CMCHistoricalDataClerk implements HistoricalDataClerk {

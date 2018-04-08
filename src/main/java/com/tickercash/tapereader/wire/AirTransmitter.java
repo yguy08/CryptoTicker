@@ -2,7 +2,7 @@ package com.tickercash.tapereader.wire;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.tickercash.tapereader.marketdata.Tick;
+import com.tickercash.tapereader.tick.Tick;
 
 import javax.jms.Connection;
 import javax.jms.DeliveryMode;

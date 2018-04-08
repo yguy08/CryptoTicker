@@ -20,7 +20,7 @@ import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.tickercash.tapereader.clerk.DisruptorClerk;
-import com.tickercash.tapereader.marketdata.Tick;
+import com.tickercash.tapereader.tick.Tick;
 
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.bytes.StopCharTesters;

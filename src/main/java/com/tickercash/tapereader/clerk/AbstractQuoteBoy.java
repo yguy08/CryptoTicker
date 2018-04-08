@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.google.inject.Inject;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
-import com.tickercash.tapereader.marketdata.Tick;
+import com.tickercash.tapereader.tick.Tick;
 import com.tickercash.tapereader.wire.Transmitter;
 
 @SuppressWarnings("unchecked")

@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.tickercash.tapereader.clerk.cmc.CMCHistoricalDataClerk;
-import com.tickercash.tapereader.marketdata.Tick;
+import com.tickercash.tapereader.tick.Tick;
 
 public interface HistoricalDataClerk {
     

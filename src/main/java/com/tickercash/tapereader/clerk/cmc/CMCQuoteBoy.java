@@ -10,7 +10,7 @@ import org.knowm.xchange.coinmarketcap.service.CoinMarketCapMarketDataService;
 
 import com.tickercash.tapereader.clerk.AbstractQuoteBoy;
 import com.tickercash.tapereader.clerk.QuoteBoyType;
-import com.tickercash.tapereader.marketdata.Tick;
+import com.tickercash.tapereader.tick.Tick;
 import com.tickercash.tapereader.util.UniqueCurrentTimeMS;
 import com.tickercash.tapereader.wire.Transmitter;
 

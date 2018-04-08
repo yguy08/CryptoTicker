@@ -1,4 +1,4 @@
-package com.tickercash.tapereader.marketdata;
+package com.tickercash.tapereader.tick;
 
 public class Tick {
     
@@ -79,5 +79,9 @@ public class Tick {
     @Override
     public String toString() {
         return this.symbol+" "+this.feed+" "+this.timestamp+" "+this.last;
+    }
+
+    public void set(Tick event) {
+        // TODO Auto-generated method stub
     }
 }
