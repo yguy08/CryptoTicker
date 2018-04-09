@@ -1,33 +1,29 @@
 package com.tickercash.tapereader.ticker;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.google.inject.Inject;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
-import com.tickercash.tapereader.clerk.DisruptorClerk;
-import com.tickercash.tapereader.tick.Tick;
-import com.tickercash.tapereader.tick.handler.TickHandler;
+import com.tickercash.tapereader.framework.Handler;
+import com.tickercash.tapereader.model.Tick;
+import com.tickercash.tapereader.util.DisruptorClerk;
 import com.tickercash.tapereader.util.UniqueCurrentTimeMS;
 
+@SuppressWarnings({ "unchecked" })
 public class FakeTicker implements Ticker {
     
     protected final AtomicBoolean running = new AtomicBoolean(false);
     
-    protected final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-    
     protected final Disruptor<Tick> disruptor;
     
-    protected final RingBuffer<Tick> ringBuffer;
+    protected final RingBuffer<Tick> ringBuffer;    
     
-    @SuppressWarnings("unchecked")
     @Inject
-    protected FakeTicker(TickHandler handler) {
+    protected FakeTicker(Handler handler) {
         disruptor = DisruptorClerk.createDefaultMarketEventDisruptor();
         ringBuffer = disruptor.getRingBuffer();
-        disruptor.handleEventsWith(handler::onTick);
+        disruptor.handleEventsWith(handler::onEvent);
         disruptor.start();
     }
 
@@ -41,7 +37,7 @@ public class FakeTicker implements Ticker {
     }
     
     private final void translateTo(Tick event, long sequence){
-        event.set(new Tick("BTC/USD", "FAKE", UniqueCurrentTimeMS.uniqueCurrentTimeMS(), 10000.00));
+        event.set("BTC/USD", "FAKE", UniqueCurrentTimeMS.uniqueCurrentTimeMS(), 10000.00);
     }
 
 }

@@ -14,10 +14,9 @@ import org.knowm.xchange.poloniex.service.PoloniexMarketDataServiceRaw;
 import com.google.inject.Inject;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
-import com.tickercash.tapereader.clerk.DisruptorClerk;
-import com.tickercash.tapereader.clerk.QuoteBoyType;
-import com.tickercash.tapereader.tick.Tick;
-import com.tickercash.tapereader.tick.handler.TickHandler;
+import com.tickercash.tapereader.framework.Handler;
+import com.tickercash.tapereader.model.Tick;
+import com.tickercash.tapereader.util.DisruptorClerk;
 import com.tickercash.tapereader.util.UniqueCurrentTimeMS;
 
 public class PoloTicker implements Ticker {
@@ -36,10 +35,10 @@ public class PoloTicker implements Ticker {
     
     @SuppressWarnings("unchecked")
     @Inject
-    public PoloTicker(TickHandler handler) {
+    public PoloTicker(Handler handler) {
         disruptor = DisruptorClerk.createDefaultMarketEventDisruptor();
         ringBuffer = disruptor.getRingBuffer();
-        disruptor.handleEventsWith(handler::onTick);
+        disruptor.handleEventsWith(handler::onEvent);
         disruptor.start();
         EXCHANGE = ExchangeFactory.INSTANCE.createExchange(PoloniexExchange.class.getName());
         marketDataService = (PoloniexMarketDataServiceRaw) (PoloniexMarketDataService) EXCHANGE.getMarketDataService();

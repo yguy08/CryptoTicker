@@ -21,8 +21,7 @@ import com.googlecode.lanterna.gui2.Separator;
 import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.tickercash.tapereader.bucketshop.BucketShopType;
-import com.tickercash.tapereader.clerk.QuoteBoyType;
-import com.tickercash.tapereader.tape.TapeType;
+import com.tickercash.tapereader.ticker.QuoteBoyType;
 import com.googlecode.lanterna.gui2.ComboBox.Listener;
 import com.googlecode.lanterna.gui2.Window.Hint;
 
@@ -152,16 +151,6 @@ public class ServerTUI extends ScreenBase {
             }
         });
         contentPanel.addComponent(brokerComboBox);
-        //Data Source
-        ComboBox<String> dataSourceComboBox = createComboBoxList(TapeType.values());
-        tape = dataSourceComboBox.getSelectedItem();
-        dataSourceComboBox.addListener(new Listener(){
-            @Override
-            public void onSelectionChanged(int selectedIndex, int previousSelection) {
-                tape = brokerComboBox.getItem(selectedIndex);
-            }
-        });
-        contentPanel.addComponent(dataSourceComboBox);
     }
 
     private static ComboBox<String> createComboBoxList(Displayable[] displayable){

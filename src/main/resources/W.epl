@@ -1,8 +1,0 @@
-module com.tickercash.tapereader.W;
-
-import com.tickercash.tapereader.marketdata.*;
-
-create schema TickEvent as Tick;
-
-@Name('All')
-select * from TickEvent#length(5);
