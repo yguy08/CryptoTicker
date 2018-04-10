@@ -5,7 +5,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.google.inject.Inject;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
-import com.tickercash.tapereader.framework.Handler;
+import com.tickercash.tapereader.framework.EventHandler;
+import com.tickercash.tapereader.framework.Ticker;
 import com.tickercash.tapereader.model.Tick;
 import com.tickercash.tapereader.util.DisruptorClerk;
 import com.tickercash.tapereader.util.UniqueCurrentTimeMS;
@@ -20,7 +21,7 @@ public class FakeTicker implements Ticker {
     protected final RingBuffer<Tick> ringBuffer;    
     
     @Inject
-    protected FakeTicker(Handler handler) {
+    protected FakeTicker(EventHandler handler) {
         disruptor = DisruptorClerk.createDefaultMarketEventDisruptor();
         ringBuffer = disruptor.getRingBuffer();
         disruptor.handleEventsWith(handler::onEvent);
@@ -28,7 +29,7 @@ public class FakeTicker implements Ticker {
     }
 
     @Override
-    public void transmit() throws Exception {
+    public void start() throws Exception {
         running.set(true);
         while(running.get()) {
             ringBuffer.publishEvent(this::translateTo);
