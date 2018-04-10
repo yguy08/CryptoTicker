@@ -2,7 +2,7 @@ package com.tickercash.tapereader.module;
 
 import com.google.inject.AbstractModule;
 import com.tickercash.tapereader.TapeReader;
-import com.tickercash.tapereader.framework.EventHandler;
+import com.tickercash.tapereader.framework.Tape;
 import com.tickercash.tapereader.framework.Ticker;
 import com.tickercash.tapereader.framework.TipStatement;
 import com.tickercash.tapereader.handler.SmartTape;
@@ -16,7 +16,7 @@ public class TapeReaderModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(Ticker.class).to(FakeTicker.class);
-        bind(EventHandler.class).to(SmartTape.class);
+        bind(Tape.class).to(SmartTape.class);
         bind(TipStatement.class).to(DefaultTipStatement.class);
         bind(TickEventListener.class).to(TapeReader.class);
         bind(OrderEventListener.class).to(TapeReader.class);

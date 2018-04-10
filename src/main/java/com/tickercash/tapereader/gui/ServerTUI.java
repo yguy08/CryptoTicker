@@ -21,7 +21,7 @@ import com.googlecode.lanterna.gui2.Separator;
 import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.tickercash.tapereader.bucketshop.BucketShopType;
-import com.tickercash.tapereader.ticker.QuoteBoyType;
+import com.tickercash.tapereader.ticker.TickerType;
 import com.googlecode.lanterna.gui2.ComboBox.Listener;
 import com.googlecode.lanterna.gui2.Window.Hint;
 
@@ -132,7 +132,7 @@ public class ServerTUI extends ScreenBase {
     
     private void createComboBoxes(Panel contentPanel){
         //Quote Boy
-        ComboBox<String> quoteBoyComboBox = createComboBoxList(QuoteBoyType.values());
+        ComboBox<String> quoteBoyComboBox = createComboBoxList(TickerType.values());
         quoteBoy = quoteBoyComboBox.getSelectedItem();
         quoteBoyComboBox.addListener(new Listener(){
             @Override

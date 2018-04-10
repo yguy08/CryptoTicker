@@ -1,6 +1,8 @@
 package com.tickercash.tapereader.model;
 
-public class Tick {
+import com.tickercash.tapereader.framework.Event;
+
+public class Tick implements Event {
     
     private String symbol;
     private String feed;

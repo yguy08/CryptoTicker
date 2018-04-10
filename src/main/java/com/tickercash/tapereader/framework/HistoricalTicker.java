@@ -4,22 +4,22 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.tickercash.tapereader.model.Tick;
-import com.tickercash.tapereader.ticker.CMCHistoricalDataClerk;
-import com.tickercash.tapereader.ticker.QuoteBoyType;
+import com.tickercash.tapereader.ticker.TickerType;
+import com.tickercash.tapereader.ticker.cmc.CMCHistoricalTicker;
 
 public interface HistoricalTicker {
     
     List<Tick> getHistoricalTicks(String currency, LocalDateTime startDate, LocalDateTime endDate) throws Exception;
     
-    static HistoricalTicker createHistoricalDataClerk(QuoteBoyType type) {
+    static HistoricalTicker createHistoricalDataClerk(TickerType type) {
         switch(type) {
         case CMC:
-            return new CMCHistoricalDataClerk();
+            return new CMCHistoricalTicker();
         case POLONIEX:
         case GDAX:
         case FAKE:
         default:
-            return new CMCHistoricalDataClerk();
+            return new CMCHistoricalTicker();
         }
     }
     

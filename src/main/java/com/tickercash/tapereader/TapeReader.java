@@ -1,11 +1,13 @@
 package com.tickercash.tapereader;
 
 import com.google.inject.Inject;
-import com.tickercash.tapereader.framework.Listener;
+import com.tickercash.tapereader.framework.Ticker;
+import com.tickercash.tapereader.listener.OrderEventListener;
+import com.tickercash.tapereader.listener.TickEventListener;
+import com.tickercash.tapereader.model.Order;
 import com.tickercash.tapereader.model.Tick;
-import com.tickercash.tapereader.ticker.Ticker;
 
-public class TapeReader implements Listener {
+public class TapeReader implements TickEventListener, OrderEventListener {
     
     private Ticker ticker;
     
@@ -15,12 +17,18 @@ public class TapeReader implements Listener {
     }
     
     public void readTheTape() throws Exception {
-        ticker.transmit();
+        ticker.start();
     }
 
     @Override
-    public void onEvent(Tick tick) {
+    public void onTick(Tick tick) {
         System.out.println(tick);
+    }
+
+    @Override
+    public void onOrder(Order order) {
+        // TODO Auto-generated method stub
+        
     }
     
 }

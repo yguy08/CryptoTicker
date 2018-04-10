@@ -6,22 +6,21 @@ import com.espertech.esper.client.EPStatement;
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
 import com.google.inject.Inject;
-import com.tickercash.tapereader.framework.EventHandler;
+import com.tickercash.tapereader.framework.Tape;
 import com.tickercash.tapereader.framework.TipStatement;
-import com.tickercash.tapereader.listener.TipEventListener;
+import com.tickercash.tapereader.listener.TickEventListener;
 import com.tickercash.tapereader.model.Tick;
-import com.tickercash.tapereader.model.Tip;
 
-public class SmartTape implements EventHandler, UpdateListener {
+public class SmartTape implements Tape, UpdateListener {
     
     private EPServiceProvider engine;
     
     private EPStatement statement;
 
-    private TipEventListener listener;
+    private TickEventListener listener;
     
     @Inject
-    public SmartTape(TipStatement tipStmt, TipEventListener listener) {
+    public SmartTape(TipStatement tipStmt, TickEventListener listener) {
         engine = EPServiceProviderManager.getDefaultProvider();
         engine.getEPAdministrator().getConfiguration().addEventType(Tick.class);
         statement = engine.getEPAdministrator().createEPL(tipStmt.toString());
@@ -30,17 +29,17 @@ public class SmartTape implements EventHandler, UpdateListener {
     }
 
     @Override
-    public void onEvent(Tick event, long sequence, boolean endOfBatch) throws Exception {
-        engine.getEPRuntime().sendEvent(event);
-    }
-
-    @Override
     public void update(EventBean[] newEvents, EventBean[] oldEvents) {
         String symbol = (String) newEvents[0].get("symbol");
         String feed = (String) newEvents[0].get("feed");
         long timestamp = (Long) newEvents[0].get("timestamp");
         double last = (Double) newEvents[0].get("last");
-        listener.onTip(new Tip());
+        listener.onTick(new Tick(symbol, feed, timestamp, last));
+    }
+
+    @Override
+    public void onEvent(Tick event, long sequence, boolean endOfBatch) throws Exception {
+        engine.getEPRuntime().sendEvent(event);
     }
 
 }

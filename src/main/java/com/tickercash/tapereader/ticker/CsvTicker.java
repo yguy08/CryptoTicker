@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.h2.tools.Csv;
 
-import com.tickercash.tapereader.framework.Transmitter;
+import com.tickercash.tapereader.framework.Tape;
 import com.tickercash.tapereader.model.Tick;
 
 public class CsvTicker extends AbstractTicker {
@@ -17,8 +17,8 @@ public class CsvTicker extends AbstractTicker {
     
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     
-    public CsvTicker(Transmitter transmitter) {
-		super(transmitter);
+    public CsvTicker(Tape tape) {
+		super(tape);
 	}
 
     @Override

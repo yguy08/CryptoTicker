@@ -10,7 +10,6 @@ import java.nio.file.Paths;
 import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
 
-import com.tickercash.tapereader.ticker.QuoteBoyType;
 
 public class ConfigTest {
     @Test

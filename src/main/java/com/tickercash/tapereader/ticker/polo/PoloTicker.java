@@ -1,4 +1,4 @@
-package com.tickercash.tapereader.ticker;
+package com.tickercash.tapereader.ticker.polo;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -12,15 +12,13 @@ import org.knowm.xchange.poloniex.service.PoloniexMarketDataService;
 import org.knowm.xchange.poloniex.service.PoloniexMarketDataServiceRaw;
 
 import com.google.inject.Inject;
-import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.dsl.Disruptor;
-import com.tickercash.tapereader.framework.EventHandler;
-import com.tickercash.tapereader.framework.Ticker;
+import com.tickercash.tapereader.framework.Tape;
 import com.tickercash.tapereader.model.Tick;
-import com.tickercash.tapereader.util.DisruptorClerk;
+import com.tickercash.tapereader.ticker.AbstractTicker;
+import com.tickercash.tapereader.ticker.TickerType;
 import com.tickercash.tapereader.util.UniqueCurrentTimeMS;
 
-public class PoloTicker implements Ticker {
+public class PoloTicker extends AbstractTicker {
     
     protected AtomicBoolean running = new AtomicBoolean(false);
     
@@ -30,17 +28,9 @@ public class PoloTicker implements Ticker {
     
     private PoloniexMarketDataServiceRaw marketDataService;
     
-    protected final Disruptor<Tick> disruptor;
-    
-    protected final RingBuffer<Tick> ringBuffer;
-    
-    @SuppressWarnings("unchecked")
     @Inject
-    public PoloTicker(EventHandler handler) {
-        disruptor = DisruptorClerk.createDefaultMarketEventDisruptor();
-        ringBuffer = disruptor.getRingBuffer();
-        disruptor.handleEventsWith(handler::onEvent);
-        disruptor.start();
+    public PoloTicker(Tape tape) {
+        super(tape);
         EXCHANGE = ExchangeFactory.INSTANCE.createExchange(PoloniexExchange.class.getName());
         marketDataService = (PoloniexMarketDataServiceRaw) (PoloniexMarketDataService) EXCHANGE.getMarketDataService();
     }

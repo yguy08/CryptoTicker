@@ -3,17 +3,17 @@ package com.tickercash.tapereader.handler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.tickercash.tapereader.framework.EventHandler;
-import com.tickercash.tapereader.model.Tick;
+import com.lmax.disruptor.EventHandler;
+import com.tickercash.tapereader.framework.Event;
 
-public class CounterHandler implements EventHandler {
+public class CounterHandler implements EventHandler<Event> {
     
     private static final Logger LOGGER = LogManager.getLogger("CounterHandler");
     
     private static int count;
 
     @Override
-    public void onEvent(Tick event, long sequence, boolean endOfBatch) throws Exception {
+    public void onEvent(Event event, long sequence, boolean endOfBatch) throws Exception {
         LOGGER.info(++count);
     }
 }

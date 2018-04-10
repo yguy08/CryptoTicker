@@ -7,11 +7,11 @@ import java.nio.file.Paths;
 
 import org.yaml.snakeyaml.Yaml;
 
-import com.tickercash.tapereader.ticker.QuoteBoyType;
+import com.tickercash.tapereader.ticker.TickerType;
 
 public class Config {
     
-    private QuoteBoyType quoteBoyType;
+    private TickerType quoteBoyType;
     
     private int quoteThrottle;
     
@@ -25,11 +25,11 @@ public class Config {
     
     private String readCsvPath;
     
-    public QuoteBoyType getQuoteBoyType() {
+    public TickerType getQuoteBoyType() {
         return quoteBoyType;
     }
 
-    public void setQuoteBoyType(QuoteBoyType quoteBoyType) {
+    public void setQuoteBoyType(TickerType quoteBoyType) {
         this.quoteBoyType = quoteBoyType;
     }
 

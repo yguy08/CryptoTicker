@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import org.junit.Test;
 
 import com.tickercash.tapereader.framework.HistoricalTicker;
-import com.tickercash.tapereader.ticker.CMCHistoricalDataClerk;
+import com.tickercash.tapereader.ticker.cmc.CMCHistoricalTicker;
 
 public class CMCHistoricalDataClerkTest {
     
@@ -14,7 +14,7 @@ public class CMCHistoricalDataClerkTest {
 
     @Test
     public void testBitcoinHistorical() throws Exception {
-        HistoricalTicker hdc = new CMCHistoricalDataClerk();
+        HistoricalTicker hdc = new CMCHistoricalTicker();
         hdc.getHistoricalTicks("Bitcoin", testDate.minusYears(5), testDate)
            .stream()
            .forEach(t -> assertNotNull(t));
