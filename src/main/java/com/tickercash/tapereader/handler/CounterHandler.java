@@ -3,10 +3,10 @@ package com.tickercash.tapereader.handler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.tickercash.tapereader.framework.Handler;
+import com.tickercash.tapereader.framework.EventHandler;
 import com.tickercash.tapereader.model.Tick;
 
-public class CounterHandler implements Handler {
+public class CounterHandler implements EventHandler {
     
     private static final Logger LOGGER = LogManager.getLogger("CounterHandler");
     
