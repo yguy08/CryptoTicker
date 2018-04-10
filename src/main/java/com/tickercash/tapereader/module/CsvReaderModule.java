@@ -8,18 +8,17 @@ import com.tickercash.tapereader.framework.TipStatement;
 import com.tickercash.tapereader.handler.SmartTape;
 import com.tickercash.tapereader.listener.OrderEventListener;
 import com.tickercash.tapereader.listener.TickEventListener;
-import com.tickercash.tapereader.ticker.FakeTicker;
-import com.tickercash.tapereader.tip.trend.DefaultTipStatement;
+import com.tickercash.tapereader.ticker.CsvTicker;
+import com.tickercash.tapereader.tip.trend.BuyHighSellLow;
 
-public class TapeReaderModule extends AbstractModule {
-
+public class CsvReaderModule extends AbstractModule {
     @Override
     protected void configure() {
-        bind(Ticker.class).to(FakeTicker.class);
+        install(new PropertiesModule());
+        bind(Ticker.class).to(CsvTicker.class);
         bind(EventHandler.class).to(SmartTape.class);
-        bind(TipStatement.class).to(DefaultTipStatement.class);
+        bind(TipStatement.class).to(BuyHighSellLow.class);
         bind(TickEventListener.class).to(TapeReader.class);
         bind(OrderEventListener.class).to(TapeReader.class);
     }
-
 }
