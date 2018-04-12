@@ -6,8 +6,8 @@ import com.espertech.esper.client.EPStatement;
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
 import com.google.inject.Inject;
+import com.tickercash.tapereader.config.EsperStatement;
 import com.tickercash.tapereader.framework.Tape;
-import com.tickercash.tapereader.framework.TipStatement;
 import com.tickercash.tapereader.listener.TickEventListener;
 import com.tickercash.tapereader.model.Tick;
 
@@ -20,10 +20,10 @@ public class SmartTape implements Tape, UpdateListener {
     private TickEventListener listener;
     
     @Inject
-    public SmartTape(TipStatement tipStmt, TickEventListener listener) {
+    public SmartTape(@EsperStatement String esperPath, TickEventListener listener) {
         engine = EPServiceProviderManager.getDefaultProvider();
         engine.getEPAdministrator().getConfiguration().addEventType(Tick.class);
-        statement = engine.getEPAdministrator().createEPL(tipStmt.toString());
+        statement = engine.getEPAdministrator().createEPL(esperPath);
         statement.addListener(this);
         this.listener = listener;
     }

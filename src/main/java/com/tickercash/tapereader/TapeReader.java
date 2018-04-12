@@ -12,7 +12,7 @@ public class TapeReader implements TickEventListener, OrderEventListener {
     private Ticker ticker;
     
     @Inject
-    private TapeReader(Ticker ticker) {
+    protected TapeReader(Ticker ticker) {
         this.ticker = ticker;
     }
     
