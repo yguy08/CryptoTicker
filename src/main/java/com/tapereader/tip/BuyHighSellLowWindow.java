@@ -2,7 +2,7 @@ package com.tapereader.tip;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.tickercash.tapereader.TapeReader;
+import com.tapereader.TapeReader;
 
 public class BuyHighSellLowWindow {
 

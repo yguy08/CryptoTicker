@@ -1,7 +1,0 @@
-!!com.tickercash.tapereader.config.Config
-quoteBoyType: POLONIEX
-quoteThrottle: 5000
-wireURL: tcp://localhost:61616
-preFeed: true
-tip: All
-tipPath: src/main/resources/W.epl

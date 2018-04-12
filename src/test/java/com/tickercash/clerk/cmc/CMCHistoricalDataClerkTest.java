@@ -5,8 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import java.time.LocalDateTime;
 import org.junit.Test;
 
-import com.tickercash.tapereader.framework.HistoricalTicker;
-import com.tickercash.tapereader.ticker.cmc.CMCHistoricalTicker;
+import com.tapereader.framework.HistoricalTicker;
+import com.tapereader.ticker.cmc.CMCHistoricalTicker;
 
 public class CMCHistoricalDataClerkTest {
     

@@ -1,14 +1,14 @@
 package com.tapereader.tip;
 
 import com.google.inject.AbstractModule;
-import com.tickercash.tapereader.config.EsperConfig;
-import com.tickercash.tapereader.config.EsperModule;
-import com.tickercash.tapereader.framework.Tape;
-import com.tickercash.tapereader.framework.Ticker;
-import com.tickercash.tapereader.listener.OrderEventListener;
-import com.tickercash.tapereader.listener.TickEventListener;
+import com.tapereader.config.EsperConfig;
+import com.tapereader.config.EsperModule;
+import com.tapereader.framework.Tape;
+import com.tapereader.framework.Ticker;
+import com.tapereader.listener.OrderEventListener;
+import com.tapereader.listener.TickEventListener;
+import com.tapereader.ticker.FakeTicker;
 import com.tickercash.tapereader.tape.SmartTape;
-import com.tickercash.tapereader.ticker.FakeTicker;
 
 public class BuyHighSellLowModule extends AbstractModule {
     
