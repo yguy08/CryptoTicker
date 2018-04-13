@@ -42,6 +42,7 @@ public class PoloTicker extends AbstractTicker {
 
     @Override
     public void start() throws Exception {
+        disruptor.start();
         running.set(true);
         while(running.get()) {
             marketDataService.getAllPoloniexTickers().entrySet().stream().forEach(s -> ringBuffer.publishEvent(this::translateTo, s.getKey(), s.getValue()));

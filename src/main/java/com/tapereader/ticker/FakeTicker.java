@@ -3,28 +3,17 @@ package com.tapereader.ticker;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.google.inject.Inject;
-import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.dsl.Disruptor;
 import com.tapereader.framework.Tape;
-import com.tapereader.framework.Ticker;
 import com.tapereader.model.Tick;
-import com.tapereader.util.DisruptorClerk;
 import com.tapereader.util.UniqueCurrentTimeMS;
 
-@SuppressWarnings({ "unchecked" })
-public class FakeTicker implements Ticker {
+public class FakeTicker extends AbstractTicker {
     
-    protected final AtomicBoolean running = new AtomicBoolean(false);
-    
-    protected final Disruptor<Tick> disruptor;
-    
-    protected final RingBuffer<Tick> ringBuffer;    
+    protected final AtomicBoolean running = new AtomicBoolean(false);   
     
     @Inject
     protected FakeTicker(Tape tape) {
-        disruptor = DisruptorClerk.createDefaultMarketEventDisruptor();
-        ringBuffer = disruptor.getRingBuffer();
-        disruptor.handleEventsWith(tape::onEvent);
+        super(tape);
         disruptor.start();
     }
 

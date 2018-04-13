@@ -7,11 +7,11 @@ import java.lang.annotation.*;
 import com.google.inject.BindingAnnotation;
 
 /**
- * Annotates the Broker URL of Active MQ Broker
+ * Annotates the Path to Esper Module
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @BindingAnnotation
-public @interface ActiveMQBrokerURL {
+public @interface StatementName {
 
 }

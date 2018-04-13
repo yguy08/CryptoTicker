@@ -21,13 +21,12 @@ public class TapeReader implements TickEventListener, OrderEventListener {
     }
 
     @Override
-    public void onTick(Tick tick) {
+    public void update(Tick tick) {
         System.out.println(tick);
     }
 
     @Override
     public void onOrder(Order order) {
-        // TODO Auto-generated method stub
         
     }
     

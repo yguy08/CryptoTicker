@@ -23,11 +23,13 @@ public abstract class AbstractTicker implements Ticker {
     
     protected final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     
+    protected Tape tape;
+    
     @Inject
     public AbstractTicker(Tape tape) {
         disruptor = DisruptorClerk.createDefaultMarketEventDisruptor();
         ringBuffer = disruptor.getRingBuffer();
-        disruptor.handleEventsWith(tape::onEvent);
+        disruptor.handleEventsWith(tape);
     }
 
 }
