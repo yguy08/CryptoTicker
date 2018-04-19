@@ -1,15 +1,15 @@
 package com.tapereader.framework;
 
-public class MarketEvent<T> {
+public class MarketEvent {
 
-    private T value;
-    
-    public T get() {
-        return value;
-    }
-    
-    public void set(T value){
-        this.value = value;
-    }
-    
+	protected MarketEvent event;
+	
+	public void set(MarketEvent value){
+		event = value;
+	}
+	
+	public MarketEvent get(){
+		return event;
+	}
+
 }

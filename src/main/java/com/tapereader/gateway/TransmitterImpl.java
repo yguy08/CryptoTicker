@@ -15,11 +15,11 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.tapereader.config.ActiveMQBrokerURL;
 import com.tapereader.config.TopicName;
-import com.tapereader.framework.TickerGateway;
+import com.tapereader.framework.Transmitter;
 import com.tapereader.model.Tick;
 import com.tapereader.util.DisruptorClerk;
 
-public class TickerGatewayImpl implements TickerGateway {
+public class TransmitterImpl implements Transmitter {
     
     private final String BROKER_URL;
     private final String UPDATE_TOPIC_NAME;
@@ -27,12 +27,12 @@ public class TickerGatewayImpl implements TickerGateway {
     private Session session;
     private MessageProducer updateProducer;
     
-    protected final Disruptor<Tick> disruptor;
+    private final Disruptor<Tick> disruptor;
     
-    protected final RingBuffer<Tick> ringBuffer;
+    private final RingBuffer<Tick> ringBuffer;
     
     @Inject
-    private TickerGatewayImpl(@ActiveMQBrokerURL String brokerURL, @TopicName String topicName) throws Exception {
+    private TransmitterImpl(@ActiveMQBrokerURL String brokerURL, @TopicName String topicName) throws Exception {
         BROKER_URL = brokerURL;
         UPDATE_TOPIC_NAME = topicName;
         initialize();

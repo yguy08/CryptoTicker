@@ -1,4 +1,4 @@
-package com.tickercash.clerk.cmc;
+package com.tapereader.ticker.cmc;
 
 import static org.junit.Assert.assertNotNull;
 

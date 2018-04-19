@@ -2,7 +2,7 @@ package com.tapereader.framework;
 
 import com.tapereader.model.Tick;
 
-public interface TickerGateway {
+public interface Transmitter {
     
     void transmit(Tick tick) throws Exception;
     

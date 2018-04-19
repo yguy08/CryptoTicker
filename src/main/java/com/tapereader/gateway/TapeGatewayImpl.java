@@ -71,5 +71,7 @@ public class TapeGatewayImpl implements TapeGateway, MessageListener {
     private void update(String newState) throws JMSException {
         eventBus.post(newState);
     }
+    
+    //Add disruptor like transmitter and then have addEventHandler and listen for a bunch of events?
 
 }

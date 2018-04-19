@@ -1,4 +1,4 @@
-package com.tickercash.tapereader.window;
+package com.tapereader.window;
 
 import java.io.IOException;
 

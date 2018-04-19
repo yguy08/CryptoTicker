@@ -1,4 +1,4 @@
-package com.tickercash.tapereader.config;
+package com.tapereader.config;
 
 import org.junit.Test;
 

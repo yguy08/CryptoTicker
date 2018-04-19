@@ -1,6 +1,8 @@
 package com.tapereader.model;
 
-public class Tick {
+import com.tapereader.framework.MarketEvent;
+
+public class Tick extends MarketEvent {
     
     private String symbol;
     private String feed;

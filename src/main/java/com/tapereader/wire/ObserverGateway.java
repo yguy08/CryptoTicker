@@ -18,8 +18,11 @@ import com.google.common.eventbus.EventBus;
 public class ObserverGateway implements MessageListener {
 
     public static final String UPDATE_TOPIC_NAME = "jms/Update";
+    
     private Connection connection;
+    
     private MessageConsumer updateConsumer;
+    
     private EventBus eventBus;
 
     protected ObserverGateway() {
