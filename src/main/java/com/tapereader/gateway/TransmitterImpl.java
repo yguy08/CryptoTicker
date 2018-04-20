@@ -15,9 +15,9 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.tapereader.config.ActiveMQBrokerURL;
 import com.tapereader.config.TopicName;
+import com.tapereader.framework.DisruptorClerk;
 import com.tapereader.framework.Transmitter;
 import com.tapereader.model.Tick;
-import com.tapereader.util.DisruptorClerk;
 
 public class TransmitterImpl implements Transmitter {
     

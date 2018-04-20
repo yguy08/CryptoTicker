@@ -6,11 +6,11 @@ import com.google.inject.Inject;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
+import com.tapereader.framework.DisruptorClerk;
 import com.tapereader.framework.MarketEvent;
 import com.tapereader.framework.Ticker;
 import com.tapereader.framework.Transmitter;
 import com.tapereader.model.Tick;
-import com.tapereader.util.DisruptorClerk;
 import com.tapereader.util.UniqueCurrentTimeMS;
 
 public class FakeTicker implements Ticker, EventHandler<MarketEvent> {

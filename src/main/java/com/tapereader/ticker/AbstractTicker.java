@@ -7,10 +7,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.google.inject.Inject;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
+import com.tapereader.framework.DisruptorClerk;
 import com.tapereader.framework.Tape;
 import com.tapereader.framework.Ticker;
 import com.tapereader.model.Tick;
-import com.tapereader.util.DisruptorClerk;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractTicker implements Ticker {

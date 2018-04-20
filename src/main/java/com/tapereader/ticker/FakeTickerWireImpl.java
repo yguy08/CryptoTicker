@@ -6,12 +6,12 @@ import com.google.inject.Inject;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
+import com.tapereader.framework.DisruptorClerk;
 import com.tapereader.framework.Event;
 import com.tapereader.framework.MarketEvent;
 import com.tapereader.framework.Ticker;
 import com.tapereader.framework.Transmitter;
 import com.tapereader.handler.CounterHandler;
-import com.tapereader.util.DisruptorClerk;
 import com.tapereader.util.UniqueCurrentTimeMS;
 
 import net.openhft.chronicle.bytes.Bytes;

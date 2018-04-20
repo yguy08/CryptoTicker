@@ -26,6 +26,7 @@ public class ChronicleWireTest {
         Data quote2 = new Data();
         quote2.readMarshallable(wire);
         System.out.println(quote2);
+        
     }
 
 }
