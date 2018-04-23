@@ -1,4 +1,4 @@
-package com.tapereader.tape;
+package com.tapereader.engine;
 
 import com.espertech.esper.client.Configuration;
 import com.espertech.esper.client.EPServiceProvider;
@@ -10,19 +10,19 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.tapereader.config.ModuleName;
 import com.tapereader.config.StatementName;
-import com.tapereader.framework.Tape;
+import com.tapereader.framework.Engine;
 import com.tapereader.listener.TickEventListener;
 import com.tapereader.model.Tick;
 
 @Singleton
-public class DefaultTape implements Tape {
+public class DefaultEngine implements Engine {
     
     private EventBus eventBus;
     
     private EPServiceProvider engine;
     
     @Inject
-    public DefaultTape(@ModuleName String moduleName, @StatementName String statementName, TickEventListener listener) throws Exception {
+    public DefaultEngine(@ModuleName String moduleName, @StatementName String statementName, TickEventListener listener) throws Exception {
         eventBus = new EventBus();
         Configuration configuration = new Configuration();
         configuration.configure();

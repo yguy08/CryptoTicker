@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.tapereader.framework.DisruptorClerk;
-import com.tapereader.framework.Tape;
+import com.tapereader.framework.Engine;
 import com.tapereader.framework.Ticker;
 import com.tapereader.model.Tick;
 
@@ -23,10 +23,10 @@ public abstract class AbstractTicker implements Ticker {
     
     protected final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     
-    protected Tape tape;
+    protected Engine tape;
     
     @Inject
-    public AbstractTicker(Tape tape) {
+    public AbstractTicker(Engine tape) {
         disruptor = DisruptorClerk.createDefaultMarketEventDisruptor();
         ringBuffer = disruptor.getRingBuffer();
         disruptor.handleEventsWith(tape);

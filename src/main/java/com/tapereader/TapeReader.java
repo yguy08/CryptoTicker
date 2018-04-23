@@ -2,7 +2,8 @@ package com.tapereader;
 
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
-import com.tapereader.framework.TapeGateway;
+import com.tapereader.framework.MarketEvent;
+import com.tapereader.framework.Receiver;
 import com.tapereader.framework.Ticker;
 import com.tapereader.listener.OrderEventListener;
 import com.tapereader.listener.TickEventListener;
@@ -13,10 +14,10 @@ public class TapeReader implements TickEventListener, OrderEventListener {
     
     private Ticker ticker;
     
-    private TapeGateway tape;
+    private Receiver tape;
     
     @Inject
-    protected TapeReader(Ticker ticker, TapeGateway tape) {
+    protected TapeReader(Ticker ticker, Receiver tape) {
         this.ticker = ticker;
         this.tape = tape;
     }
@@ -36,6 +37,7 @@ public class TapeReader implements TickEventListener, OrderEventListener {
     }
 
     @Override
+    @Subscribe
     public void update(Tick tick) {
         System.out.println(tick);
     }
@@ -43,11 +45,6 @@ public class TapeReader implements TickEventListener, OrderEventListener {
     @Override
     public void onOrder(Order order) {
         
-    }
-    
-    @Subscribe
-    public void update(String event){
-    	System.out.println("Tape Reader:"+event);
     }
     
 }

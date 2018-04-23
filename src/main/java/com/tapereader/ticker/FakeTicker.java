@@ -47,7 +47,7 @@ public class FakeTicker implements Ticker, EventHandler<MarketEvent> {
 
 	@Override
 	public void onEvent(MarketEvent event, long sequence, boolean endOfBatch) throws Exception {
-		transmitter.transmit((Tick) event.get());
+		transmitter.transmit(event.get().toString());
 	}
 
 }

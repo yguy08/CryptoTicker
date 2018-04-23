@@ -8,7 +8,7 @@ import org.knowm.xchange.coinmarketcap.CoinMarketCapExchange;
 import org.knowm.xchange.coinmarketcap.dto.marketdata.CoinMarketCapTicker;
 import org.knowm.xchange.coinmarketcap.service.CoinMarketCapMarketDataService;
 
-import com.tapereader.framework.Tape;
+import com.tapereader.framework.Engine;
 import com.tapereader.model.Tick;
 import com.tapereader.ticker.AbstractTicker;
 import com.tapereader.ticker.TickerType;
@@ -22,7 +22,7 @@ public class CMCTicker extends AbstractTicker {
     
     private static final Logger LOGGER = LogManager.getLogger("CMCQuoteBoy");
     
-    public CMCTicker(Tape tape) {
+    public CMCTicker(Engine tape) {
         super(tape);
         CMC_EXCHANGE = ExchangeFactory.INSTANCE.createExchange(CoinMarketCapExchange.class.getName());
         CMC_MARKET_DATA_SERVICE = (CoinMarketCapMarketDataService) CMC_EXCHANGE.getMarketDataService();

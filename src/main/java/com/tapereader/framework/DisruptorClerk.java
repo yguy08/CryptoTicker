@@ -14,17 +14,9 @@ public class DisruptorClerk {
                 ProducerType.SINGLE, new BlockingWaitStrategy());
     }
     
-    public static final Disruptor<String> createStringDisruptor(){
-        return new Disruptor<String>(String::new, 1024, Executors.defaultThreadFactory(), ProducerType.SINGLE, new BlockingWaitStrategy());
-    }
-    
     public static final Disruptor<MarketEvent> newMarketEventDisruptor(){
         return new Disruptor<MarketEvent>(MarketEvent::new, 1024, Executors.defaultThreadFactory(),
                 ProducerType.SINGLE, new BlockingWaitStrategy());
-    }
-    
-    public static final Disruptor newDisruptor(){
-        return new Disruptor(Object::new, 1024, Executors.defaultThreadFactory(), ProducerType.SINGLE, new BlockingWaitStrategy());
     }
 
 }

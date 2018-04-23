@@ -12,7 +12,7 @@ import org.knowm.xchange.poloniex.service.PoloniexMarketDataService;
 import org.knowm.xchange.poloniex.service.PoloniexMarketDataServiceRaw;
 
 import com.google.inject.Inject;
-import com.tapereader.framework.Tape;
+import com.tapereader.framework.Engine;
 import com.tapereader.model.Tick;
 import com.tapereader.ticker.AbstractTicker;
 import com.tapereader.ticker.TickerType;
@@ -29,7 +29,7 @@ public class PoloTicker extends AbstractTicker {
     private PoloniexMarketDataServiceRaw marketDataService;
     
     @Inject
-    public PoloTicker(Tape tape) {
+    public PoloTicker(Engine tape) {
         super(tape);
         EXCHANGE = ExchangeFactory.INSTANCE.createExchange(PoloniexExchange.class.getName());
         marketDataService = (PoloniexMarketDataServiceRaw) (PoloniexMarketDataService) EXCHANGE.getMarketDataService();

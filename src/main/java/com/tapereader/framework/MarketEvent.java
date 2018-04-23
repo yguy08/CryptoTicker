@@ -1,14 +1,16 @@
 package com.tapereader.framework;
 
-public class MarketEvent {
+import net.openhft.chronicle.wire.AbstractMarshallable;
 
-	protected MarketEvent event;
+public class MarketEvent extends AbstractMarshallable {
+
+	private Object event;
 	
-	public void set(MarketEvent value){
+	public void set(Object value){
 		event = value;
 	}
 	
-	public MarketEvent get(){
+	public Object get(){
 		return event;
 	}
 

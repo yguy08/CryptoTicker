@@ -77,9 +77,4 @@ public class Tick extends MarketEvent {
     public int getVolume() {
         return volume;
     }
-    
-    @Override
-    public String toString() {
-        return this.symbol+" "+this.feed+" "+this.timestamp+" "+this.last;
-    }
 }
