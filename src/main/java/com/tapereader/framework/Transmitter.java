@@ -6,4 +6,6 @@ public interface Transmitter {
     
     void endTransmission() throws Exception;
     
+    void transmit(Object event, long sequence, boolean endOfBatch) throws Exception;
+    
 }

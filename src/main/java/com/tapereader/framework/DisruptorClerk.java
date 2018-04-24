@@ -9,13 +9,8 @@ import com.tapereader.model.Tick;
 
 public class DisruptorClerk {
 
-    public static final Disruptor<Tick> createDefaultMarketEventDisruptor(){
+    public static final Disruptor<Tick> newTickDisruptor(){
         return new Disruptor<Tick>(Tick::new, 1024, Executors.defaultThreadFactory(),
-                ProducerType.SINGLE, new BlockingWaitStrategy());
-    }
-    
-    public static final Disruptor<MarketEvent> newMarketEventDisruptor(){
-        return new Disruptor<MarketEvent>(MarketEvent::new, 1024, Executors.defaultThreadFactory(),
                 ProducerType.SINGLE, new BlockingWaitStrategy());
     }
 
