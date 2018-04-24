@@ -3,32 +3,29 @@ package com.tapereader.ticker;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.google.inject.Inject;
-import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.tapereader.framework.DisruptorClerk;
-import com.tapereader.framework.MarketEvent;
 import com.tapereader.framework.Ticker;
 import com.tapereader.framework.Transmitter;
+import com.tapereader.handler.CounterHandler;
 import com.tapereader.model.Tick;
 import com.tapereader.util.UniqueCurrentTimeMS;
 
-public class FakeTicker implements Ticker, EventHandler<MarketEvent> {
+public class FakeTicker implements Ticker {
     
-    protected final AtomicBoolean running = new AtomicBoolean(false);   
+    protected final AtomicBoolean running = new AtomicBoolean(false);
     
-    private final Transmitter transmitter;
+    private final Disruptor<Tick> disruptor;
     
-    private final Disruptor<MarketEvent> disruptor;
+    private final RingBuffer<Tick> ringBuffer;
     
-    private final RingBuffer<MarketEvent> ringBuffer;
-    
+    @SuppressWarnings("unchecked")
     @Inject
     protected FakeTicker(Transmitter transmitter) {
-    	this.transmitter = transmitter;
-    	disruptor = DisruptorClerk.newMarketEventDisruptor();
+    	disruptor = DisruptorClerk.newTickDisruptor();
     	ringBuffer = disruptor.getRingBuffer();
-    	disruptor.handleEventsWith(this);
+    	disruptor.handleEventsWith(transmitter::transmit, new CounterHandler());
         disruptor.start();
     }
 
@@ -41,13 +38,8 @@ public class FakeTicker implements Ticker, EventHandler<MarketEvent> {
         }
     }
     
-    private final void translateTo(MarketEvent event, long sequence){
-        event.set(new Tick("BTC/USD", "FAKE", UniqueCurrentTimeMS.uniqueCurrentTimeMS(), 10000.00));
+    private final void translateTo(Tick event, long sequence){
+        event.set("BTC/USD", "FAKE", UniqueCurrentTimeMS.uniqueCurrentTimeMS(), 10000.00);
     }
-
-	@Override
-	public void onEvent(MarketEvent event, long sequence, boolean endOfBatch) throws Exception {
-		transmitter.transmit(event.get().toString());
-	}
 
 }
