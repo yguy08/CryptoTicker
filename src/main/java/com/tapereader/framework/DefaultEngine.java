@@ -7,7 +7,7 @@ import com.espertech.esper.client.deploy.EPDeploymentAdmin;
 import com.espertech.esper.client.deploy.Module;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
-import com.tapereader.config.ModuleName;
+import com.tapereader.annotation.ModuleName;
 
 public class DefaultEngine implements Engine {
     

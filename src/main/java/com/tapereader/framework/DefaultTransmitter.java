@@ -11,8 +11,8 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerService;
 
 import com.google.inject.Inject;
-import com.tapereader.config.ActiveMQBrokerURL;
-import com.tapereader.config.TopicName;
+import com.tapereader.annotation.ActiveMQBrokerURL;
+import com.tapereader.annotation.TopicName;
 
 public class DefaultTransmitter implements Transmitter {
     

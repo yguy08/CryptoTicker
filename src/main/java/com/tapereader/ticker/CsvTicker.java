@@ -13,7 +13,7 @@ import org.h2.tools.Csv;
 import com.google.inject.Inject;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
-import com.tapereader.config.CsvFile;
+import com.tapereader.annotation.CsvFile;
 import com.tapereader.framework.CounterHandler;
 import com.tapereader.framework.DisruptorClerk;
 import com.tapereader.framework.Tick;

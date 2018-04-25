@@ -1,4 +1,4 @@
-package com.tapereader.bucketshop;
+package com.tapereader.framework;
 
 import com.tapereader.gui.Displayable;
 

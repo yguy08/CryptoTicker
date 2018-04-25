@@ -22,7 +22,7 @@ import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.ComboBox.Listener;
 import com.googlecode.lanterna.gui2.Window.Hint;
-import com.tapereader.bucketshop.BucketShopType;
+import com.tapereader.framework.BucketShopType;
 import com.tapereader.ticker.TickerType;
 
 public class ServerTUI extends ScreenBase {

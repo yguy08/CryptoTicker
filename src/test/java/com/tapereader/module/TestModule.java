@@ -2,8 +2,8 @@ package com.tapereader.module;
 
 import com.google.inject.AbstractModule;
 import com.tapereader.TapeReader;
-import com.tapereader.config.ActiveMQBrokerURL;
-import com.tapereader.config.TopicName;
+import com.tapereader.annotation.ActiveMQBrokerURL;
+import com.tapereader.annotation.TopicName;
 import com.tapereader.framework.DefaultReceiver;
 import com.tapereader.framework.DefaultTransmitter;
 import com.tapereader.framework.OrderEventListener;

@@ -1,4 +1,4 @@
-package com.tapereader.config;
+package com.tapereader.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
