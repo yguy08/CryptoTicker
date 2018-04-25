@@ -13,7 +13,7 @@ import org.knowm.xchange.poloniex.service.PoloniexMarketDataServiceRaw;
 
 import com.google.inject.Inject;
 import com.tapereader.framework.Engine;
-import com.tapereader.model.Tick;
+import com.tapereader.framework.Tick;
 import com.tapereader.ticker.AbstractTicker;
 import com.tapereader.ticker.TickerType;
 import com.tapereader.util.UniqueCurrentTimeMS;

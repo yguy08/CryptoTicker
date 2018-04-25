@@ -2,24 +2,27 @@ package com.tapereader;
 
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
-import com.tapereader.framework.MarketEvent;
+import com.tapereader.framework.Engine;
+import com.tapereader.framework.Order;
+import com.tapereader.framework.OrderEventListener;
 import com.tapereader.framework.Receiver;
+import com.tapereader.framework.Tick;
+import com.tapereader.framework.TickEventListener;
 import com.tapereader.framework.Ticker;
-import com.tapereader.listener.OrderEventListener;
-import com.tapereader.listener.TickEventListener;
-import com.tapereader.model.Order;
-import com.tapereader.model.Tick;
 
 public class TapeReader implements TickEventListener, OrderEventListener {
     
     private Ticker ticker;
     
-    private Receiver tape;
+    private Receiver receiver;
+    
+    protected Engine engine;
     
     @Inject
-    protected TapeReader(Ticker ticker, Receiver tape) {
+    protected TapeReader(Ticker ticker, Receiver receiver, Engine engine) {
         this.ticker = ticker;
-        this.tape = tape;
+        this.receiver = receiver;
+        this.engine = engine;
     }
     
     public void readTheTape() throws Exception {
@@ -32,13 +35,13 @@ public class TapeReader implements TickEventListener, OrderEventListener {
         });
         t.setDaemon(true);
         t.start();
-        tape.initialize(this);
-        tape.read();
+        receiver.initialize(engine);
+        receiver.read();
     }
 
     @Override
     @Subscribe
-    public void update(Tick tick) {
+    public void onTick(Tick tick) {
         System.out.println(tick);
     }
 

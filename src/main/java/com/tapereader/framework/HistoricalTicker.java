@@ -3,7 +3,6 @@ package com.tapereader.framework;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.tapereader.model.Tick;
 import com.tapereader.ticker.TickerType;
 import com.tapereader.ticker.cmc.CMCHistoricalTicker;
 

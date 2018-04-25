@@ -1,6 +1,4 @@
-package com.tapereader.listener;
-
-import com.tapereader.model.Order;
+package com.tapereader.framework;
 
 public interface OrderEventListener {
     void onOrder(Order order);

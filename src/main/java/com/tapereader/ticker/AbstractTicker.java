@@ -9,8 +9,8 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.tapereader.framework.DisruptorClerk;
 import com.tapereader.framework.Engine;
+import com.tapereader.framework.Tick;
 import com.tapereader.framework.Ticker;
-import com.tapereader.model.Tick;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractTicker implements Ticker {
@@ -27,9 +27,9 @@ public abstract class AbstractTicker implements Ticker {
     
     @Inject
     public AbstractTicker(Engine tape) {
-        disruptor = DisruptorClerk.createDefaultMarketEventDisruptor();
+        disruptor = DisruptorClerk.newTickDisruptor();
         ringBuffer = disruptor.getRingBuffer();
-        disruptor.handleEventsWith(tape);
+        //disruptor.handleEventsWith(tape);
     }
 
 }

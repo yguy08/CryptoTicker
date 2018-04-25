@@ -13,7 +13,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import com.tapereader.framework.HistoricalTicker;
-import com.tapereader.model.Tick;
+import com.tapereader.framework.Tick;
 import com.tapereader.util.DateTimePatterns;
 
 public class CMCHistoricalTicker implements HistoricalTicker {

@@ -5,7 +5,6 @@ import java.util.concurrent.Executors;
 import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
-import com.tapereader.model.Tick;
 
 public class DisruptorClerk {
 

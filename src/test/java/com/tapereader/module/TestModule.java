@@ -4,13 +4,13 @@ import com.google.inject.AbstractModule;
 import com.tapereader.TapeReader;
 import com.tapereader.config.ActiveMQBrokerURL;
 import com.tapereader.config.TopicName;
+import com.tapereader.framework.DefaultReceiver;
+import com.tapereader.framework.DefaultTransmitter;
+import com.tapereader.framework.OrderEventListener;
 import com.tapereader.framework.Receiver;
+import com.tapereader.framework.TickEventListener;
 import com.tapereader.framework.Ticker;
 import com.tapereader.framework.Transmitter;
-import com.tapereader.gateway.DefaultReceiver;
-import com.tapereader.gateway.DefaultTransmitter;
-import com.tapereader.listener.OrderEventListener;
-import com.tapereader.listener.TickEventListener;
 import com.tapereader.ticker.FakeTicker;
 
 public class TestModule extends AbstractModule {

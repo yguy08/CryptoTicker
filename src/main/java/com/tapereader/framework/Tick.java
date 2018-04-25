@@ -1,8 +1,8 @@
-package com.tapereader.model;
+package com.tapereader.framework;
 
-import com.tapereader.framework.MarketEvent;
+import net.openhft.chronicle.wire.AbstractMarshallable;
 
-public class Tick extends MarketEvent {
+public class Tick extends AbstractMarshallable {
     
     private String symbol;
     private String feed;

@@ -83,7 +83,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <artifactId>h2</artifactId>
         <version>1.4.196</version>
     </dependency>
-	<!-- https://mvnrepository.com/artifact/com.google.inject/guice -->
 	<dependency>
 	    <groupId>com.google.inject</groupId>
 	    <artifactId>guice</artifactId>
@@ -104,7 +103,17 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	    <groupId>org.jsoup</groupId>
 	    <artifactId>jsoup</artifactId>
 	    <version>1.11.2</version>
-	</dependency>     
+	</dependency>
+	<dependency>
+    	<groupId>net.openhft</groupId>
+    	<artifactId>chronicle-wire</artifactId>
+    	<version>1.12.3</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.eclipse.jetty</groupId>
+	    <artifactId>jetty-server</artifactId>
+	    <version>9.4.9.v20180320</version>
+	</dependency>    
   </dependencies>
   
   <build>
