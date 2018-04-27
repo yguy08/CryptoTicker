@@ -25,6 +25,10 @@ public class TapeReader implements TickEventListener, OrderEventListener {
         this.engine = engine;
     }
     
+    public Engine getEngine(){
+    	return engine;
+    }
+    
     public void readTheTape() throws Exception {
         Thread t = new Thread(() -> {
         	try{

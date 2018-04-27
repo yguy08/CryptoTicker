@@ -1,0 +1,12 @@
+// Declare the name for the module
+module BuyHighSellLow;
+
+// Import any Java/.NET classes in an application package 
+import com.tapereader.framework.Tick;
+
+// Declare an event type based on a Java class in the package that was imported as above
+create schema TickEvent as Tick;
+
+// Sample statement
+@Name('Select-All')
+select * from TickEvent.win:length(5);

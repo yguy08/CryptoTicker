@@ -11,6 +11,8 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerService;
 
 import com.google.inject.Inject;
+import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.dsl.Disruptor;
 import com.tapereader.annotation.ActiveMQBrokerURL;
 import com.tapereader.annotation.TopicName;
 
@@ -21,6 +23,9 @@ public class DefaultTransmitter implements Transmitter {
     private Connection connection;
     private Session session;
     private MessageProducer updateProducer;
+    private Disruptor<String> disruptor;
+    private RingBuffer<String> ringBuffer;
+    
     
     @Inject
     private DefaultTransmitter(@ActiveMQBrokerURL String brokerURL, @TopicName String topicName) throws Exception {
