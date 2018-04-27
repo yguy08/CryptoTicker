@@ -12,9 +12,9 @@ import com.tapereader.framework.Ticker;
 
 public class TapeReader implements TickEventListener, OrderEventListener {
     
-    private Ticker ticker;
+	protected Ticker ticker;
     
-    private Receiver receiver;
+    protected Receiver receiver;
     
     protected Engine engine;
     

@@ -31,27 +31,27 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     <dependency>
         <groupId>org.knowm.xchange</groupId>
         <artifactId>xchange-core</artifactId>
-        <version>4.3.2-SNAPSHOT</version>
+        <version>4.3.6-SNAPSHOT</version>
     </dependency>    
     <dependency>
         <groupId>org.knowm.xchange</groupId>
         <artifactId>xchange-poloniex</artifactId>
-        <version>4.3.2-SNAPSHOT</version>
+        <version>4.3.6-SNAPSHOT</version>
     </dependency>    
     <dependency>
         <groupId>org.knowm.xchange</groupId>
         <artifactId>xchange-binance</artifactId>
-        <version>4.3.2-SNAPSHOT</version>
+        <version>4.3.6-SNAPSHOT</version>
     </dependency>       
     <dependency>
         <groupId>org.knowm.xchange</groupId>
         <artifactId>xchange-gdax</artifactId>
-        <version>4.3.2-SNAPSHOT</version>
+        <version>4.3.6-SNAPSHOT</version>
     </dependency>    
     <dependency>
         <groupId>org.knowm.xchange</groupId>
         <artifactId>xchange-coinmarketcap</artifactId>
-        <version>4.3.2-SNAPSHOT</version>
+        <version>4.3.6-SNAPSHOT</version>
     </dependency>       
     <dependency>
         <groupId>com.lmax</groupId>
