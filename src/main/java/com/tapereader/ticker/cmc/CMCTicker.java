@@ -8,8 +8,9 @@ import org.knowm.xchange.coinmarketcap.CoinMarketCapExchange;
 import org.knowm.xchange.coinmarketcap.dto.marketdata.CoinMarketCapTicker;
 import org.knowm.xchange.coinmarketcap.service.CoinMarketCapMarketDataService;
 
-import com.tapereader.framework.Engine;
+import com.lmax.disruptor.dsl.Disruptor;
 import com.tapereader.framework.Tick;
+import com.tapereader.framework.Transmitter;
 import com.tapereader.ticker.AbstractTicker;
 import com.tapereader.ticker.TickerType;
 import com.tapereader.util.UniqueCurrentTimeMS;
@@ -22,8 +23,8 @@ public class CMCTicker extends AbstractTicker {
     
     private static final Logger LOGGER = LogManager.getLogger("CMCQuoteBoy");
     
-    public CMCTicker(Engine tape) {
-        super(tape);
+    public CMCTicker(Transmitter transmitter) {
+        super(transmitter);
         CMC_EXCHANGE = ExchangeFactory.INSTANCE.createExchange(CoinMarketCapExchange.class.getName());
         CMC_MARKET_DATA_SERVICE = (CoinMarketCapMarketDataService) CMC_EXCHANGE.getMarketDataService();
     }
@@ -47,6 +48,11 @@ public class CMCTicker extends AbstractTicker {
     private final void translateTo(Tick event, long sequence, CoinMarketCapTicker ticker) {
         event.set(ticker.getIsoCode()+"/BTC", TickerType.CMC.toString(), 
                 UniqueCurrentTimeMS.uniqueCurrentTimeMS(), ticker.getPriceBTC().doubleValue());
+    }
+
+    @Override
+    public void handleEventsWith(Disruptor disruptor) {
+        disruptor.handleEventsWith(transmitter::transmit);        
     }
 
 }

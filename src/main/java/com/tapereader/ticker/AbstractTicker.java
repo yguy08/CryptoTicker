@@ -8,28 +8,30 @@ import com.google.inject.Inject;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.tapereader.framework.DisruptorClerk;
-import com.tapereader.framework.Engine;
 import com.tapereader.framework.Tick;
 import com.tapereader.framework.Ticker;
+import com.tapereader.framework.Transmitter;
 
-@SuppressWarnings("unchecked")
 public abstract class AbstractTicker implements Ticker {
     
     protected final Disruptor<Tick> disruptor;
     
     protected final RingBuffer<Tick> ringBuffer;
     
-    protected AtomicBoolean running = new AtomicBoolean(false);
-    
     protected final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     
-    protected Engine tape;
+    protected final Transmitter transmitter;
+    
+    protected AtomicBoolean running = new AtomicBoolean(false);
     
     @Inject
-    public AbstractTicker(Engine tape) {
+    public AbstractTicker(Transmitter transmitter) {
+        this.transmitter = transmitter;
         disruptor = DisruptorClerk.newTickDisruptor();
         ringBuffer = disruptor.getRingBuffer();
-        //disruptor.handleEventsWith(tape);
+        handleEventsWith(disruptor);
     }
+    
+    public abstract void handleEventsWith(Disruptor disruptor);
 
 }

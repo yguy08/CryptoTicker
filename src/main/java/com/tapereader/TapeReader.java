@@ -1,6 +1,8 @@
 package com.tapereader;
 
-import com.google.common.eventbus.Subscribe;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.tapereader.framework.Engine;
 import com.tapereader.framework.Order;
@@ -18,6 +20,8 @@ public class TapeReader implements TickEventListener, OrderEventListener {
     
     protected Engine engine;
     
+    protected static final Logger LOGGER = LogManager.getLogger("TapeReader");
+    
     @Inject
     protected TapeReader(Ticker ticker, Receiver receiver, Engine engine) {
         this.ticker = ticker;
@@ -29,6 +33,26 @@ public class TapeReader implements TickEventListener, OrderEventListener {
     	return engine;
     }
     
+    public Ticker getTicker() {
+        return ticker;
+    }
+
+    public void setTicker(Ticker ticker) {
+        this.ticker = ticker;
+    }
+
+    public Receiver getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(Receiver receiver) {
+        this.receiver = receiver;
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+
     public void readTheTape() throws Exception {
         Thread t = new Thread(() -> {
         	try{
@@ -44,7 +68,6 @@ public class TapeReader implements TickEventListener, OrderEventListener {
     }
 
     @Override
-    @Subscribe
     public void onTick(Tick tick) {
         System.out.println(tick);
     }

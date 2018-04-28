@@ -1,9 +1,5 @@
 package com.tapereader.ticker.polo;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.poloniex.PoloniexExchange;
@@ -12,25 +8,22 @@ import org.knowm.xchange.poloniex.service.PoloniexMarketDataService;
 import org.knowm.xchange.poloniex.service.PoloniexMarketDataServiceRaw;
 
 import com.google.inject.Inject;
-import com.tapereader.framework.Engine;
+import com.lmax.disruptor.dsl.Disruptor;
 import com.tapereader.framework.Tick;
+import com.tapereader.framework.Transmitter;
 import com.tapereader.ticker.AbstractTicker;
 import com.tapereader.ticker.TickerType;
 import com.tapereader.util.UniqueCurrentTimeMS;
 
 public class PoloTicker extends AbstractTicker {
-    
-    protected AtomicBoolean running = new AtomicBoolean(false);
-    
-    protected final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-    
+
     private Exchange EXCHANGE;
     
     private PoloniexMarketDataServiceRaw marketDataService;
     
     @Inject
-    public PoloTicker(Engine tape) {
-        super(tape);
+    public PoloTicker(Transmitter transmitter) {
+        super(transmitter);
         EXCHANGE = ExchangeFactory.INSTANCE.createExchange(PoloniexExchange.class.getName());
         marketDataService = (PoloniexMarketDataServiceRaw) (PoloniexMarketDataService) EXCHANGE.getMarketDataService();
     }
@@ -48,6 +41,11 @@ public class PoloTicker extends AbstractTicker {
             marketDataService.getAllPoloniexTickers().entrySet().stream().forEach(s -> ringBuffer.publishEvent(this::translateTo, s.getKey(), s.getValue()));
             Thread.sleep(5000);
         }
+    }
+
+    @Override
+    public void handleEventsWith(Disruptor disruptor) {
+        disruptor.handleEventsWith(transmitter::transmit);
     }
 
 }
