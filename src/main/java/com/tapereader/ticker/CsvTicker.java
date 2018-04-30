@@ -1,42 +1,25 @@
 package com.tapereader.ticker;
 
 import java.sql.ResultSet;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.h2.tools.Csv;
 
 import com.google.inject.Inject;
-import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.tapereader.annotation.CsvFile;
-import com.tapereader.framework.CounterHandler;
-import com.tapereader.framework.DisruptorClerk;
 import com.tapereader.framework.Tick;
-import com.tapereader.framework.Ticker;
 import com.tapereader.framework.Transmitter;
 
-public class CsvTicker implements Ticker {
-    
-    protected final AtomicBoolean running = new AtomicBoolean(false);
-    
-    private final Disruptor<Tick> disruptor;
-    
-    private final RingBuffer<Tick> ringBuffer;
+public class CsvTicker extends AbstractTicker {
     
     private final String path;
     
-    @SuppressWarnings("unchecked")
     @Inject
     protected CsvTicker(@CsvFile String path, Transmitter transmitter) {
+        super(transmitter);
         this.path = path;
-        disruptor = DisruptorClerk.newTickDisruptor();
-        ringBuffer = disruptor.getRingBuffer();
-        disruptor.handleEventsWith(transmitter::transmit, new CounterHandler());
         disruptor.start();
     }
 
@@ -54,6 +37,11 @@ public class CsvTicker implements Ticker {
     private final void translateTo(Tick event, long sequence, String date, double last){
         long timestamp = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toEpochSecond(ZoneOffset.UTC);
         event.set("BTC/USD", "CSV", timestamp, last);
+    }
+
+    @Override
+    public void handleEventsWith(Disruptor disruptor) {
+        disruptor.handleEventsWith(transmitter::transmit);
     }
 
 }
