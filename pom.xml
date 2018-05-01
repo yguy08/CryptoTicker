@@ -83,11 +83,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <artifactId>h2</artifactId>
         <version>1.4.196</version>
     </dependency>
-	<dependency>
-	    <groupId>com.google.inject</groupId>
-	    <artifactId>guice</artifactId>
-	    <version>4.2.0</version>
-	</dependency> 
+    <dependency>
+	<groupId>com.google.inject</groupId>
+	<artifactId>guice</artifactId>
+	<version>4.2.0</version>
+    </dependency> 
     <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
