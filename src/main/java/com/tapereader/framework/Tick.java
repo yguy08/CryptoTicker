@@ -4,6 +4,8 @@ import net.openhft.chronicle.wire.AbstractMarshallable;
 
 public class Tick extends AbstractMarshallable {
     
+    private long id;
+    
     private String symbol;
     private String feed;
     private long timestamp;
@@ -11,7 +13,15 @@ public class Tick extends AbstractMarshallable {
     private int volume;
     
     public Tick(){
-        // For Disruptor Factory
+        
+    }
+    
+    public Tick(String symbol, String feed, long timestamp, double last, int volume){
+        this.symbol = symbol;
+        this.feed = feed;
+        this.timestamp = timestamp;
+        this.last = last;
+        this.volume = volume;
     }
     
     public Tick(String symbol, String feed, long timestamp, double last){
@@ -36,6 +46,15 @@ public class Tick extends AbstractMarshallable {
         this.last = last;
         this.volume = volume;
         return this;
+    }
+    
+    public Long getId() {
+        return id;
+    }
+
+    @SuppressWarnings("unused")
+    private void setId(Long id) {
+        this.id = id;
     }
     
     public void setSymbol(String symbol){
