@@ -1,22 +1,10 @@
 package com.tapereader.framework;
 
-import com.tapereader.gui.Displayable;
-
-public enum BucketShopType implements Displayable {
+public enum BucketShopType {
     
-    POLONIEX("Poloniex"),
-    BINANCE("Binance"),
-    GDAX("GDAX"),
-    KUCOIN("Kucoin");
+    POLONIEX,
+    BINANCE,
+    GDAX,
+    KUCOIN;
     
-    private String displayName;
-    
-    BucketShopType(String displayName){
-        this.displayName = displayName;
-    }
-
-    @Override
-    public String getDisplayName() {
-        return displayName;
-    }
 }
