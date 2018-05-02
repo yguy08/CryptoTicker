@@ -25,9 +25,12 @@
 
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">create</property>
-
-        <mapping resource="com/tapereader/hibernate/Event.hbm.xml"/>
-        <mapping resource="com/tapereader/framework/Tick.hbm.xml"/>
+		
+		<!-- <mapping resource="com/tapereader/hibernate/Event.hbm.xml"/> -->
+        <!-- <mapping resource="com/tapereader/framework/Tick.hbm.xml"/> -->
+        
+        <!-- Names the annotated entity class -->
+        <mapping class="com.tapereader.framework.Tick"/>
 
     </session-factory>
 
