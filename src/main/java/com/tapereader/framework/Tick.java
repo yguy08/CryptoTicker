@@ -1,7 +1,16 @@
 package com.tapereader.framework;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+
 import net.openhft.chronicle.wire.AbstractMarshallable;
 
+@Entity
+@Table( name = "TICKS" )
 public class Tick extends AbstractMarshallable {
     
     private long id;
@@ -48,6 +57,9 @@ public class Tick extends AbstractMarshallable {
         return this;
     }
     
+    @Id
+    @GeneratedValue( generator="increment" )
+    @GenericGenerator( name="increment", strategy = "increment" )
     public Long getId() {
         return id;
     }
