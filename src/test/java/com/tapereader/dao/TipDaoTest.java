@@ -1,9 +1,12 @@
 package com.tapereader.dao;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -22,25 +25,19 @@ public class TipDaoTest {
         Injector injector = Guice.createInjector(new FakeTestModule(), new JpaPersistModule("com.tapereader"));
         init = injector.getInstance(AppInitializer.class);
         tipDao = injector.getInstance(TipDao.class);
-        tipDao.save(new Tip("BHSL"));
-        tipDao.save(new Tip("BLSH"));
     }
     
     @After
     public void tearDown(){
-        
+        //init.endAll();
     }
-
-    public static void main(String[] args) {
-        Injector injector = Guice.createInjector(new FakeTestModule(), new JpaPersistModule("com.tapereader"));
-        AppInitializer init = injector.getInstance(AppInitializer.class);
-        TipDao tipDao = injector.getInstance(TipDao.class);
+    
+    @Test
+    public void tipDaoTest() {
         tipDao.save(new Tip("BHSL"));
         tipDao.save(new Tip("BLSH"));
         List<Tip> tips = tipDao.loadAll();
-        for(Tip tip : tips){
-            System.out.println(tip.getName());
-        }
+        assertEquals(2, tips.size());
     }
-
+    
 }

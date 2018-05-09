@@ -5,9 +5,16 @@ import com.google.inject.persist.PersistService;
 
 public class AppInitializer {
     
-    @Inject(optional=true) 
-    private AppInitializer(PersistService service){
+    @Inject AppInitializer(PersistService service){
         service.start();
+    }
+    
+    public void startAll() {
+        //service.start();
+    }
+    
+    public void endAll() {
+        //service.stop();
     }
     
     
