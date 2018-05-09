@@ -9,8 +9,8 @@ import org.h2.tools.Csv;
 import com.google.inject.Inject;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.tapereader.annotation.CsvFile;
-import com.tapereader.framework.Tick;
 import com.tapereader.framework.Transmitter;
+import com.tapereader.model.Tick;
 
 public class CsvTicker extends AbstractTicker {
     

@@ -11,9 +11,9 @@ import com.google.inject.Inject;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.tapereader.framework.DisruptorClerk;
-import com.tapereader.framework.Tick;
 import com.tapereader.framework.Ticker;
 import com.tapereader.framework.Transmitter;
+import com.tapereader.model.Tick;
 
 public abstract class AbstractTicker implements Ticker {
     

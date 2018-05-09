@@ -5,6 +5,8 @@ import com.tapereader.annotation.ActiveMQBrokerURL;
 import com.tapereader.annotation.CsvFile;
 import com.tapereader.annotation.ModuleName;
 import com.tapereader.annotation.TopicName;
+import com.tapereader.dao.TipDao;
+import com.tapereader.dao.TipDaoImpl;
 import com.tapereader.framework.DefaultEngine;
 import com.tapereader.framework.DefaultReceiver;
 import com.tapereader.framework.DefaultTransmitter;
@@ -24,6 +26,7 @@ public class FakeTestModule extends AbstractModule {
         bind(Transmitter.class).to(DefaultTransmitter.class);
         bind(Receiver.class).to(DefaultReceiver.class);
         bind(Engine.class).to(DefaultEngine.class);
+        bind(TipDao.class).to(TipDaoImpl.class);
         bindConstant().annotatedWith(ModuleName.class).to(module);
         bindConstant().annotatedWith(ActiveMQBrokerURL.class).to("vm://localhost");
         bindConstant().annotatedWith(TopicName.class).to("global.update");

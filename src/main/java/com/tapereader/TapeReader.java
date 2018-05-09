@@ -5,14 +5,14 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.tapereader.framework.Engine;
-import com.tapereader.framework.Order;
 import com.tapereader.framework.OrderEventListener;
 import com.tapereader.framework.Receiver;
-import com.tapereader.framework.Tick;
 import com.tapereader.framework.TickEventListener;
 import com.tapereader.framework.Ticker;
+import com.tapereader.model.Order;
+import com.tapereader.model.Tick;
 
-public class TapeReader implements TickEventListener, OrderEventListener {
+public class TapeReader {
     
 	protected Ticker ticker;
     
@@ -67,12 +67,10 @@ public class TapeReader implements TickEventListener, OrderEventListener {
         receiver.read();
     }
 
-    @Override
     public void onTick(Tick tick) {
         System.out.println(tick);
     }
 
-    @Override
     public void onOrder(Order order) {
         
     }

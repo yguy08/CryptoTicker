@@ -1,4 +1,4 @@
-package com.tapereader.framework;
+package com.tapereader.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

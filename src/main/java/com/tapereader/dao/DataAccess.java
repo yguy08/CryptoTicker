@@ -7,8 +7,6 @@ public interface DataAccess<E> {
     
     E get(long id);
     
-    E load(long id);
-    
     List<E> loadAll();
     
     void delete(E value);

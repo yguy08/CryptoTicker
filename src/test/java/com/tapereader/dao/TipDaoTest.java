@@ -11,7 +11,6 @@ import com.google.inject.persist.jpa.JpaPersistModule;
 import com.tapereader.framework.AppInitializer;
 import com.tapereader.model.Tip;
 import com.tapereader.module.FakeTestModule;
-import com.tapereader.module.TestModule;
 
 public class TipDaoTest {
     
@@ -20,11 +19,11 @@ public class TipDaoTest {
     
     @Before
     public void setUp(){
-        Injector injector = Guice.createInjector(new TestModule(), new JpaPersistModule("com.tapereader"));
+        Injector injector = Guice.createInjector(new FakeTestModule(), new JpaPersistModule("com.tapereader"));
         init = injector.getInstance(AppInitializer.class);
         tipDao = injector.getInstance(TipDao.class);
-        tipDao.save(new Tip("BHSL", false));
-        tipDao.save(new Tip("BLSH", false));
+        tipDao.save(new Tip("BHSL"));
+        tipDao.save(new Tip("BLSH"));
     }
     
     @After
@@ -36,8 +35,8 @@ public class TipDaoTest {
         Injector injector = Guice.createInjector(new FakeTestModule(), new JpaPersistModule("com.tapereader"));
         AppInitializer init = injector.getInstance(AppInitializer.class);
         TipDao tipDao = injector.getInstance(TipDao.class);
-        tipDao.save(new Tip("BHSL", false));
-        tipDao.save(new Tip("BLSH", false));
+        tipDao.save(new Tip("BHSL"));
+        tipDao.save(new Tip("BLSH"));
         List<Tip> tips = tipDao.loadAll();
         for(Tip tip : tips){
             System.out.println(tip.getName());

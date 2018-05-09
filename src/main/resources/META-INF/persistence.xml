@@ -4,12 +4,11 @@
              version="2.0">
 
     <persistence-unit name="com.tapereader">
-        <description>
-            Persistence unit for the JPA tutorial of the Hibernate Getting Started Guide
-        </description>
+        <description>Persistence unit</description>
 
-        <class>com.tapereader.framework.Tick</class>
-
+        <class>com.tapereader.model.Tick</class>
+		<class>com.tapereader.model.Tip</class>
+		
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/test;DB_CLOSE_DELAY=-1;MVCC=TRUE" />
