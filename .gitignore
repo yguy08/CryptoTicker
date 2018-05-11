@@ -20,4 +20,4 @@ dependency-reduced-pom.xml
 *.swo
 
 # externalized configuration file for keys
-.properties
+exchange.properties
