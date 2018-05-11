@@ -15,6 +15,7 @@ import com.espertech.esper.client.deploy.DeploymentResult;
 import com.espertech.esper.client.deploy.EPDeploymentAdmin;
 import com.espertech.esper.client.deploy.ParseException;
 import com.tapereader.annotation.Subscriber;
+import com.tapereader.model.Tick;
 
 public class EsperTest {
     
@@ -31,9 +32,9 @@ public class EsperTest {
         for (Annotation annotation : annotations) {
             if (annotation instanceof Subscriber) {
                 Subscriber subscriber = (Subscriber) annotation;
-                Object obj = getSubscriber(subscriber.className());
-                String method = subscriber.methodName();
-                statement.setSubscriber(obj, method);
+                //Object obj = getSubscriber(subscriber.className());
+                //String method = subscriber.methodName();
+                //statement.setSubscriber(obj, method);
             }
         }
     }
@@ -69,7 +70,7 @@ public class EsperTest {
                     }
                 }
                 System.out.println("deployed module " + filename);
-            } catch (DeploymentException | InterruptedException e) {
+            } catch (DeploymentException e) {
                 System.out.println("unable to deploy module " + source + e);
             }
         } catch (FileNotFoundException ignored) {

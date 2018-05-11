@@ -2,13 +2,13 @@ package com.tapereader.framework;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
+import com.tapereader.model.Tick;
 
 public class TickHibernateTest {
 
