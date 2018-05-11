@@ -20,5 +20,4 @@ dependency-reduced-pom.xml
 *.swo
 
 # externalized configuration file for keys
-exchangeConfiguration.json
-accountInfo.csv
+.properties

@@ -50,8 +50,15 @@ public class Cryptor {
         props.load(new FileInputStream(clazz.getResource(propName).getPath()));
         return props;
     }
+    
+    public static Properties getEncryptableProperties(String evnVarPW, String propName) throws FileNotFoundException, IOException {
+        ENCRYPTOR.setPassword(evnVarPW);
+        Properties props = new EncryptableProperties(ENCRYPTOR);
+        props.load(new FileInputStream(propName));
+        return props;
+    }
 
-    public static void main(String[] args) throws FileNotFoundException, IOException {
+    public static void main(String[] args) throws Exception {
         // create the command line parser
         CommandLineParser parser = new DefaultParser();
 
@@ -59,24 +66,42 @@ public class Cryptor {
         Options options = new Options();
         options.addOption( "e", "encrypt", true, "encrypt" );
         options.addOption( "d", "decrypt", true, "decrypt" );
+        options.addOption( "v", "envvar", true, "env var containing pw" );
+        options.addOption( "p", "decprop", true, "test properties" );
 
         try {
             // parse the command line arguments
             CommandLine line = parser.parse( options, args );
+            
+            if (!line.hasOption("envvar")) {
+                throw new Exception("Specify env var w/ pw");
+            }
+            
+            String envPW = System.getenv(line.getOptionValue("envvar"));
 
             // validate that block-size has been set
             if( line.hasOption( "encrypt" ) ) {
                 String plainTxt = line.getOptionValue("encrypt");
                 System.out.println( "Plain Text: " + plainTxt );
-                String encrypted = encryptProperty(System.getenv("TEST_PW"), plainTxt);
+                String encrypted = encryptProperty(envPW, plainTxt);
                 System.out.println( "Cipher Text: " + encrypted );
             }
             
             if( line.hasOption("decrypt")){
                 String encrypted = line.getOptionValue("decrypt");
                 System.out.println( "Cipher Text: " + encrypted );
-                String plainTxt = decryptProperty(System.getenv("TEST_PW"), encrypted);
+                String plainTxt = decryptProperty(envPW, encrypted);
                 System.out.println( "Plain Text: " + plainTxt );
+            }
+            
+            if( line.hasOption("decprop")){
+                String fn = line.getOptionValue("decprop");
+                Properties props = getEncryptableProperties(envPW, fn);
+                for (Object obj : props.keySet()) {
+                    String value = props.getProperty((String) obj);
+                    System.out.println( "KEY: " + (String) obj);
+                    System.out.println( "VALUE: " + value);
+                }
             }
         } catch( ParseException exp ) {
             System.out.println( "Unexpected exception:" + exp.getMessage() );
