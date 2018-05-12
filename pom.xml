@@ -27,42 +27,97 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     
-  <dependencies>    
+  <dependencies>
+
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>3.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.0.17</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>    
     <dependency>
         <groupId>org.knowm.xchange</groupId>
         <artifactId>xchange-core</artifactId>
         <version>4.3.6-SNAPSHOT</version>
+        <exclusions>
+        	<exclusion>
+        		<groupId>org.slf4j</groupId>
+        		<artifactId>slf4j-api</artifactId>
+        	</exclusion>
+        </exclusions>
     </dependency>    
     <dependency>
         <groupId>org.knowm.xchange</groupId>
         <artifactId>xchange-poloniex</artifactId>
         <version>4.3.6-SNAPSHOT</version>
+        <exclusions>
+        	<exclusion>
+        		<groupId>org.slf4j</groupId>
+        		<artifactId>slf4j-api</artifactId>
+        	</exclusion>
+        </exclusions>
     </dependency>    
     <dependency>
         <groupId>org.knowm.xchange</groupId>
         <artifactId>xchange-binance</artifactId>
         <version>4.3.6-SNAPSHOT</version>
+        <exclusions>
+        	<exclusion>
+        		<groupId>org.slf4j</groupId>
+        		<artifactId>slf4j-api</artifactId>
+        	</exclusion>
+        </exclusions>
     </dependency>       
     <dependency>
         <groupId>org.knowm.xchange</groupId>
         <artifactId>xchange-gdax</artifactId>
         <version>4.3.6-SNAPSHOT</version>
+        <exclusions>
+        	<exclusion>
+        		<groupId>org.slf4j</groupId>
+        		<artifactId>slf4j-api</artifactId>
+        	</exclusion>
+        </exclusions>
     </dependency>    
     <dependency>
         <groupId>org.knowm.xchange</groupId>
         <artifactId>xchange-coinmarketcap</artifactId>
         <version>4.3.6-SNAPSHOT</version>
+        <exclusions>
+        	<exclusion>
+        		<groupId>org.slf4j</groupId>
+        		<artifactId>slf4j-api</artifactId>
+        	</exclusion>
+        </exclusions>
     </dependency>       
     <dependency>
         <groupId>com.lmax</groupId>
         <artifactId>disruptor</artifactId>
         <version>3.3.7</version>
     </dependency>   
-    <dependency>
-        <groupId>org.apache.activemq</groupId>
-        <artifactId>activemq-all</artifactId>
-        <version>5.15.2</version>
-    </dependency>   
+<!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-broker -->
+<dependency>
+    <groupId>org.apache.activemq</groupId>
+    <artifactId>activemq-broker</artifactId>
+    <version>5.15.3</version>
+    <exclusions>
+    	<exclusion>
+    		<groupId>org.slf4j</groupId>
+    		<artifactId>slf4j-api</artifactId>
+    	</exclusion>
+    </exclusions>
+</dependency>   
     <dependency>
         <groupId>com.espertech</groupId>
         <artifactId>esper</artifactId>
@@ -74,9 +129,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
         <version>2.9.1</version>
     </dependency>    
     <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-api</artifactId>
-        <version>2.9.1</version>
+  <groupId>org.ta4j</groupId>
+  <artifactId>ta4j-core</artifactId>
+  <version>0.12-SNAPSHOT</version>
     </dependency>    
     <dependency>
         <groupId>com.h2database</groupId>
@@ -103,6 +158,16 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     	<groupId>net.openhft</groupId>
     	<artifactId>chronicle-wire</artifactId>
     	<version>1.12.3</version>
+    	<exclusions>
+    		<exclusion>
+    			<groupId>org.slf4j</groupId>
+    			<artifactId>slf4j-api</artifactId>
+    		</exclusion>
+    		<exclusion>
+    			<groupId>com.intellij</groupId>
+    			<artifactId>annotations</artifactId>
+    		</exclusion>
+    	</exclusions>
     </dependency>
     <dependency>
 	 <groupId>org.eclipse.jetty</groupId>
@@ -124,11 +189,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     	<artifactId>guice-persist</artifactId>
     	<version>4.2.0</version>
 	</dependency>
-	<dependency>
-  <groupId>org.ta4j</groupId>
-  <artifactId>ta4j-core</artifactId>
-  <version>0.11</version>
+	<!-- https://mvnrepository.com/artifact/org.jasypt/jasypt -->
+<dependency>
+    <groupId>org.jasypt</groupId>
+    <artifactId>jasypt</artifactId>
+    <version>1.9.2</version>
 </dependency>
+	
   </dependencies>
   
   <build>
@@ -149,4 +216,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     </plugins>
 </build>
   
+  <dependencyManagement>
+  	<dependencies>
+  		<dependency>
+  			<groupId>ch.qos.logback</groupId>
+  			<artifactId>logback-core</artifactId>
+  			<version>1.2.3</version>
+  		</dependency>
+  	</dependencies>
+  </dependencyManagement>
 </project>

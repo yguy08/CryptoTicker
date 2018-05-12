@@ -1,9 +1,5 @@
 package com.tapereader.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -20,7 +16,6 @@ import org.ta4j.core.Bar;
 import org.ta4j.core.BaseBar;
 import org.ta4j.core.BaseStrategy;
 import org.ta4j.core.BaseTimeSeries;
-import org.ta4j.core.Decimal;
 import org.ta4j.core.Rule;
 import org.ta4j.core.Strategy;
 import org.ta4j.core.TimeSeries;
@@ -41,11 +36,9 @@ import org.ta4j.core.indicators.helpers.HighestValueIndicator;
 import org.ta4j.core.indicators.helpers.LowestValueIndicator;
 import org.ta4j.core.indicators.helpers.MaxPriceIndicator;
 import org.ta4j.core.indicators.helpers.MinPriceIndicator;
-import org.ta4j.core.indicators.helpers.MultiplierIndicator;
+import org.ta4j.core.num.DoubleNum;
 import org.ta4j.core.trading.rules.IsHighestRule;
 import org.ta4j.core.trading.rules.IsLowestRule;
-import org.ta4j.core.trading.rules.OverIndicatorRule;
-import org.ta4j.core.trading.rules.UnderIndicatorRule;
 
 public class BuyHighSellLow {
     
@@ -74,7 +67,7 @@ public class BuyHighSellLow {
         Rule buyingRule = new IsHighestRule(closePrices, BARS_25);
         
         // Going short if the close price goes above the max price
-        Rule sellingRule = new IsLowestRule(closePrices, BARS_25);
+        Rule sellingRule = new IsLowestRule(closePrices, 11);
 
         return new BaseStrategy(buyingRule, sellingRule);
     }
@@ -88,7 +81,7 @@ public class BuyHighSellLow {
 
         List<Bar> bars = new ArrayList<>();
         try {
-            ResultSet rs = new Csv().read("src/main/resources/NXTBTC.txt", null, null);
+            ResultSet rs = new Csv().read("src/main/resources/ETHBTC.txt", null, null);
             while (rs.next()) {
                 ZonedDateTime date = LocalDate.parse(rs.getString(1), DATE_FORMAT).atStartOfDay(ZoneId.systemDefault());
                 double open = Double.parseDouble(rs.getString(4));
@@ -97,7 +90,7 @@ public class BuyHighSellLow {
                 double close = Double.parseDouble(rs.getString(5));
                 double volume = Double.parseDouble(rs.getString(6));
 
-                bars.add(new BaseBar(date, open, high, low, close, volume));
+                bars.add(new BaseBar(date, open, high, low, close, volume, DoubleNum::valueOf));
             }
         } catch (SQLException ioe) {
             Logger.getLogger(BuyHighSellLow.class.getName()).log(Level.SEVERE, "Unable to load bars from CSV", ioe);
