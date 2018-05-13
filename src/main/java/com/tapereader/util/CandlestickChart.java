@@ -104,7 +104,7 @@ public class CandlestickChart {
         ChartPanel panel = new ChartPanel(chart);
         panel.setFillZoomRectangle(true);
         panel.setMouseWheelEnabled(true);
-        panel.setPreferredSize(new Dimension(1280, 800));
+        panel.setPreferredSize(new Dimension(1213, 755));
         // Application frame
         ApplicationFrame frame = new ApplicationFrame("Ta4j example - Candlestick chart");
         

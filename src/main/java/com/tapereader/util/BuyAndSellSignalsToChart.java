@@ -32,7 +32,6 @@ import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.time.Day;
-import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
@@ -199,23 +198,6 @@ public class BuyAndSellSignalsToChart {
         frame.pack();
         RefineryUtilities.centerFrameOnScreen(frame);
         frame.setVisible(true);
-    }
-    
-    /**
-     * Displays a chart in a frame.
-     * @param chart the chart to be displayed
-     */
-    public static ChartPanel newJFreeAppFrame(JFreeChart chart) {
-        // Chart panel
-        ChartPanel panel = new ChartPanel(chart);
-        panel.setFillZoomRectangle(true);
-        panel.setMouseWheelEnabled(true);
-        //panel.setZoomAroundAnchor(true);
-        panel.setOpaque(false);
-        panel.setZoomOutlinePaint(Color.GREEN);
-        panel.setDisplayToolTips(true);
-        panel.setPreferredSize(new Dimension(1280, 800));
-        return panel;
     }
     
     public static Strategy buildStrategy(TimeSeries series) {
