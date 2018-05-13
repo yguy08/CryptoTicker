@@ -113,7 +113,7 @@ public class TopLevelDemo {
         /*
           Creating the chart
          */
-        JFreeChart chart = newCandleStickChart("Tape Reader", "Date", "Price", ohlcDataset);
+        JFreeChart chart = newCandleStickChart("Tape Reader", "", "", ohlcDataset);
 
         /*
           Running the strategy and adding the buy and sell signals to plot
@@ -178,26 +178,23 @@ public class TopLevelDemo {
                   xAxisLbl,
                   yAxisLbl,
                   ohlcDataset,
-                  true);
+                  false);
           // Candlestick rendering
           CandlestickRenderer renderer = new CandlestickRenderer();
           renderer.setUseOutlinePaint(true);
           renderer.setAutoWidthMethod(CandlestickRenderer.WIDTHMETHOD_AVERAGE);
           renderer.setAutoWidthFactor(1.0);
-          renderer.setVolumePaint(Color.BLUE);
+          renderer.setVolumePaint(ChartColor.BLUE);
           XYPlot plot = chart.getXYPlot();
           plot.setRenderer(renderer);
           // Misc
           plot.setRangeGridlinePaint(Color.LIGHT_GRAY.brighter());
           NumberAxis numberAxis = (NumberAxis) plot.getRangeAxis();
           numberAxis.setAutoRangeIncludesZero(false);
-          plot.setDatasetRenderingOrder(DatasetRenderingOrder.FORWARD);
-          plot.setRangeCrosshairLockedOnData(true);
           plot.setDomainPannable(true);
           plot.setBackgroundPaint(ChartColor.DARK_BLUE.darker().darker());
-          plot.setBackgroundAlpha(0.9f);
+          plot.setBackgroundAlpha(0.8f);
           plot.setDomainMinorGridlinesVisible(false);
-          plot.setDomainCrosshairLockedOnData(true);
           plot.setForegroundAlpha(0.9f);
           plot.setDomainGridlinePaint(ChartColor.LIGHT_GRAY.brighter());
           //Chart
@@ -286,7 +283,6 @@ public class TopLevelDemo {
             // Sell signal
             double sellSignalBarTime = new Day(Date.from(series.getBar(trade.getExit().getIndex()).getEndTime().toInstant())).getFirstMillisecond();
             Marker sellMarker = new ValueMarker(sellSignalBarTime);
-            sellMarker.setAlpha(1.0f);
             sellMarker.setPaint(ChartColor.DARK_RED);
             plot.addDomainMarker(sellMarker);
         }

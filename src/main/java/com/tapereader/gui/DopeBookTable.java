@@ -12,8 +12,6 @@ import javax.swing.table.AbstractTableModel;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class DopeBookTable extends JPanel {
     
@@ -28,7 +26,6 @@ public class DopeBookTable extends JPanel {
  
         //Create the scroll pane and add the table to it.
         JScrollPane scrollPane = new JScrollPane(table);
- 
         //Add the scroll pane to this panel.
         add(scrollPane);
     }
