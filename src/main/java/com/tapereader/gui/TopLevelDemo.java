@@ -32,20 +32,19 @@ package com.tapereader.gui;
  */
 
 import java.awt.*;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
-
 import org.jfree.chart.ChartColor;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.DatasetRenderingOrder;
 import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
@@ -59,7 +58,6 @@ import org.jfree.ui.RectangleInsets;
 import org.jfree.ui.RefineryUtilities;
 import org.ta4j.core.Bar;
 import org.ta4j.core.BaseStrategy;
-import org.ta4j.core.Indicator;
 import org.ta4j.core.Rule;
 import org.ta4j.core.Strategy;
 import org.ta4j.core.TimeSeries;
@@ -78,22 +76,46 @@ import org.ta4j.core.analysis.criteria.RewardRiskRatioCriterion;
 import org.ta4j.core.analysis.criteria.TotalProfitCriterion;
 import org.ta4j.core.analysis.criteria.VersusBuyAndHoldCriterion;
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
-import org.ta4j.core.num.Num;
 import org.ta4j.core.trading.rules.IsHighestRule;
 import org.ta4j.core.trading.rules.IsLowestRule;
 import org.ta4j.core.trading.rules.StopLossRule;
 
-import com.tapereader.util.BuyAndSellSignalsToChart;
+import com.googlecode.lanterna.gui2.Border;
+import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
+import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
+import com.googlecode.lanterna.screen.Screen;
+import com.googlecode.lanterna.screen.TerminalScreen;
+import com.googlecode.lanterna.terminal.Terminal;
+import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.tapereader.util.CsvLoader;
 
 /* TopLevelDemo.java requires no other files.*/
 public class TopLevelDemo {
+    
+    public TopLevelDemo() {
+        
+    }
+    
     /**
      * Create the GUI and show it.  For thread safety,
      * this method should be invoked from the
      * event-dispatching thread.
      */
     private static void createAndShowGUI() {
+        
+        try {
+            Terminal term = new DefaultTerminalFactory().createTerminal();
+            Screen screen = new TerminalScreen(term);
+            WindowBasedTextGUI gui = new MultiWindowTextGUI(screen);
+            screen.startScreen();
+
+            // use GUI here until the GUI wants to exit
+
+            screen.stopScreen();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
         // Getting the time series
         TimeSeries series = CsvLoader.load("EEE MMM dd HH:mm:ss z yyyy", "src/main/resources/BTCUSDT.txt", "BTCUSD");
         series = series.getSubSeries(series.getEndIndex()-365, series.getEndIndex());
@@ -127,6 +149,11 @@ public class TopLevelDemo {
         
         //Create a panel and add components to it.
         JPanel contentPane = new JPanel(new BorderLayout());
+        JLabel tape = new JLabel("BTC / USD $XX,XXX.XXXXXXXX.");
+        
+        tape.setBounds(new Rectangle(100, 100));
+        tape.setBackground(ChartColor.BLACK);
+        contentPane.add(tape, BorderLayout.BEFORE_FIRST_LINE);
         
         /*
           Displaying the chart
