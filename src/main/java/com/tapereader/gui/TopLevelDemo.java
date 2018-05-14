@@ -32,8 +32,6 @@ package com.tapereader.gui;
  */
 
 import java.awt.*;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -80,13 +78,6 @@ import org.ta4j.core.trading.rules.IsHighestRule;
 import org.ta4j.core.trading.rules.IsLowestRule;
 import org.ta4j.core.trading.rules.StopLossRule;
 
-import com.googlecode.lanterna.gui2.Border;
-import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
-import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
-import com.googlecode.lanterna.screen.Screen;
-import com.googlecode.lanterna.screen.TerminalScreen;
-import com.googlecode.lanterna.terminal.Terminal;
-import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.tapereader.util.CsvLoader;
 
 /* TopLevelDemo.java requires no other files.*/
@@ -101,21 +92,7 @@ public class TopLevelDemo {
      * this method should be invoked from the
      * event-dispatching thread.
      */
-    private static void createAndShowGUI() {
-        
-        try {
-            Terminal term = new DefaultTerminalFactory().createTerminal();
-            Screen screen = new TerminalScreen(term);
-            WindowBasedTextGUI gui = new MultiWindowTextGUI(screen);
-            screen.startScreen();
-
-            // use GUI here until the GUI wants to exit
-
-            screen.stopScreen();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
+    private static void createAndShowGUI() {        
         // Getting the time series
         TimeSeries series = CsvLoader.load("EEE MMM dd HH:mm:ss z yyyy", "src/main/resources/BTCUSDT.txt", "BTCUSD");
         series = series.getSubSeries(series.getEndIndex()-365, series.getEndIndex());
@@ -148,11 +125,12 @@ public class TopLevelDemo {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //Create a panel and add components to it.
-        JPanel contentPane = new JPanel(new BorderLayout());
+        JPanel contentPane = new JPanel(new BorderLayout(2,2));
         JLabel tape = new JLabel("BTC / USD $XX,XXX.XXXXXXXX.");
         
         tape.setBounds(new Rectangle(100, 100));
         tape.setBackground(ChartColor.BLACK);
+        tape.setForeground(ChartColor.BLACK);
         contentPane.add(tape, BorderLayout.BEFORE_FIRST_LINE);
         
         /*
@@ -345,9 +323,8 @@ public class TopLevelDemo {
         System.out.println("END CASH: " + cashFlow.getValue(series.getEndIndex()));
     }
     
-    private static void makeFrameFullSize(JFrame aFrame) {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        aFrame.setSize(screenSize.width, screenSize.height);
+    private static void fullScreen(JFrame aFrame) {
+        
     }
 
     public static void main(String[] args) {

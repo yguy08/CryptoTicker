@@ -8,16 +8,12 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.h2.tools.Csv;
 import org.ta4j.core.Bar;
 import org.ta4j.core.BaseBar;
 import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.BigDecimalNum;
-import org.ta4j.core.num.DoubleNum;
 
 
 public class CsvLoader {
@@ -40,9 +36,9 @@ public class CsvLoader {
                 bars.add(new BaseBar(date, open, high, low, close, volume, BigDecimalNum::valueOf));
             }
         } catch (SQLException ioe) {
-            Logger.getLogger(BuyHighSellLow.class.getName()).log(Level.SEVERE, "Unable to load bars from CSV", ioe);
+            System.out.println("Unable to load bars from CSV");
         } catch (NumberFormatException nfe) {
-            Logger.getLogger(BuyHighSellLow.class.getName()).log(Level.SEVERE, "Error while parsing value", nfe);
+            System.out.println("Unable to load bars from CSV");
         }
 
         return new BaseTimeSeries(seriesName, bars);

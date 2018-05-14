@@ -35,7 +35,6 @@ import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
-import org.slf4j.LoggerFactory;
 import org.ta4j.core.*;
 import org.ta4j.core.analysis.CashFlow;
 import org.ta4j.core.analysis.criteria.AverageProfitCriterion;
@@ -54,16 +53,11 @@ import org.ta4j.core.trading.rules.IsHighestRule;
 import org.ta4j.core.trading.rules.IsLowestRule;
 import org.ta4j.core.trading.rules.StopLossRule;
 
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.joran.JoranConfigurator;
-import ch.qos.logback.core.joran.spi.JoranException;
 import java.awt.*;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class builds a graphical chart showing the buy/sell signals of a strategy.
@@ -92,26 +86,6 @@ public class BuyAndSellSignalsToChart {
             chartTimeSeries.add(new Day(Date.from(bar.getEndTime().toInstant())), indicator.getValue(i).doubleValue());
         }
         return chartTimeSeries;
-    }
-    
-    private static void loadLoggerConfiguration() {
-        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-        context.reset();
-
-        JoranConfigurator configurator = new JoranConfigurator();
-        configurator.setContext(context);
-        try {
-            configurator.doConfigure(LOGBACK_CONF_FILE);
-        } catch (JoranException je) {
-            Logger.getLogger(BuyAndSellSignalsToChart.class.getName()).log(Level.SEVERE, "Unable to load Logback configuration", je);
-        }
-    }
-
-    private static void unloadLoggerConfiguration() {
-        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-        context.reset();
-        JoranConfigurator configurator = new JoranConfigurator();
-        configurator.setContext(context);
     }
 
     /**
@@ -215,7 +189,6 @@ public class BuyAndSellSignalsToChart {
     }
 
     public static void main(String[] args) {
-        loadLoggerConfiguration();
         // Getting the time series
         TimeSeries series = CsvLoader.load("EEE MMM dd HH:mm:ss z yyyy", "src/main/resources/ETHBTC.txt", "BTCUSDT");
         series = series.getSubSeries(0, series.getEndIndex());
@@ -253,6 +226,5 @@ public class BuyAndSellSignalsToChart {
          */
         displayChart(chart);
         
-        unloadLoggerConfiguration();
     }
 }
