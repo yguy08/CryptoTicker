@@ -11,7 +11,6 @@ import org.junit.Test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.persist.jpa.JpaPersistModule;
-import com.tapereader.framework.AppInitializer;
 import com.tapereader.model.Tip;
 import com.tapereader.module.FakeTestModule;
 
