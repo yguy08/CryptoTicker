@@ -17,7 +17,6 @@ import com.tapereader.module.FakeTestModule;
 
 public class TipDaoTest {
     
-    private AppInitializer init;
     private TipDao tipDao;
     
     /*@Before
