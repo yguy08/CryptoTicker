@@ -53,7 +53,7 @@ public class DefaultEngine implements Engine {
                     }
                 }
                 System.out.println("deployed module " + filename);
-            } catch (DeploymentException e) {
+            } catch (Exception e) {
                 System.out.println("unable to deploy module " + source + e);
             }
         } catch (FileNotFoundException ignored) {
